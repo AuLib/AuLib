@@ -1,0 +1,72 @@
+.TH "SamplePlayer" 3 "Fri Dec 9 2016" "Version 0.0" "AuLib" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+SamplePlayer
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <SamplePlayer\&.h>\fP
+.PP
+Inherits \fBOscili\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSamplePlayer\fP (double amp, double pitch, double phase=\&.0, double *table=NULL, uint32_t tsize=def_tsize, double sr=def_sr, uint32_t vsize=def_vsize)"
+.br
+.ti -1c
+.RI "virtual void \fBprocess\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBprocess\fP (double amp)"
+.br
+.ti -1c
+.RI "virtual void \fBprocess\fP (double amp, double pitch)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Sample playback oscillator with linear interpolation 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "SamplePlayer::SamplePlayer (double amp, double pitch, double phase = \fC\&.0\fP, double * table = \fCNULL\fP, uint32_t tsize = \fCdef_tsize\fP, double sr = \fCdef_sr\fP, uint32_t vsize = \fCdef_vsize\fP)\fC [inline]\fP"
+\fBSamplePlayer\fP constructor 
+.br
+
+.br
+amp - amplitude 
+.br
+pitch - playback pitch 
+.br
+phase - init phase (0-1) 
+.br
+ table - function table 
+.br
+tsize - table size 
+.br
+sr - sampling rate 
+.br
+vsize - vector size 
+.br
+
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual void SamplePlayer::process ()\fC [inline]\fP, \fC [virtual]\fP"
+Process one vector of audio 
+.PP
+Reimplemented from \fBOscili\fP\&.
+.SS "virtual void SamplePlayer::process (double amp)\fC [inline]\fP, \fC [virtual]\fP"
+Process one vector of audio with amplitude amp 
+.PP
+Reimplemented from \fBOscili\fP\&.
+.SS "virtual void SamplePlayer::process (double amp, double pitch)\fC [inline]\fP, \fC [virtual]\fP"
+Process one vector of audio with amplitude amp and pitch transposition 
+.PP
+Reimplemented from \fBOscili\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for AuLib from the source code\&.

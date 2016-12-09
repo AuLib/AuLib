@@ -6,16 +6,18 @@
 #define _TABLEREADI_H
 #include "TableRead.h"
 
+/** Table reader with linear interpolation
+ */
 class TableReadi : public TableRead {
 
  public:
-  /** TableReadi constructor
-     table - function table
-     phase - initial phase
-     norm - normalisation switch
-     wrap - wraparound switch
-     tsize - table size
-     vsize - vector size
+  /** TableReadi constructor \n\n
+     table - function table \n
+     phase - initial phase \n
+     norm - normalisation switch \n
+     wrap - wraparound switch \n
+     tsize - table size \n
+     vsize - vector size \n
   */
   TableReadi(double *table, double phase = 0.,
 	    bool norm = true, bool wrap = true,

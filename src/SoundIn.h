@@ -11,6 +11,8 @@ enum {SOUNDIN_RT=1,
      SOUNDIN_STDIN,
      SOUNDIN_SNDFILE};
 
+/** Audio input class
+ */
 class SoundIn : AudioBase {
 
  protected:
@@ -23,10 +25,10 @@ class SoundIn : AudioBase {
   void *m_handle;
 
  public:
-  /** SoundIn constructor
-    src - input source
-    vsize - vector size
-    bsize - buffer size
+  /** SoundIn constructor \n\n
+    src - input source ("adc", "stdin", or file path) \n
+    vsize - vector size \n
+    bsize - buffer size \n
   */
   SoundIn(const char *src,
 	   uint32_t vsize = def_vsize,
@@ -36,10 +38,9 @@ class SoundIn : AudioBase {
    */
   ~SoundIn();
 
-  /** Writes sig to the output
-    destination.
+  /** Reads audio into output vector
   */
-  uint32_t read(double *sig); 
+  uint32_t read(); 
   
 };
 

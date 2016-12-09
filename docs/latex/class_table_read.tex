@@ -1,0 +1,58 @@
+\hypertarget{class_table_read}{}\section{Table\+Read Class Reference}
+\label{class_table_read}\index{Table\+Read@{Table\+Read}}
+
+
+{\ttfamily \#include $<$Table\+Read.\+h$>$}
+
+Inheritance diagram for Table\+Read\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_table_read}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_table_read_a0ca6b6a46416b6ae1a48af6a490de9ff}{Table\+Read} (double $\ast$table, double phase=0., bool norm=true, bool wrap=true, uint32\+\_\+t tsize=def\+\_\+tsize, uint32\+\_\+t vsize=def\+\_\+vsize)
+\item 
+virtual void \hyperlink{class_table_read_ada219536a398309150f5f1270ac9534e}{process} (double $\ast$phs)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Table reader with truncated lookup 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_table_read_a0ca6b6a46416b6ae1a48af6a490de9ff}\label{class_table_read_a0ca6b6a46416b6ae1a48af6a490de9ff}} 
+\index{Table\+Read@{Table\+Read}!Table\+Read@{Table\+Read}}
+\index{Table\+Read@{Table\+Read}!Table\+Read@{Table\+Read}}
+\subsubsection{\texorpdfstring{Table\+Read()}{TableRead()}}
+{\footnotesize\ttfamily Table\+Read\+::\+Table\+Read (\begin{DoxyParamCaption}\item[{double $\ast$}]{table,  }\item[{double}]{phase = {\ttfamily 0.},  }\item[{bool}]{norm = {\ttfamily true},  }\item[{bool}]{wrap = {\ttfamily true},  }\item[{uint32\+\_\+t}]{tsize = {\ttfamily def\+\_\+tsize},  }\item[{uint32\+\_\+t}]{vsize = {\ttfamily def\+\_\+vsize} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\hyperlink{class_table_read}{Table\+Read} constructor ~\newline
+~\newline
+table -\/ function table ~\newline
+phase -\/ initial phase ~\newline
+norm -\/ normalisation switch ~\newline
+wrap -\/ wraparound switch ~\newline
+tsize -\/ table size ~\newline
+vsize -\/ vector size ~\newline
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_table_read_ada219536a398309150f5f1270ac9534e}\label{class_table_read_ada219536a398309150f5f1270ac9534e}} 
+\index{Table\+Read@{Table\+Read}!process@{process}}
+\index{process@{process}!Table\+Read@{Table\+Read}}
+\subsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily void Table\+Read\+::process (\begin{DoxyParamCaption}\item[{double $\ast$}]{phs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+takes in a frame of phase values and lookups up the table values 
+
+Reimplemented in \hyperlink{class_table_readic_acc300e7cf5cf06af7d4aa06dde917f3c}{Table\+Readic}, and \hyperlink{class_table_readi_a636913b122affaa2b7bde68114f35a4a}{Table\+Readi}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Table\+Read.\+h\item 
+src/Table\+Read.\+cpp\end{DoxyCompactItemize}

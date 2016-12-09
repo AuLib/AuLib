@@ -7,17 +7,20 @@
 
 #include "Oscili.h"
 
+/** Sample playback oscillator 
+    with linear interpolation
+ */
 class SamplePlayer : public Oscili {
 
  public:
-  /** SamplePlayer constructor
-      amp - amplitude
-      pitch - playback pitch
-      phase - init phase (0-1)  
-      table - function table
-      tsize - table size
-      sr - sampling rate
-      vsize - vector size
+  /** SamplePlayer constructor \n\n
+      amp - amplitude \n
+      pitch - playback pitch \n
+      phase - init phase (0-1) \n 
+      table - function table \n
+      tsize - table size \n
+      sr - sampling rate \n
+      vsize - vector size \n
   */
   SamplePlayer(double amp, double pitch,
 	double phase = .0,

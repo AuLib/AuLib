@@ -7,17 +7,19 @@
 
 #include "Oscil.h"
 
+/** Linear interpolation oscillator
+ */
 class Oscili : public Oscil {
 
  public:
-  /** Oscili constructor
-      amp - amplitude
-      freq - frequency in Hz
-      phase - init phase (0-1)  
-      table - function table
-      tsize - table size
-      sr - sampling rate
-      vsize - vector size
+  /** Oscili constructor \n\n
+      amp - amplitude \n
+      freq - frequency in Hz \n
+      phase - init phase (0-1) \n 
+      table - function table \n
+      tsize - table size \n
+      sr - sampling rate \n
+      vsize - vector size \n
   */
   Oscili(double amp, double freq,
 	double phase = .0,

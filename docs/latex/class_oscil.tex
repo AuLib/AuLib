@@ -1,0 +1,102 @@
+\hypertarget{class_oscil}{}\section{Oscil Class Reference}
+\label{class_oscil}\index{Oscil@{Oscil}}
+
+
+{\ttfamily \#include $<$Oscil.\+h$>$}
+
+Inheritance diagram for Oscil\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_oscil}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_oscil_a02ed65e22d9046e3f6253281b107b7bd}{Oscil} (double amp, double freq, double phase=.\+0, double $\ast$table=N\+U\+LL, uint32\+\_\+t tsize=def\+\_\+tsize, double sr=def\+\_\+sr, uint32\+\_\+t vsize=def\+\_\+vsize)
+\item 
+virtual \hyperlink{class_oscil_a3c09a41fb42bce840ca1b27cf27cf4f1}{$\sim$\+Oscil} ()
+\item 
+virtual void \hyperlink{class_oscil_a0e658a6f1b494286a783ce63e95f48ba}{process} ()
+\item 
+virtual void \hyperlink{class_oscil_a7ed04cfd228e849ddf95d09ea0aee8c2}{process} (double amp)
+\item 
+virtual void \hyperlink{class_oscil_abca4352d264fd66538502c72c2440784}{process} (double amp, double freq)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_oscil_a2dc5570e853d1364f753ff88f62d4e64}{mod} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Truncating oscillator 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_oscil_a02ed65e22d9046e3f6253281b107b7bd}\label{class_oscil_a02ed65e22d9046e3f6253281b107b7bd}} 
+\index{Oscil@{Oscil}!Oscil@{Oscil}}
+\index{Oscil@{Oscil}!Oscil@{Oscil}}
+\subsubsection{\texorpdfstring{Oscil()}{Oscil()}}
+{\footnotesize\ttfamily Oscil\+::\+Oscil (\begin{DoxyParamCaption}\item[{double}]{amp,  }\item[{double}]{freq,  }\item[{double}]{phase = {\ttfamily .0},  }\item[{double $\ast$}]{table = {\ttfamily NULL},  }\item[{uint32\+\_\+t}]{tsize = {\ttfamily def\+\_\+tsize},  }\item[{double}]{sr = {\ttfamily def\+\_\+sr},  }\item[{uint32\+\_\+t}]{vsize = {\ttfamily def\+\_\+vsize} }\end{DoxyParamCaption})}
+
+\hyperlink{class_oscil}{Oscil} constructor ~\newline
+~\newline
+amp -\/ amplitude ~\newline
+freq -\/ frequency in Hz ~\newline
+phase -\/ init phase (0-\/1) ~\newline
+ table -\/ function table ~\newline
+tsize -\/ table size ~\newline
+sr -\/ sampling rate ~\newline
+vsize -\/ vector size ~\newline
+\mbox{\Hypertarget{class_oscil_a3c09a41fb42bce840ca1b27cf27cf4f1}\label{class_oscil_a3c09a41fb42bce840ca1b27cf27cf4f1}} 
+\index{Oscil@{Oscil}!````~Oscil@{$\sim$\+Oscil}}
+\index{````~Oscil@{$\sim$\+Oscil}!Oscil@{Oscil}}
+\subsubsection{\texorpdfstring{$\sim$\+Oscil()}{~Oscil()}}
+{\footnotesize\ttfamily Oscil\+::$\sim$\+Oscil (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\hyperlink{class_oscil}{Oscil} destructor 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_oscil_a2dc5570e853d1364f753ff88f62d4e64}\label{class_oscil_a2dc5570e853d1364f753ff88f62d4e64}} 
+\index{Oscil@{Oscil}!mod@{mod}}
+\index{mod@{mod}!Oscil@{Oscil}}
+\subsubsection{\texorpdfstring{mod()}{mod()}}
+{\footnotesize\ttfamily void Oscil\+::mod (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+phase modulo \mbox{\Hypertarget{class_oscil_a0e658a6f1b494286a783ce63e95f48ba}\label{class_oscil_a0e658a6f1b494286a783ce63e95f48ba}} 
+\index{Oscil@{Oscil}!process@{process}}
+\index{process@{process}!Oscil@{Oscil}}
+\subsubsection{\texorpdfstring{process()}{process()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily void Oscil\+::process (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Process one vector of audio 
+
+Reimplemented in \hyperlink{class_oscilic_adcff5c6c3fd5a4da4bc76e05091d6dda}{Oscilic}, \hyperlink{class_sample_player_a263ee55c5d334486bc57956458a64713}{Sample\+Player}, and \hyperlink{class_oscili_a2571464f3b4874c3ca691061e8db7d32}{Oscili}.
+
+\mbox{\Hypertarget{class_oscil_a7ed04cfd228e849ddf95d09ea0aee8c2}\label{class_oscil_a7ed04cfd228e849ddf95d09ea0aee8c2}} 
+\index{Oscil@{Oscil}!process@{process}}
+\index{process@{process}!Oscil@{Oscil}}
+\subsubsection{\texorpdfstring{process()}{process()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily virtual void Oscil\+::process (\begin{DoxyParamCaption}\item[{double}]{amp }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Process one vector of audio with amplitude amp 
+
+Reimplemented in \hyperlink{class_sample_player_a806595c5e7674717d52bb8a57f451c0b}{Sample\+Player}, \hyperlink{class_oscilic_ad97eaf877abdd40fc06499198eb3d9bc}{Oscilic}, and \hyperlink{class_oscili_a1fb47dff09f771481e1a1d2fde39d775}{Oscili}.
+
+\mbox{\Hypertarget{class_oscil_abca4352d264fd66538502c72c2440784}\label{class_oscil_abca4352d264fd66538502c72c2440784}} 
+\index{Oscil@{Oscil}!process@{process}}
+\index{process@{process}!Oscil@{Oscil}}
+\subsubsection{\texorpdfstring{process()}{process()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily virtual void Oscil\+::process (\begin{DoxyParamCaption}\item[{double}]{amp,  }\item[{double}]{freq }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Process one vector of audio with amplitude amp and frequency freq 
+
+Reimplemented in \hyperlink{class_sample_player_a01fc7c2fdfd29c0c178e288d5aa06acc}{Sample\+Player}, \hyperlink{class_oscilic_acce96320f114bbd74114ef87e39660aa}{Oscilic}, and \hyperlink{class_oscili_a053ace3b633b645c4b8a517009ea7389}{Oscili}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Oscil.\+h\item 
+src/Oscil.\+cpp\end{DoxyCompactItemize}

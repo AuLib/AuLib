@@ -25,8 +25,8 @@ installation base directory.
 
 Documentation
 -----------------------
-Documentation is currently only present as comments in the header files,
-but these can be used to build doxygen-type doc files.
+Documentation is auto-generated from the headers using doxygen
+as html, latex sources and man pages.
 
 Author
 -----------------------

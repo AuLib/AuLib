@@ -7,6 +7,8 @@
 
 #include "AuLib.h"
 
+/** Function table base class
+ */
 class FuncTable {
 
  protected:
@@ -27,8 +29,8 @@ class FuncTable {
   }
 
  public:
-  /** FuncTable constructor
-      tsize - table size
+  /** FuncTable constructor \n\n
+      tsize - table size \n
    */ 
   FuncTable(uint32_t tsize = def_tsize)
   : m_tsize(tsize) {

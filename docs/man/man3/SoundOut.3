@@ -1,0 +1,54 @@
+.TH "SoundOut" 3 "Fri Dec 9 2016" "Version 0.0" "AuLib" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+SoundOut
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <SoundOut\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSoundOut\fP (const char *dest, uint32_t nchnls=def_nchnls, double sr=def_sr, uint32_t vsize=def_vsize, uint32_t bsize=def_bsize)"
+.br
+.ti -1c
+.RI "\fB~SoundOut\fP ()"
+.br
+.ti -1c
+.RI "uint32_t \fBwrite\fP (double *sig)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Generic audio output class 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "SoundOut::SoundOut (const char * dest, uint32_t nchnls = \fCdef_nchnls\fP, double sr = \fCdef_sr\fP, uint32_t vsize = \fCdef_vsize\fP, uint32_t bsize = \fCdef_bsize\fP)"
+\fBSoundOut\fP constructor 
+.br
+
+.br
+dest - output destination ('dac', 'stdout', or file path) 
+.br
+nchnls - number of channels 
+.br
+sr - sampling rate 
+.br
+vsize - vector size 
+.br
+bsize - buffer size 
+.br
+
+.SS "SoundOut::~SoundOut ()"
+\fBSoundOut\fP destructor 
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t SoundOut::write (double * sig)"
+Writes sig to the output destination\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for AuLib from the source code\&.

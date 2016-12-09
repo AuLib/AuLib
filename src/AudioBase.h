@@ -8,6 +8,8 @@
 #include "AuLib.h"
 #include <iostream>
 
+/** Audio DSP base class
+ */
 class AudioBase {
 
  protected:
@@ -17,10 +19,10 @@ class AudioBase {
   double *m_output;
 
  public:
-  /** AudioBase constructor
-      nchnls - number of channels
-      sr - sampling rate
-      vsize - vector size (frames)
+  /** AudioBase constructor \n\n
+      nchnls - number of channels \n
+      sr - sampling rate \n
+      vsize - vector size (frames) \n
   */
   AudioBase(uint32_t nchnls = def_nchnls,
 	   double sr = def_sr,

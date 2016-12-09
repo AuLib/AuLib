@@ -7,6 +7,8 @@
 
 #include "AudioBase.h"
 
+/** Phase signal (ramp) generator
+ */
 class Phasor : public AudioBase {
 
  protected:
@@ -22,11 +24,11 @@ class Phasor : public AudioBase {
   }
 
  public:
-  /** Phasor constructor
-      freq - frequency in Hz
-      phase - init phase (0-1)  
-      sr - sampling rate
-      vsize - vector size
+  /** Phasor constructor \n\n
+      freq - frequency in Hz \n
+      phase - init phase (0-1) \n 
+      sr - sampling rate \n
+      vsize - vector size \n
   */
   Phasor(double freq,
 	double phase = .0,

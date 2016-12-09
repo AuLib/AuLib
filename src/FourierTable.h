@@ -7,10 +7,15 @@
 
 #include "FuncTable.h"
 
+/** Table type constants
+ */
 enum {SAW_TABLE=1,
       SQUARE_TABLE,
       TRIANGLE_TABLE};
 
+/** Function tables based on
+    Fourier Series
+*/
 class FourierTable : public FuncTable {
 
  protected:
@@ -21,21 +26,21 @@ class FourierTable : public FuncTable {
 	      double phase);
 
  public:
-  /** FourierTable constructor
-      harms - number of harmonics
-      amps - array of harmonic amplitudes
-      phase - phase offset
-      tsize - table size
+  /** FourierTable constructor \n\n
+      harms - number of harmonics \n
+      amps - array of harmonic amplitudes \n
+      phase - phase offset \n
+      tsize - table size \n
   */
   FourierTable(uint32_t harms,
 	       double *amps=NULL,
 	       double phase=0.,
 	       uint32_t tsize = def_tsize);
   
-  /** FourierTable constructor
-      harms - number of harmonics
-      type - wave type 
-      tsize - table size
+  /** FourierTable constructor \n\n
+      harms - number of harmonics \n
+      type - wave type \n
+      tsize - table size \n
   */
   FourierTable(uint32_t harms,
 	       uint32_t type = SAW_TABLE,

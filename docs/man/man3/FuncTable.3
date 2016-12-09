@@ -1,0 +1,57 @@
+.TH "FuncTable" 3 "Fri Dec 9 2016" "Version 0.0" "AuLib" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FuncTable
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <FuncTable\&.h>\fP
+.PP
+Inherited by \fBFourierTable\fP, and \fBSampleTable\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFuncTable\fP (uint32_t tsize=def_tsize)"
+.br
+.ti -1c
+.RI "double * \fBtable\fP ()"
+.br
+.ti -1c
+.RI "double \fBtable\fP (uint32_t pos)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBnormalise_table\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Function table base class 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "FuncTable::FuncTable (uint32_t tsize = \fCdef_tsize\fP)\fC [inline]\fP"
+\fBFuncTable\fP constructor 
+.br
+
+.br
+tsize - table size 
+.br
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void FuncTable::normalise_table ()\fC [inline]\fP, \fC [protected]\fP"
+Normalise the table 
+.SS "double* FuncTable::table ()\fC [inline]\fP"
+Get the function table 
+.SS "double FuncTable::table (uint32_t pos)\fC [inline]\fP"
+Get a single point at pos from the function table 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for AuLib from the source code\&.

@@ -11,6 +11,8 @@ enum {SOUNDOUT_RT=1,
      SOUNDOUT_STDOUT,
      SOUNDOUT_SNDFILE};
 
+/** Generic audio output class
+ */
 class SoundOut {
 
  protected:
@@ -26,12 +28,13 @@ class SoundOut {
   void *m_handle;
 
  public:
-  /** SoundOut constructor
-    dest - output destination
-    nchnls - number of channels
-    sr - sampling rate
-    vsize - vector size
-    bsize - buffer size
+  /** SoundOut constructor \n\n
+    dest - output destination 
+    ("dac", "stdout", or file path) \n
+    nchnls - number of channels \n
+    sr - sampling rate \n
+    vsize - vector size \n
+    bsize - buffer size \n
   */
   SoundOut(const char *dest,
 	   uint32_t nchnls = def_nchnls,

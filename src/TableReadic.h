@@ -7,16 +7,18 @@
 #define _TABLEREADIC_H
 #include "TableRead.h"
 
+/** Table reader with cubic interpolation
+ */
 class TableReadic : public TableRead {
 
  public:
-  /** TableReadic constructor
-     table - function table
-     phase - initial phase
-     norm - normalisation switch
-     wrap - wraparound switch
-     tsize - table size
-     vsize - vector size
+  /** TableReadic constructor \n\n
+     table - function table \n
+     phase - initial phase \n
+     norm - normalisation switch \n
+     wrap - wraparound switch \n
+     tsize - table size \n
+     vsize - vector size \n
   */
   TableReadic(double *table, double phase = 0.,
 	    bool norm = true, bool wrap = true,

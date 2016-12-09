@@ -1,0 +1,52 @@
+.TH "SoundIn" 3 "Fri Dec 9 2016" "Version 0.0" "AuLib" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+SoundIn
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <SoundIn\&.h>\fP
+.PP
+Inherits \fBAudioBase\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSoundIn\fP (const char *src, uint32_t vsize=def_vsize, uint32_t bsize=def_bsize)"
+.br
+.ti -1c
+.RI "\fB~SoundIn\fP ()"
+.br
+.ti -1c
+.RI "uint32_t \fBread\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Audio input class 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "SoundIn::SoundIn (const char * src, uint32_t vsize = \fCdef_vsize\fP, uint32_t bsize = \fCdef_bsize\fP)"
+\fBSoundIn\fP constructor 
+.br
+
+.br
+src - input source ('adc', 'stdin', or file path) 
+.br
+vsize - vector size 
+.br
+bsize - buffer size 
+.br
+
+.SS "SoundIn::~SoundIn ()"
+\fBSoundOut\fP destructor 
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t SoundIn::read ()"
+Reads audio into output vector 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for AuLib from the source code\&.

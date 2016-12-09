@@ -7,6 +7,8 @@
 
 #include "AudioBase.h"
 
+/** Truncating oscillator
+ */
 class Oscil : public AudioBase {
 
  protected:
@@ -27,14 +29,14 @@ class Oscil : public AudioBase {
   }
 
  public:
-  /** Oscil constructor
-      amp - amplitude
-      freq - frequency in Hz
-      phase - init phase (0-1)  
-      table - function table
-      tsize - table size
-      sr - sampling rate
-      vsize - vector size
+  /** Oscil constructor \n\n
+      amp - amplitude   \n
+      freq - frequency in Hz \n
+      phase - init phase (0-1) \n 
+      table - function table \n
+      tsize - table size \n
+      sr - sampling rate \n
+      vsize - vector size \n
   */
   Oscil(double amp, double freq,
 	double phase = .0,

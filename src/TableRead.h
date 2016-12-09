@@ -6,6 +6,8 @@
 #define _TABLEREAD_H
 #include "AudioBase.h"
 
+/** Table reader with truncated lookup
+ */
 class TableRead : public AudioBase {
 
  protected:
@@ -27,13 +29,13 @@ class TableRead : public AudioBase {
   }
 
  public:
-   /** TableRead constructor
-     table - function table
-     phase - initial phase
-     norm - normalisation switch
-     wrap - wraparound switch
-     tsize - table size
-     vsize - vector size
+   /** TableRead constructor \n\n
+     table - function table \n
+     phase - initial phase \n
+     norm - normalisation switch \n
+     wrap - wraparound switch \n
+     tsize - table size \n
+     vsize - vector size \n
   */
   TableRead(double *table, double phase = 0.,
 	    bool norm = true, bool wrap = true,

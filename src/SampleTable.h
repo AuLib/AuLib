@@ -7,15 +7,17 @@
 
 #include "FuncTable.h"
 
+/** Sampled-sound table from a soundfile
+ */
 class SampleTable : public FuncTable {
 
  protected:
   uint32_t m_nchnls;
 
  public:
-  /** SampleTable constructor
-      name - filename
-      chn - channel to load
+  /** SampleTable constructor \n\n
+      name - filename \n
+      chn - channel to load (0 = all channels) \n
   */
   SampleTable(const char *name,
 	      uint32_t chn = 1);
