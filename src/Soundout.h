@@ -31,6 +31,7 @@ class SoundOut {
     nchnls - number of channels
     sr - sampling rate
     vsize - vector size
+    bsize - buffer size
   */
   SoundOut(const char *dest,
 	   uint32_t nchnls = def_nchnls,
