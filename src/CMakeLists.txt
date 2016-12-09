@@ -11,3 +11,12 @@ SoundOut.cpp
 FourierTable.cpp
 SampleTable.cpp)
 
+# installing headers
+FILE(GLOB files "${PROJECT_SOURCE_DIR}/src/*.h")
+INSTALL(FILES ${files} DESTINATION include)
+
+# installing library
+INSTALL(TARGETS AuLib
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)
