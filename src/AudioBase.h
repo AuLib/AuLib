@@ -6,6 +6,7 @@
 #define _AUDIOBASE_H
 
 #include "AuLib.h"
+#include <iostream>
 
 class AudioBase {
 
@@ -27,6 +28,7 @@ class AudioBase {
     m_nchnls(nchnls), m_sr(sr),
     m_vsize(vsize) {
     m_output = new double[m_vsize*m_nchnls];
+    
   }
   
   /** AudioBase destructor

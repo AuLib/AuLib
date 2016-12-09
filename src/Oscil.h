@@ -45,7 +45,7 @@ class Oscil : public AudioBase {
 
   /** Oscil destructor
    */
-  ~Oscil();
+  virtual ~Oscil();
 
   /** Process one vector of audio
    */
