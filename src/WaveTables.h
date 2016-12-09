@@ -1,6 +1,7 @@
 ////////////////////////////////////////////
 // Classic wavetables based on FourierTable
 // (c) V Lazzarini, 2016-7
+// -*- mode: c++;-*-
 ////////////////////////////////////////////
 #ifndef _WAVETABLES_H
 #define _WAVETABLES_H
