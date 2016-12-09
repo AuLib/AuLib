@@ -11,8 +11,9 @@ enum {SOUNDOUT_RT=1,
      SOUNDOUT_STDOUT,
      SOUNDOUT_SNDFILE};
 
-struct SoundOut {
+class SoundOut {
 
+ protected:
   double m_sr;
   uint32_t m_nchnls;
   double m_vsize;
@@ -23,7 +24,8 @@ struct SoundOut {
   void *m_buffer;
   uint32_t m_bsize;
   void *m_handle;
-  
+
+ public:
   /** SoundOut constructor
     dest - output destination
     nchnls - number of channels
