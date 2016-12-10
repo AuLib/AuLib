@@ -8,9 +8,49 @@
 // version 3.0 of the License, or (at your option) any later version.
 //
 /////////////////////////////////////////////////////////////////////
-
 #ifndef _AU_LIB_H
 #define _AU_LIB_H
+
+/*! \mainpage
+ *
+ *  AuLib is a simple lightweight C++ class library for audio DSP.
+ *
+ * \section build_the_package Building
+ *
+ * The library and example programs are built with CMake. The only
+ * dependencies are libsndfile and portaudio and they are only required
+ * to build the example programs that use the audio IO classes.
+ * The code can be used within any audio processing context and it can
+ * be incorporated in plugins and other programs with their own IO.
+ *
+ * \code
+ * 
+ * $ mkdir build
+ * $ cd build
+ * $ cmake .. 
+ * $ make
+ * $ make install
+ * 
+ * \endcode
+ *
+ * \section gpl_license License
+ *
+ * Copyright (C) 2016-7 V Lazzarini
+ *
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 
 #include <cmath>
 #include <cstdint>
