@@ -36,7 +36,7 @@ public:
       sr - sampling rate \n
       vsize - vector size \n
   */
-  Phasor(double freq,
+  Phasor(double freq = 0.,
 	 double phase = 0.,
 	 uint32_t vsize = def_vsize,
 	 double sr = def_sr);

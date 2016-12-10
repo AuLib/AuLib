@@ -15,6 +15,7 @@ void Oscilic::process(){
   double frac,a,b,c,d;
   double tmp, fracsq, fracb;
   for(int i=0; i < m_vsize; i++){
+    am_fm(i);
     phi = (uint32_t) m_phs;
     frac = m_phs - phi;
     a = phi > 0 ? m_table[phi-1] :

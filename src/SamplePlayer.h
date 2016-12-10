@@ -28,8 +28,8 @@ public:
       sr - sampling rate \n
       vsize - vector size \n
   */
-  SamplePlayer(double amp, double pitch,
-	       double phase = .0,
+  SamplePlayer(double amp = 0., double pitch = 0.,
+	       double phase = 0.,
 	       const double *table = NULL,
 	       uint32_t tsize = def_tsize,
 	       uint32_t vsize = def_vsize, 

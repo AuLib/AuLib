@@ -14,6 +14,7 @@ void Oscili::process(){
   uint32_t phi;
   double frac,a,b;
   for(int i=0; i < m_vsize; i++){
+    am_fm(i);
     phi = (uint32_t) m_phs;
     frac = m_phs - phi;
     a = m_table[phi];

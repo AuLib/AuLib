@@ -8,21 +8,22 @@
 //
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
-#include <WaveTables.h>
-#include <Oscilic.h>
+#include <Oscili.h>
+#include <SigBus.h>
 
 int main(){
-  
-  SawTable wave(50);
-  Oscilic sig(0.5, 440., 0., wave.table(), wave.size());
+  double fm = 440., fc = 220., ndx = 5.;
+  Oscili mod,car;
+  SigBus sig;
   SoundOut output("dac");
 
-  if(wave.error() == AULIB_NOERROR &&
-     sig.error() == AULIB_NOERROR &&
+  if(sig.error() == AULIB_NOERROR &&
      output.error() == AULIB_NOERROR) {
     for(int i=0; i < def_sr*10; i+=def_vsize){
-      sig.process();
-      output.write(sig.output());
+      mod.process(ndx,fm);
+      sig.process(mod.output(),fm,fc);
+      car.process(0.5,sig.output());
+      output.write(car.output());
     }
   }
   return 0;

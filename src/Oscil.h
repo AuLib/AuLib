@@ -25,7 +25,19 @@ protected:
   double m_incr;
   uint32_t m_tsize;
   const double *m_table;
+  const double *m_am;
+  const double *m_fm;
   bool m_sine;
+
+  /** AM/FM
+   */
+  void am_fm(uint32_t ndx){
+    if(m_am != NULL) m_amp = m_am[ndx];
+    if(m_fm != NULL) {
+      m_freq = m_fm[ndx];
+      m_incr = m_freq * m_tsize/m_sr;
+    }
+  }
   
   /** phase modulo
    */
@@ -44,8 +56,8 @@ public:
       sr - sampling rate \n
       vsize - vector size \n
   */
-  Oscil(double amp, double freq,
-	double phase = .0,
+  Oscil(double amp = 0., double freq = 0.,
+	double phase = 0.,
 	const double *table = NULL,
 	uint32_t tsize = def_tsize,
 	uint32_t vsize = def_vsize,
@@ -73,6 +85,36 @@ public:
   */
   virtual void process(double amp, double freq){
     m_amp = amp;
+    m_freq = freq;
+    m_incr = m_freq*m_tsize/m_sr;
+    process();
+  }
+
+  /** Process one vector of audio
+      with amplitude and (optional) freq modulation
+  */
+  virtual void process(const double *amp, const double *freq = NULL){
+    m_am = amp;
+    m_fm = freq;
+    process();
+  }
+
+  /** Process one vector of audio
+      with amplitude amp 
+      and freq modulation
+  */
+  virtual void process(double amp, const double *freq){
+    m_amp = amp;
+    m_fm = freq;
+    process();
+  }
+
+  /** Process one vector of audio
+      with amplitude modulation 
+      and frequency freq
+  */ 
+  virtual void process(const double *amp, double freq){
+    m_am = amp;
     m_freq = freq;
     m_incr = m_freq*m_tsize/m_sr;
     process();

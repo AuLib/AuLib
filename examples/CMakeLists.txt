@@ -9,12 +9,17 @@ elseif(LINUX)
 endif()
 
 # example programs
-add_executable(sampleplay sampleplay.cpp)
-target_link_libraries(sampleplay AuLib ${LIBSNDFILE} ${PORTAUDIO})
+add_executable(sine sine.cpp)
+target_link_libraries(sine AuLib ${LIBSNDFILE} ${PORTAUDIO})
 add_executable(saw saw.cpp)
 target_link_libraries(saw AuLib ${LIBSNDFILE} ${PORTAUDIO})
+add_executable(sampleplay sampleplay.cpp)
+target_link_libraries(sampleplay AuLib ${LIBSNDFILE} ${PORTAUDIO})
 add_executable(readtable readtable.cpp)
 target_link_libraries(readtable AuLib ${LIBSNDFILE} ${PORTAUDIO})
+add_executable(fm fm.cpp)
+target_link_libraries(fm AuLib ${LIBSNDFILE} ${PORTAUDIO})
+
 
 # installation targets
 INSTALL(TARGETS sampleplay saw readtable
