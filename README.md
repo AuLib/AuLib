@@ -26,7 +26,13 @@ installation base directory.
 Documentation
 -----------------------
 Documentation is auto-generated from the headers using doxygen
-as html, latex sources and man pages.
+as html, latex sources and man pages. From the build directory, 
+
+```
+$ make doc
+```
+
+will build the documentation and place it under ./docs.
 
 Author
 -----------------------
