@@ -32,7 +32,8 @@ as html, latex sources and man pages. From the build directory,
 $ make doc
 ```
 
-will build the documentation and place it under ./docs.
+will build the documentation and place it under ./docs. You will
+need doxygen to be installed in your system
 
 Author
 -----------------------

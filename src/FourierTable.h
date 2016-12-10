@@ -1,7 +1,13 @@
-////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
 // FourierTable class: Fourier series tables
-// (c) V Lazzarini, 2016-7
-////////////////////////////////////////////
+// Copyright (C) 2016-7 V Lazzarini
+//
+// This software is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+// version 3.0 of the License, or (at your option) any later version.
+//
+/////////////////////////////////////////////////////////////////////
 #ifndef _FOURIERTABLE_H
 #define _FOURIERTABLE_H
 
