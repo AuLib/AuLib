@@ -1,11 +1,17 @@
-////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
 // Implementation of the Oscil class
-// (c) V Lazzarini, 2016-7
-////////////////////////////////////////////
+// Copyright (C) 2016-7 V Lazzarini
+//
+// This software is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+// version 3.0 of the License, or (at your option) any later version.
+//
+/////////////////////////////////////////////////////////////////////
 #include "Oscil.h"
 
 Oscil::Oscil(double amp, double freq,
-	     double phase, double *table,
+	     double phase, const double *table,
 	     uint32_t tsize,double sr,
 	     uint32_t vsize) :
   m_amp(amp), m_freq(freq),
@@ -13,15 +19,22 @@ Oscil::Oscil(double amp, double freq,
   m_table(table), m_sine(false),
   AudioBase(1,sr,vsize)
 {
-  m_incr = m_freq*m_tsize/m_sr;
-  m_output = new double[m_vsize];
-  if(m_table == NULL) {
-    m_table = new double[def_tsize+1];
+   m_incr = m_freq*m_tsize/m_sr;
+   if(m_table == NULL) {
+    double *table = new double[def_tsize+1];
+    if(m_table != NULL) {
     for(int i=0; i < def_tsize; i++)
-      m_table[i] = sin(i*twopi/def_tsize);
-    m_table[def_tsize] = m_table[0];
+     table[i] = sin(i*twopi/def_tsize);
+    table[def_tsize] = table[0];
+    m_table = (const double *) table;
     m_sine = true;
-  }
+    } else {
+      m_tsize = 0;
+      m_vsize = 0;  
+      m_error = AULIB_MEM_ERROR;
+      return;
+    }
+   }
    m_phs *= m_tsize;
    mod();
 }

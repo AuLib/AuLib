@@ -20,6 +20,7 @@ class FuncTable {
  protected:
   double *m_table;
   uint32_t m_tsize;
+  uint32_t m_error;
  
   /** Normalise the table
    */ 
@@ -39,12 +40,15 @@ class FuncTable {
       tsize - table size \n
    */ 
   FuncTable(uint32_t tsize = def_tsize)
-  : m_tsize(tsize) {
+    : m_tsize(tsize), m_error(AULIB_NOERROR) {
     if(m_tsize > 0) {
      m_table = new double[m_tsize+1];
-     memset(m_table,0,
-	 sizeof(double)*(m_tsize+1));
-    }
+     if(m_table == NULL) {
+       m_tsize = 0;
+       m_error = AULIB_MEM_ERROR;
+     } else 
+     memset(m_table,0,sizeof(double)*(m_tsize+1));
+    } else m_table = NULL;
   }
   ~FuncTable(){
     delete[] m_table;
@@ -52,8 +56,8 @@ class FuncTable {
 
   /** Get the function table
    */ 
-  double *table(){
-    return m_table;
+  const double *table(){
+    return (const double *) m_table;
   }
 
   /** Get a single point at pos
@@ -63,8 +67,16 @@ class FuncTable {
     return m_table[pos];
   }
 
+  /** Get table size
+   */
   uint32_t size(){
     return m_tsize;
+  }
+
+  /** Get error code
+   */
+  uint32_t error(){
+    return m_error;
   }
 };
 

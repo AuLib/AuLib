@@ -50,6 +50,14 @@ const double pi = 4*atan(1.);
 
 /** the two pi definition. 
 */ 
-const double twopi = 8*atan(1.); 
+const double twopi = 8*atan(1.);
+
+/** General Error Codes
+ */
+enum {
+      AULIB_NOERROR = 0,
+      AULIB_MEM_ERROR,
+      AULIB_ERROR
+      };
 
 #endif  // ifndef _AU_LIB_H

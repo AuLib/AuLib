@@ -21,7 +21,7 @@ class TableRead : public AudioBase {
   bool  m_wrap;
   bool  m_norm;
   uint32_t m_tsize;
-  double *m_table;
+  const double *m_table;
 
   double mod(double pos){
     if(m_wrap) {
@@ -43,19 +43,24 @@ class TableRead : public AudioBase {
      tsize - table size \n
      vsize - vector size \n
   */
-  TableRead(double *table, double phase = 0.,
+  TableRead(const double *table, double phase = 0.,
 	    bool norm = true, bool wrap = true,
 	    uint32_t tsize = def_tsize,
 	    uint32_t vsize = def_vsize):
   m_table(table), m_phs(phase),
   m_norm(norm), m_wrap(wrap),
   m_tsize(tsize),
-    AudioBase(1,def_sr,vsize) { };
+    AudioBase(1,def_sr,vsize) {
+    if(m_table == NULL) {
+      m_vsize = 0;
+      m_tsize = 0;
+    }
+   };
   
   /** takes in a frame of phase values
       and lookups up the table values
   */
-  virtual void process(double *phs);
+  virtual void process(const double *phs);
 
 };
 #endif

@@ -24,7 +24,7 @@ class Oscil : public AudioBase {
   double m_amp;
   double m_incr;
   uint32_t m_tsize;
-  double *m_table;
+  const double *m_table;
   bool m_sine;
   
   /** phase modulo
@@ -46,7 +46,7 @@ class Oscil : public AudioBase {
   */
   Oscil(double amp, double freq,
 	double phase = .0,
-	double *table = NULL,
+	const double *table = NULL,
 	uint32_t tsize = def_tsize,
 	double sr = def_sr,
 	uint32_t vsize = def_vsize);

@@ -30,7 +30,7 @@ class SamplePlayer : public Oscili {
   */
   SamplePlayer(double amp, double pitch,
 	double phase = .0,
-	double *table = NULL,
+	const double *table = NULL,
 	uint32_t tsize = def_tsize,
 	double sr = def_sr,
 	 uint32_t vsize = def_vsize) :

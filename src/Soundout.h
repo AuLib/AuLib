@@ -15,7 +15,15 @@
 
 enum {SOUNDOUT_RT=1,
      SOUNDOUT_STDOUT,
-     SOUNDOUT_SNDFILE};
+     SOUNDOUT_SNDFILE
+};
+
+enum{AULIB_FOPEN_ERROR
+     = AULIB_ERROR + 1,
+     AULIB_RTINIT_ERROR,
+     AULIB_RTOPEN_ERROR,
+     AULIB_RTSTREAM_ERROR   
+};
 
 /** Generic audio output class
  */
@@ -32,6 +40,7 @@ class SoundOut {
   void *m_buffer;
   uint32_t m_bsize;
   void *m_handle;
+  uint32_t m_error;
 
  public:
   /** SoundOut constructor \n\n
@@ -55,8 +64,13 @@ class SoundOut {
   /** Writes sig to the output
     destination.
   */
-  uint32_t write(double *sig); 
-  
+  uint32_t write(const double *sig); 
+
+  /** Get error code
+   */
+  uint32_t error(){
+    return m_error;
+  }
 };
 
 #endif

@@ -25,7 +25,7 @@ class TableReadi : public TableRead {
      tsize - table size \n
      vsize - vector size \n
   */
-  TableReadi(double *table, double phase = 0.,
+  TableReadi(const double *table, double phase = 0.,
 	    bool norm = true, bool wrap = true,
 	    uint32_t tsize = def_tsize,
 	     uint32_t vsize = def_vsize) :

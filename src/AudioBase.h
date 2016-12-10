@@ -23,6 +23,7 @@ class AudioBase {
   double m_sr;
   uint32_t m_vsize;
   double *m_output;
+  uint32_t m_error;
 
  public:
   /** AudioBase constructor \n\n
@@ -34,9 +35,16 @@ class AudioBase {
 	   double sr = def_sr,
 	   double vsize = def_vsize) :
     m_nchnls(nchnls), m_sr(sr),
-    m_vsize(vsize) {
-    m_output = new double[m_vsize*m_nchnls];
-    
+    m_vsize(vsize), m_error(AULIB_NOERROR) {
+    if(m_vsize != 0) {
+      m_output = new double[m_vsize*m_nchnls];
+      if(m_output == NULL) {
+        m_error = AULIB_MEM_ERROR;
+	m_output = NULL;
+        m_vsize = 0;
+      } else
+	memset(m_output, 0, m_vsize*sizeof(double));
+    } 
   }
   
   /** AudioBase destructor
@@ -47,16 +55,25 @@ class AudioBase {
 
   /** Get the audio output vector
    */ 
-  double *output(){
-    return m_output;
+  const double *output(){
+    return (const double *) m_output;
   }
   
   /** Get a single sample at ndx 
       off the output audio vector
   */  
   double output(uint32_t ndx){
-    return m_output[ndx];
+    if(ndx < m_vsize)
+      return m_output[ndx];
+    else return 0.;
   }
+
+  /** Get error code
+   */
+  uint32_t error(){
+    return m_error;
+  }
+  
   
 };
 #endif

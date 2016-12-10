@@ -1,11 +1,22 @@
-////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
 // SampleTable class: Sampled-sound tables
-// (c) V Lazzarini, 2016-7
-////////////////////////////////////////////
+// Copyright (C) 2016-7 V Lazzarini
+//
+// This software is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+// version 3.0 of the License, or (at your option) any later version.
+//
+/////////////////////////////////////////////////////////////////////
 #ifndef _SAMPLETABLE_H
 #define _SAMPLETABLE_H
 
 #include "FuncTable.h"
+
+enum{AULIB_FILE_ERROR
+     = AULIB_ERROR + 1,
+     AULIB_READ_ERROR
+};
 
 /** Sampled-sound table from a soundfile
  */
