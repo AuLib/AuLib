@@ -17,7 +17,7 @@
  */
 class Oscili : public Oscil {
 
- public:
+public:
   /** Oscili constructor \n\n
       amp - amplitude \n
       freq - frequency in Hz \n
@@ -28,19 +28,19 @@ class Oscili : public Oscil {
       vsize - vector size \n
   */
   Oscili(double amp, double freq,
-	double phase = .0,
-	const double *table = NULL,
-	uint32_t tsize = def_tsize,
-	double sr = def_sr,
-	 uint32_t vsize = def_vsize) :
-  Oscil(amp,freq,phase,table,
-	tsize,sr,vsize) { };
+	 double phase = .0,
+	 const double *table = NULL,
+	 uint32_t tsize = def_tsize,
+	 uint32_t vsize = def_vsize,
+	 double sr = def_sr) :
+    Oscil(amp,freq,phase,table,
+	  tsize,vsize,sr) { };
 
   /** Process one vector of audio
    */
   virtual void process();
 
-    /** Process one vector of audio
+  /** Process one vector of audio
       with amplitude amp
   */
   virtual void process(double amp) {

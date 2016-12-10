@@ -32,8 +32,8 @@ class AudioBase {
       vsize - vector size (frames) \n
   */
   AudioBase(uint32_t nchnls = def_nchnls,
-	   double sr = def_sr,
-	   double vsize = def_vsize) :
+	    double vsize = def_vsize,
+	    double sr = def_sr) :
     m_nchnls(nchnls), m_sr(sr),
     m_vsize(vsize), m_error(AULIB_NOERROR) {
     if(m_vsize != 0) {

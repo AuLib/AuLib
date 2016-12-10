@@ -7,9 +7,9 @@
 // version 3.0 of the License, or (at your option) any later version.
 //
 /////////////////////////////////////////////////////////////////////
-#include "SoundOut.h"
-#include "WaveTables.h"
-#include "Oscilic.h"
+#include <SoundOut.h>
+#include <WaveTables.h>
+#include <Oscilic.h>
 
 int main(){
   

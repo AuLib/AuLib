@@ -15,13 +15,10 @@
 #include <iostream>
 
 SoundOut::SoundOut(const char *dest, uint32_t nchnls,
-		   double sr, uint32_t vsize,
-		   uint32_t bsize) :
-  m_dest(dest), m_nchnls(nchnls),
-  m_vsize(vsize), m_sr(sr),
-  m_bsize(bsize), m_buffer(NULL),
+		   uint32_t vsize, uint32_t bsize, double sr) :
+  m_dest(dest), m_bsize(bsize), m_buffer(NULL),
   m_handle(NULL), m_mode(0), m_cnt(0),
-  m_framecnt(0), m_error(AULIB_NOERROR)
+  m_framecnt(0), AudioBase(nchnls,vsize,sr)
 {
   if(strcmp("dac",m_dest) == 0){
     // RT audio
@@ -53,12 +50,12 @@ SoundOut::SoundOut(const char *dest, uint32_t nchnls,
 	  m_handle = (void *) stream;
 	  m_mode = SOUNDOUT_RT;
 	} else {
-         m_error = AULIB_RTSTREAM_ERROR;
-         m_vsize  = 0;
+	  m_error = AULIB_RTSTREAM_ERROR;
+	  m_vsize  = 0;
         }
       } else {
-       m_error = AULIB_RTOPEN_ERROR;
-       m_vsize  = 0;
+	m_error = AULIB_RTOPEN_ERROR;
+	m_vsize  = 0;
       }
     } else {
       m_error = AULIB_RTINIT_ERROR;
@@ -102,7 +99,6 @@ SoundOut::~SoundOut(){
     double *buffer = (double *) m_buffer;
     delete[] buffer;
   }
-;
 }
 
 uint32_t SoundOut::write(const double *sig){

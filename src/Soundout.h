@@ -11,11 +11,11 @@
 #ifndef _SOUNDOUT_H
 #define _SOUNDOUT_H
 
-#include "AuLib.h"
+#include "AudioBase.h"
 
 enum {SOUNDOUT_RT=1,
-     SOUNDOUT_STDOUT,
-     SOUNDOUT_SNDFILE
+      SOUNDOUT_STDOUT,
+      SOUNDOUT_SNDFILE
 };
 
 enum{AULIB_FOPEN_ERROR
@@ -27,12 +27,9 @@ enum{AULIB_FOPEN_ERROR
 
 /** Generic audio output class
  */
-class SoundOut {
+class SoundOut : public AudioBase {
 
- protected:
-  double m_sr;
-  uint32_t m_nchnls;
-  double m_vsize;
+protected:
   const char *m_dest;
   uint32_t m_mode;
   uint32_t m_cnt;
@@ -40,37 +37,31 @@ class SoundOut {
   void *m_buffer;
   uint32_t m_bsize;
   void *m_handle;
-  uint32_t m_error;
 
- public:
+public:
   /** SoundOut constructor \n\n
-    dest - output destination 
-    ("dac", "stdout", or file path) \n
-    nchnls - number of channels \n
-    sr - sampling rate \n
-    vsize - vector size \n
-    bsize - buffer size \n
+      dest - output destination 
+      ("dac", "stdout", or file path) \n
+      nchnls - number of channels \n
+      sr - sampling rate \n
+      vsize - vector size \n
+      bsize - buffer size \n
   */
   SoundOut(const char *dest,
 	   uint32_t nchnls = def_nchnls,
-	   double sr = def_sr,
 	   uint32_t vsize = def_vsize,
-	   uint32_t bsize = def_bsize);
+	   uint32_t bsize = def_bsize,
+	   double sr = def_sr);
   
   /** SoundOut destructor
    */
   ~SoundOut();
 
   /** Writes sig to the output
-    destination.
+      destination.
   */
   uint32_t write(const double *sig); 
 
-  /** Get error code
-   */
-  uint32_t error(){
-    return m_error;
-  }
 };
 
 #endif

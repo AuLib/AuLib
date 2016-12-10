@@ -11,9 +11,9 @@
 #include "Phasor.h"
 
 Phasor::Phasor(double freq, double phase,
-	       double sr,uint32_t vsize) :
+	       uint32_t vsize, double sr) :
   m_freq(freq),m_phs(phase),
-  AudioBase(1,sr,vsize)
+  AudioBase(1,vsize,sr)
 {
   m_incr = m_freq/m_sr;
   mod();

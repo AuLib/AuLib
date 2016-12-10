@@ -15,10 +15,10 @@
 
 /** Sample playback oscillator 
     with linear interpolation
- */
+*/
 class SamplePlayer : public Oscili {
 
- public:
+public:
   /** SamplePlayer constructor \n\n
       amp - amplitude \n
       pitch - playback pitch \n
@@ -29,22 +29,22 @@ class SamplePlayer : public Oscili {
       vsize - vector size \n
   */
   SamplePlayer(double amp, double pitch,
-	double phase = .0,
-	const double *table = NULL,
-	uint32_t tsize = def_tsize,
-	double sr = def_sr,
-	 uint32_t vsize = def_vsize) :
-  Oscili(amp,pitch*sr/tsize,phase,table,
-	tsize,sr,vsize) { };
+	       double phase = .0,
+	       const double *table = NULL,
+	       uint32_t tsize = def_tsize,
+	       uint32_t vsize = def_vsize, 
+	       double sr = def_sr) :
+    Oscili(amp,pitch*sr/tsize,phase,table,
+	   tsize,vsize,sr) { };
 
 
   /** Process one vector of audio
-  */
+   */
   virtual void process() {
     Oscili::process();
   }
 
- /** Process one vector of audio
+  /** Process one vector of audio
       with amplitude amp
   */
   virtual void process(double amp) {
@@ -52,7 +52,7 @@ class SamplePlayer : public Oscili {
   }
 
 
- /** Process one vector of audio
+  /** Process one vector of audio
       with amplitude amp and
       pitch transposition
   */

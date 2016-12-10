@@ -7,10 +7,10 @@
 // version 3.0 of the License, or (at your option) any later version.
 //
 /////////////////////////////////////////////////////////////////////
-#include "TableRead.h"
-#include "SoundOut.h"
-#include "WaveTables.h"
-#include "Phasor.h"
+#include <TableRead.h>
+#include <SoundOut.h>
+#include <WaveTables.h>
+#include <Phasor.h>
 
 int main(){
   

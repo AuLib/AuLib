@@ -7,9 +7,9 @@
 // version 3.0 of the License, or (at your option) any later version.
 //
 /////////////////////////////////////////////////////////////////////
-#include "SoundOut.h"
-#include "SampleTable.h"
-#include "SamplePlayer.h"
+#include <SoundOut.h>
+#include <SampleTable.h>
+#include <SamplePlayer.h>
 
 int main(int argc, const char **argv){
 

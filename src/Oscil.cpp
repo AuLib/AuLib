@@ -12,31 +12,31 @@
 
 Oscil::Oscil(double amp, double freq,
 	     double phase, const double *table,
-	     uint32_t tsize,double sr,
-	     uint32_t vsize) :
+	     uint32_t tsize,uint32_t vsize,
+	     double sr) :
   m_amp(amp), m_freq(freq),
   m_phs(phase), m_tsize(tsize),
   m_table(table), m_sine(false),
-  AudioBase(1,sr,vsize)
+  AudioBase(1,vsize,sr)
 {
-   m_incr = m_freq*m_tsize/m_sr;
-   if(m_table == NULL) {
+  m_incr = m_freq*m_tsize/m_sr;
+  if(m_table == NULL) {
     double *table = new double[def_tsize+1];
     if(m_table != NULL) {
-    for(int i=0; i < def_tsize; i++)
-     table[i] = sin(i*twopi/def_tsize);
-    table[def_tsize] = table[0];
-    m_table = (const double *) table;
-    m_sine = true;
+      for(int i=0; i < def_tsize; i++)
+	table[i] = sin(i*twopi/def_tsize);
+      table[def_tsize] = table[0];
+      m_table = (const double *) table;
+      m_sine = true;
     } else {
       m_tsize = 0;
       m_vsize = 0;  
       m_error = AULIB_MEM_ERROR;
       return;
     }
-   }
-   m_phs *= m_tsize;
-   mod();
+  }
+  m_phs *= m_tsize;
+  mod();
 }
 
 Oscil::~Oscil(){

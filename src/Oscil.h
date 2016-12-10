@@ -17,7 +17,7 @@
  */
 class Oscil : public AudioBase {
 
- protected:
+protected:
   
   double m_phs;  
   double m_freq;
@@ -34,7 +34,7 @@ class Oscil : public AudioBase {
     while(m_phs < 0) m_phs += m_tsize;
   }
 
- public:
+public:
   /** Oscil constructor \n\n
       amp - amplitude   \n
       freq - frequency in Hz \n
@@ -48,8 +48,8 @@ class Oscil : public AudioBase {
 	double phase = .0,
 	const double *table = NULL,
 	uint32_t tsize = def_tsize,
-	double sr = def_sr,
-	uint32_t vsize = def_vsize);
+	uint32_t vsize = def_vsize,
+	double sr = def_sr);
 
   /** Oscil destructor
    */

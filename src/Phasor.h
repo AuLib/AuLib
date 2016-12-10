@@ -17,7 +17,7 @@
  */
 class Phasor : public AudioBase {
 
- protected:
+protected:
   double m_phs;  
   double m_freq;
   double m_incr;
@@ -29,7 +29,7 @@ class Phasor : public AudioBase {
     while(m_phs < 0.0) m_phs += 1.;
   }
 
- public:
+public:
   /** Phasor constructor \n\n
       freq - frequency in Hz \n
       phase - init phase (0-1) \n 
@@ -37,9 +37,9 @@ class Phasor : public AudioBase {
       vsize - vector size \n
   */
   Phasor(double freq,
-	double phase = .0,
-	double sr = def_sr,
-	uint32_t vsize = def_vsize);
+	 double phase = 0.,
+	 uint32_t vsize = def_vsize,
+	 double sr = def_sr);
 
   /** Process one vector of audio
    */

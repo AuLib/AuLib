@@ -17,7 +17,7 @@
  */
 class Oscilic : public Oscil {
 
- public:
+public:
   /** Oscilic constructor \n\n
       amp - amplitude \n
       freq - frequency in Hz \n
@@ -28,13 +28,13 @@ class Oscilic : public Oscil {
       vsize - vector size \n
   */
   Oscilic(double amp, double freq,
-	double phase = .0,
-	const double *table = NULL,
-	uint32_t tsize = def_tsize,
-	double sr = def_sr,
-	 uint32_t vsize = def_vsize) :
-  Oscil(amp,freq,phase,table,
-	tsize,sr,vsize) { };
+	  double phase = .0,
+	  const double *table = NULL,
+	  uint32_t tsize = def_tsize,
+	  uint32_t vsize = def_vsize,
+	  double sr = def_sr) :
+    Oscil(amp,freq,phase,table,
+	  tsize,vsize,sr) { };
 
 
   /** Process one vector of audio

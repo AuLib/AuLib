@@ -14,14 +14,14 @@
 #include "AudioBase.h"
 
 enum {SOUNDIN_RT=1,
-     SOUNDIN_STDIN,
-     SOUNDIN_SNDFILE};
+      SOUNDIN_STDIN,
+      SOUNDIN_SNDFILE};
 
 /** Audio input class
  */
 class SoundIn : AudioBase {
 
- protected:
+protected:
   const char *m_src;
   uint32_t m_mode;
   uint32_t m_cnt;
@@ -30,22 +30,22 @@ class SoundIn : AudioBase {
   uint32_t m_bsize;
   void *m_handle;
 
- public:
+public:
   /** SoundIn constructor \n\n
-    src - input source ("adc", "stdin", or file path) \n
-    vsize - vector size \n
-    bsize - buffer size \n
+      src - input source ("adc", "stdin", or file path) \n
+      vsize - vector size \n
+      bsize - buffer size \n
   */
-  SoundIn(const char *src,
-	   uint32_t vsize = def_vsize,
-	   uint32_t bsize = def_bsize);
+  SoundIn(const char *src, uint32_t nchnls = def_nchnls,
+	  uint32_t vsize = def_vsize, uint32_t bsize = def_bsize,
+	  double sr = def_sr);
   
   /** SoundOut destructor
    */
   ~SoundIn();
 
   /** Reads audio into output vector
-  */
+   */
   uint32_t read(); 
   
 };
