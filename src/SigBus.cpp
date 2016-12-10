@@ -10,13 +10,15 @@
 /////////////////////////////////////////////////////////////////////
 #include "SigBus.h"
 
-void SigBus::process(const double *sig) {
+void
+AuLib::SigBus::process(const double *sig) {
   for(int i=0; i < m_vsize*m_nchnls; i++)
     m_output[i] += sig[i];
 }
 
-void SigBus::process(const double *sig, double scal, double offs,
-		     bool overwrite) {
+void
+AuLib::SigBus::process(const double *sig, double scal,
+		       double offs, bool overwrite) {
   for(int i=0; i < m_vsize*m_nchnls; i++) 
     m_output[i] = overwrite ? sig[i]*scal + offs :
       sig[i]*scal + offs + m_output[i];     

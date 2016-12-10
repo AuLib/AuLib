@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "Phasor.h"
 
-Phasor::Phasor(double freq, double phase,
+AuLib::Phasor::Phasor(double freq, double phase,
 	       uint32_t vsize, double sr) :
   m_freq(freq),m_phs(phase),
   AudioBase(1,vsize,sr)
@@ -19,7 +19,8 @@ Phasor::Phasor(double freq, double phase,
   mod();
 }
 
-void Phasor::process(){
+void
+AuLib::Phasor::process(){
   for(int i=0; i < m_vsize; i++){
     m_output[i] = m_phs;
     m_phs += m_incr;

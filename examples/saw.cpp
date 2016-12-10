@@ -11,6 +11,8 @@
 #include <WaveTables.h>
 #include <Oscilic.h>
 
+using namespace AuLib;
+
 int main(){
   
   SawTable wave(50);

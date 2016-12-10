@@ -11,7 +11,7 @@
 #include "TableRead.h"
 
 void
-TableRead::process(const double *phs){
+AuLib::TableRead::process(const double *phs){
   uint32_t pos;
   for(int i=0; i < m_vsize; i++){   
     pos = (uint32_t) mod((m_norm ?

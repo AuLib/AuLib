@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "Oscil.h"
 
-Oscil::Oscil(double amp, double freq,
+AuLib::Oscil::Oscil(double amp, double freq,
 	     double phase, const double *table,
 	     uint32_t tsize,uint32_t vsize,
 	     double sr) :
@@ -40,12 +40,14 @@ Oscil::Oscil(double amp, double freq,
   mod();
 }
 
-Oscil::~Oscil(){
+AuLib::Oscil::~Oscil(){
   if(m_sine)
     delete[] m_table;
 }
 
-void Oscil::process(){
+
+void
+AuLib::Oscil::process(){
   for(int i=0; i < m_vsize; i++){
     am_fm(i);
     m_output[i] = m_amp*m_table[(uint32_t)m_phs];

@@ -12,30 +12,34 @@
 #define _TABLEREADIC_H
 #include "TableRead.h"
 
-/** Table reader with cubic interpolation
- */
-class TableReadic : public TableRead {
+namespace AuLib {
 
- public:
-  /** TableReadic constructor \n\n
-     table - function table \n
-     phase - initial phase \n
-     norm - normalisation switch \n
-     wrap - wraparound switch \n
-     tsize - table size \n
-     vsize - vector size \n
-  */
-  TableReadic(const double *table, double phase = 0.,
-	    bool norm = true, bool wrap = true,
-	    uint32_t tsize = def_tsize,
-	     uint32_t vsize = def_vsize) :
-  TableRead(table,phase,norm,wrap,
-	    tsize, vsize) { };
+  /** Table reader with cubic interpolation
+   */
+  class TableReadic : public TableRead {
 
-  /** takes in a frame of phase values
-      and lookups up the table values
-  */
-  virtual void process(double *phs);
+  public:
+    /** TableReadic constructor \n\n
+	table - function table \n
+	phase - initial phase \n
+	norm - normalisation switch \n
+	wrap - wraparound switch \n
+	tsize - table size \n
+	vsize - vector size \n
+    */
+    TableReadic(const double *table, double phase = 0.,
+		bool norm = true, bool wrap = true,
+		uint32_t tsize = def_tsize,
+		uint32_t vsize = def_vsize) :
+      TableRead(table,phase,norm,wrap,
+		tsize, vsize) { };
 
-};
+    /** takes in a frame of phase values
+	and lookups up the table values
+    */
+    virtual void process(double *phs);
+
+  };
+
+}
 #endif

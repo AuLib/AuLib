@@ -11,7 +11,7 @@
 #include "SampleTable.h"
 #include "sndfile.h"
 
-SampleTable::SampleTable(const char *name,
+AuLib::SampleTable::SampleTable(const char *name,
 			 uint32_t chn) :
   FuncTable(0) {
   SF_INFO info;

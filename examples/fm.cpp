@@ -11,6 +11,8 @@
 #include <Oscili.h>
 #include <SigBus.h>
 
+using namespace AuLib;
+
 int main(){
   double fm = 440., fc = 220., ndx = 5.;
   Oscili mod,car;

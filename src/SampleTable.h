@@ -13,31 +13,38 @@
 
 #include "FuncTable.h"
 
-enum{AULIB_FILE_ERROR
-     = AULIB_ERROR + 1,
-     AULIB_READ_ERROR
-};
+namespace AuLib {
 
-/** Sampled-sound table from a soundfile
- */
-class SampleTable : public FuncTable {
-
- protected:
-  uint32_t m_nchnls;
-
- public:
-  /** SampleTable constructor \n\n
-      name - filename \n
-      chn - channel to load (0 = all channels) \n
-  */
-  SampleTable(const char *name,
-	      uint32_t chn = 1);
-
-  /** Get the number of channels
+  /** Error codes
    */
-  uint32_t nchnls(){
-    return m_nchnls;
-  }
+  enum sampletable_error_codes {
+    AULIB_FILE_ERROR
+    = AULIB_ERROR + 1,
+    AULIB_READ_ERROR
+  };
+
+  /** Sampled-sound table from a soundfile
+   */
+  class SampleTable : public FuncTable {
+
+  protected:
+    uint32_t m_nchnls;
+
+  public:
+    /** SampleTable constructor \n\n
+	name - filename \n
+	chn - channel to load (0 = all channels) \n
+    */
+    SampleTable(const char *name,
+		uint32_t chn = 1);
+
+    /** Get the number of channels
+     */
+    uint32_t nchnls(){
+      return m_nchnls;
+    }
  
-};
+  };
+
+}
 #endif

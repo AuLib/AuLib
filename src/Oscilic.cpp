@@ -10,7 +10,8 @@
 /////////////////////////////////////////////////////////////////////
 #include "Oscilic.h"
 
-void Oscilic::process(){
+void
+AuLib::Oscilic::process(){
   uint32_t phi;
   double frac,a,b,c,d;
   double tmp, fracsq, fracb;

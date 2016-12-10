@@ -10,7 +10,8 @@
 /////////////////////////////////////////////////////////////////////
 #include "Oscili.h"
 
-void Oscili::process(){
+void
+AuLib::Oscili::process(){
   uint32_t phi;
   double frac,a,b;
   for(int i=0; i < m_vsize; i++){

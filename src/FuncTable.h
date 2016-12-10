@@ -13,71 +13,74 @@
 
 #include "AuLib.h"
 
-/** Function table base class
- */
-class FuncTable {
+namespace AuLib {
+  /** Function table base class
+   */
+  class FuncTable {
 
- protected:
-  double *m_table;
-  uint32_t m_tsize;
-  uint32_t m_error;
+  protected:
+    double *m_table;
+    uint32_t m_tsize;
+    uint32_t m_error;
  
-  /** Normalise the table
-   */ 
-  void normalise_table(){
-    uint32_t n;
-    double max = 0.;
-    for(n=0; n < m_tsize+1; n++)
-      max = m_table[n] > max ?
-	m_table[n] : max;
-    if(max)
+    /** Normalise the table
+     */ 
+    void normalise_table(){
+      uint32_t n;
+      double max = 0.;
       for(n=0; n < m_tsize+1; n++)
-	m_table[n] /= max;
-  }
+	max = m_table[n] > max ?
+	  m_table[n] : max;
+      if(max)
+	for(n=0; n < m_tsize+1; n++)
+	  m_table[n] /= max;
+    }
 
- public:
-  /** FuncTable constructor \n\n
-      tsize - table size \n
-   */ 
-  FuncTable(uint32_t tsize = def_tsize)
-    : m_tsize(tsize), m_error(AULIB_NOERROR) {
-    if(m_tsize > 0) {
-     m_table = new double[m_tsize+1];
-     if(m_table == NULL) {
-       m_tsize = 0;
-       m_error = AULIB_MEM_ERROR;
-     } else 
-     memset(m_table,0,sizeof(double)*(m_tsize+1));
-    } else m_table = NULL;
-  }
-  ~FuncTable(){
-    delete[] m_table;
-  }
+  public:
+    /** FuncTable constructor \n\n
+	tsize - table size \n
+    */ 
+    FuncTable(uint32_t tsize = def_tsize)
+      : m_tsize(tsize), m_error(AULIB_NOERROR) {
+      if(m_tsize > 0) {
+	m_table = new double[m_tsize+1];
+	if(m_table == NULL) {
+	  m_tsize = 0;
+	  m_error = AULIB_MEM_ERROR;
+	} else 
+	  memset(m_table,0,sizeof(double)*(m_tsize+1));
+      } else m_table = NULL;
+    }
+    ~FuncTable(){
+      delete[] m_table;
+    }
 
-  /** Get the function table
-   */ 
-  const double *table(){
-    return (const double *) m_table;
-  }
+    /** Get the function table
+     */ 
+    const double *table(){
+      return (const double *) m_table;
+    }
 
-  /** Get a single point at pos
-      from the function table
-  */ 
-  double table(uint32_t pos){
-    return m_table[pos];
-  }
+    /** Get a single point at pos
+	from the function table
+    */ 
+    double table(uint32_t pos){
+      return m_table[pos];
+    }
 
-  /** Get table size
-   */
-  uint32_t size(){
-    return m_tsize;
-  }
+    /** Get table size
+     */
+    uint32_t size(){
+      return m_tsize;
+    }
 
-  /** Get error code
-   */
-  uint32_t error(){
-    return m_error;
-  }
-};
+    /** Get error code
+     */
+    uint32_t error(){
+      return m_error;
+    }
 
+  };
+
+}
 #endif

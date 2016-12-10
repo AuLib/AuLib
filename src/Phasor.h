@@ -13,46 +13,51 @@
 
 #include "AudioBase.h"
 
-/** Phase signal (ramp) generator
- */
-class Phasor : public AudioBase {
+namespace AuLib {
 
-protected:
-  double m_phs;  
-  double m_freq;
-  double m_incr;
-  
-  /** phase modulo
+  /** Phase signal (ramp) generator
    */
-  void mod(){
-    while(m_phs >= 1.0) m_phs -= 1.;
-    while(m_phs < 0.0) m_phs += 1.;
-  }
+  class Phasor : public AudioBase {
 
-public:
-  /** Phasor constructor \n\n
-      freq - frequency in Hz \n
-      phase - init phase (0-1) \n 
-      sr - sampling rate \n
-      vsize - vector size \n
-  */
-  Phasor(double freq = 0.,
-	 double phase = 0.,
-	 uint32_t vsize = def_vsize,
-	 double sr = def_sr);
-
-  /** Process one vector of audio
-   */
-  virtual void process();
+  protected:
+    double m_phs;  
+    double m_freq;
+    double m_incr;
   
-  /** Process one vector of audio with
-      frequency freq
-  */
-  virtual void process(double freq){
-    m_freq = freq;
-    m_incr = m_freq/m_sr;
-    process();
-  }
+    /** phase modulo
+     */
+    void mod(){
+      while(m_phs >= 1.0) m_phs -= 1.;
+      while(m_phs < 0.0) m_phs += 1.;
+    }
 
-};
+  public:
+    /** Phasor constructor \n\n
+	freq - frequency in Hz \n
+	phase - init phase (0-1) \n 
+	sr - sampling rate \n
+	vsize - vector size \n
+    */
+    Phasor(double freq = 0.,
+	   double phase = 0.,
+	   uint32_t vsize = def_vsize,
+	   double sr = def_sr);
+
+    /** Process one vector of audio
+     */
+    virtual void process();
+  
+    /** Process one vector of audio with
+	frequency freq
+    */
+    virtual void process(double freq){
+      m_freq = freq;
+      m_incr = m_freq/m_sr;
+      process();
+    }
+
+  };
+
+
+}
 #endif

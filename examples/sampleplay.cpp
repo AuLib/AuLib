@@ -11,6 +11,8 @@
 #include <SampleTable.h>
 #include <SamplePlayer.h>
 
+using namespace AuLib;
+
 int main(int argc, const char **argv){
 
   if(argc > 1){

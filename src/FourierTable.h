@@ -13,45 +13,49 @@
 
 #include "FuncTable.h"
 
-/** Table type constants
- */
-enum {SAW_TABLE=1,
-      SQUARE_TABLE,
-      TRIANGLE_TABLE};
+namespace AuLib {
 
-/** Function tables based on
-    Fourier Series
-*/
-class FourierTable : public FuncTable {
+  /** Table type constants
+   */
+  enum wave_types {
+    SAW_TABLE=1,
+    SQUARE_TABLE,
+    TRIANGLE_TABLE};
 
- protected:
-  /** Create the table
-   */ 
-  void create(uint32_t harms,
-	      double *amps,
-	      double phase);
-
- public:
-  /** FourierTable constructor \n\n
-      harms - number of harmonics \n
-      amps - array of harmonic amplitudes \n
-      phase - phase offset \n
-      tsize - table size \n
+  /** Function tables based on
+      Fourier Series
   */
-  FourierTable(uint32_t harms,
-	       double *amps=NULL,
-	       double phase=0.,
-	       uint32_t tsize = def_tsize);
+  class FourierTable : public FuncTable {
+
+  protected:
+    /** Create the table
+     */ 
+    void create(uint32_t harms,
+		double *amps,
+		double phase);
+
+  public:
+    /** FourierTable constructor \n\n
+	harms - number of harmonics \n
+	amps - array of harmonic amplitudes \n
+	phase - phase offset \n
+	tsize - table size \n
+    */
+    FourierTable(uint32_t harms,
+		 double *amps=NULL,
+		 double phase=0.,
+		 uint32_t tsize = def_tsize);
   
-  /** FourierTable constructor \n\n
-      harms - number of harmonics \n
-      type - wave type \n
-      tsize - table size \n
-  */
-  FourierTable(uint32_t harms,
-	       uint32_t type = SAW_TABLE,
-	       uint32_t tsize = def_tsize);
+    /** FourierTable constructor \n\n
+	harms - number of harmonics \n
+	type - wave type \n
+	tsize - table size \n
+    */
+    FourierTable(uint32_t harms,
+		 uint32_t type = SAW_TABLE,
+		 uint32_t tsize = def_tsize);
 
-};
+  };
 
+}
 #endif

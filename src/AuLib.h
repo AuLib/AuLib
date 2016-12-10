@@ -50,54 +50,57 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 #include <cmath>
 #include <cstdint>
 #include <cstring>
 
-/** default signal vectorsize.
-*/
-const uint32_t def_vsize = 64;
+namespace AuLib {
+  
+  /** default signal vectorsize.
+   */
+  const uint32_t def_vsize = 64;
 
-/** default IO buffersize.
-*/
-const uint32_t def_bsize = 1024;
+  /** default IO buffersize.
+   */
+  const uint32_t def_bsize = 1024;
 
-/** default sampling rate
-*/
-const double def_sr = 44100.;
+  /** default sampling rate
+   */
+  const double def_sr = 44100.;
 
-/** default control rate
-*/
-const double def_kr = def_sr/def_vsize;
+  /** default control rate
+   */
+  const double def_kr = def_sr/def_vsize;
 
-/** default audio channels.
-*/
-const uint32_t  def_nchnls = 1;
+  /** default audio channels.
+   */
+  const uint32_t  def_nchnls = 1;
 
-/** default function table length
-*/
-const uint32_t   def_tsize = 16384;
+  /** default function table length
+   */
+  const uint32_t   def_tsize = 16384;
 
-/** butterworth modes 
-*/
-enum { BP,BR,LP,HP };
+  /** filter modes 
+   */
+  enum filter_types { BP = 0,BR,LP,HP };
 
-/** the pi definition. 
-*/ 
-const double pi = 4*atan(1.); 
+  /** the pi definition. 
+   */ 
+  const double pi = 4*atan(1.); 
 
-/** the two pi definition. 
-*/ 
-const double twopi = 8*atan(1.);
+  /** the two pi definition. 
+   */ 
+  const double twopi = 8*atan(1.);
 
-/** General Error Codes
- */
-enum {
-      AULIB_NOERROR = 0,
-      AULIB_MEM_ERROR,
-      AULIB_ERROR
-      };
+  /** General error xodes
+   */
+  enum error_codes {
+    AULIB_NOERROR = 0,
+    AULIB_MEM_ERROR,
+    AULIB_ERROR
+  };
 
+};
 #endif  // ifndef _AU_LIB_H

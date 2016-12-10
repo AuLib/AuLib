@@ -14,7 +14,7 @@
 #include <portaudio.h>
 #include <iostream>
 
-SoundOut::SoundOut(const char *dest, uint32_t nchnls,
+AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
 		   uint32_t vsize, uint32_t bsize, double sr) :
   m_dest(dest), m_bsize(bsize), m_buffer(NULL),
   m_handle(NULL), m_mode(0), m_cnt(0),
@@ -84,7 +84,7 @@ SoundOut::SoundOut(const char *dest, uint32_t nchnls,
   }
 }
 
-SoundOut::~SoundOut(){
+AuLib::SoundOut::~SoundOut(){
   if(m_mode == SOUNDOUT_RT &&
      m_handle != NULL) {
     Pa_StopStream((PaStream*) m_handle);
@@ -101,7 +101,8 @@ SoundOut::~SoundOut(){
   }
 }
 
-uint32_t SoundOut::write(const double *sig){
+uint32_t
+AuLib::SoundOut::write(const double *sig){
   uint32_t samples = m_vsize*m_nchnls;
   if(m_mode == SOUNDOUT_RT &&
      m_handle != NULL) {

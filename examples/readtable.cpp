@@ -12,6 +12,8 @@
 #include <WaveTables.h>
 #include <Phasor.h>
 
+using namespace AuLib;
+
 int main(){
   
   TriangleTable wave(50);

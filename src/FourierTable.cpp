@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "FourierTable.h"
 
-FourierTable::FourierTable(uint32_t harms,
+AuLib::FourierTable::FourierTable(uint32_t harms,
 			   double *amps, double phase,
 			   uint32_t tsize) :
   FuncTable(tsize)
@@ -18,7 +18,7 @@ FourierTable::FourierTable(uint32_t harms,
   create(harms,amps,phase);
 }
 
-FourierTable::FourierTable(uint32_t harms,
+AuLib::FourierTable::FourierTable(uint32_t harms,
 			   uint32_t type, uint32_t tsize) :
   FuncTable(tsize)
 {
@@ -50,7 +50,7 @@ FourierTable::FourierTable(uint32_t harms,
 }
 
 void
-FourierTable::create(uint32_t harms,
+AuLib::FourierTable::create(uint32_t harms,
 		     double *amps,
 		     double phase)
 { 

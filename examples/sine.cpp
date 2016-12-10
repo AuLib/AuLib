@@ -10,6 +10,8 @@
 #include <SoundOut.h>
 #include <Oscili.h>
 
+using namespace AuLib;
+
 int main(){
   
   Oscili sig;

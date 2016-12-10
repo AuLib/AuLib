@@ -13,56 +13,59 @@
 
 #include "Oscili.h"
 
-/** Sample playback oscillator 
-    with linear interpolation
-*/
-class SamplePlayer : public Oscili {
+namespace AuLib {
 
-public:
-  /** SamplePlayer constructor \n\n
-      amp - amplitude \n
-      pitch - playback pitch \n
-      phase - init phase (0-1) \n 
-      table - function table \n
-      tsize - table size \n
-      sr - sampling rate \n
-      vsize - vector size \n
+  /** Sample playback oscillator 
+      with linear interpolation
   */
-  SamplePlayer(double amp = 0., double pitch = 0.,
-	       double phase = 0.,
-	       const double *table = NULL,
-	       uint32_t tsize = def_tsize,
-	       uint32_t vsize = def_vsize, 
-	       double sr = def_sr) :
-    Oscili(amp,pitch*sr/tsize,phase,table,
-	   tsize,vsize,sr) { };
+  class SamplePlayer : public Oscili {
+
+  public:
+    /** SamplePlayer constructor \n\n
+	amp - amplitude \n
+	pitch - playback pitch \n
+	phase - init phase (0-1) \n 
+	table - function table \n
+	tsize - table size \n
+	sr - sampling rate \n
+	vsize - vector size \n
+    */
+    SamplePlayer(double amp = 0., double pitch = 0.,
+		 double phase = 0.,
+		 const double *table = NULL,
+		 uint32_t tsize = def_tsize,
+		 uint32_t vsize = def_vsize, 
+		 double sr = def_sr) :
+      Oscili(amp,pitch*sr/tsize,phase,table,
+	     tsize,vsize,sr) { };
 
 
-  /** Process one vector of audio
-   */
-  virtual void process() {
-    Oscili::process();
-  }
+    /** Process one vector of audio
+     */
+    virtual void process() {
+      Oscili::process();
+    }
 
-  /** Process one vector of audio
-      with amplitude amp
-  */
-  virtual void process(double amp) {
-    Oscili::process(amp);
-  }
+    /** Process one vector of audio
+	with amplitude amp
+    */
+    virtual void process(double amp) {
+      Oscili::process(amp);
+    }
 
 
-  /** Process one vector of audio
-      with amplitude amp and
-      pitch transposition
-  */
-  virtual void process(double amp, double pitch){
-    m_amp = amp;
-    m_freq = pitch*m_sr/m_tsize;
-    m_incr = pitch;
-    Oscili::process();
-  }
+    /** Process one vector of audio
+	with amplitude amp and
+	pitch transposition
+    */
+    virtual void process(double amp, double pitch){
+      m_amp = amp;
+      m_freq = pitch*m_sr/m_tsize;
+      m_incr = pitch;
+      Oscili::process();
+    }
   
-};
+  };
 
+}
 #endif
