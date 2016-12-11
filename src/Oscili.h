@@ -116,12 +116,9 @@ namespace AuLib {
 	and frequency freq
     */ 
     virtual void process(const AudioBase& obja, double freq){
-      if(obja.vsize() == m_vsize) {
-	m_am = obja.output();
-	m_freq = freq;
-        m_incr = m_freq*m_tsize/m_sr;
-        process();
-      } else m_error = AULIB_ERROR;
+      m_freq = freq;
+      m_incr = m_freq*m_tsize/m_sr;
+      process(obja);
     }
 
     /** Process one vector of audio
@@ -129,7 +126,8 @@ namespace AuLib {
 	and freq modulation from objf
     */
     virtual void process(double amp, const AudioBase& objf){
-      if(objf.vsize() == m_vsize) {
+      if(objf.vsize() == m_vsize &&
+	 objf.nchnls() == 1) {
 	m_amp = amp;
 	m_fm = objf.output();
         process();
@@ -141,7 +139,9 @@ namespace AuLib {
     */
     virtual void process(const AudioBase& obja, const AudioBase& objf){
       if(obja.vsize() == m_vsize &&
-	 objf.vsize() == m_vsize) {
+	 objf.vsize() == m_vsize &&
+	 obja.nchnls() == 1 &&
+	 objf.nchnls() == 1) {
 	m_am = obja.output();
 	m_fm = objf.output();
         process();

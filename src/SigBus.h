@@ -22,22 +22,26 @@ namespace AuLib {
   protected:
     double m_scal;
     double m_offs;
+    bool  m_ovw;
   
   public:
     /** SigBus constructor \n\n
 	scal - amplitude scaling \n
 	offs - amplitude offset \n
+        overwrite - overwrite bus \n
 	nchnls - number of channels \n
 	vsize - vector size \n
     */  
     SigBus(double scal = 1., double offs = 0.,
+	   bool overwrite = false,
 	   int nchnls = def_nchnls,
 	   uint32_t vsize = def_vsize) :
-      m_scal(scal), m_offs(offs),
+      m_scal(scal), m_offs(offs), m_ovw(overwrite),
       AudioBase(nchnls,vsize) { };
 
     /** Adds a signal vector to the bus.
 	Requires an explicit call to clear()
+        if overwrite is switched off
 	once the bus data has been consumed
     */
     virtual void process(const double* sig);
@@ -50,7 +54,12 @@ namespace AuLib {
     */
     virtual void process(const double* sig,
 			 double scal, double offs = 0.,
-			 bool overwrite = true);
+			 bool overwrite = true){
+      m_scal = scal;
+      m_offs = offs;
+      m_ovw = overwrite;
+      process(sig);
+    }
 
 
     /** Adds a signal vector to the bus from obj.
@@ -58,7 +67,8 @@ namespace AuLib {
 	once the bus data has been consumed
     */
     virtual void process(const AudioBase& obj) {
-      if(obj.vsize() == m_vsize){
+      if(obj.vsize() == m_vsize &&
+	 obj.nchnls() == m_nchnls){
 	process(obj.output());
       } else m_error = AULIB_ERROR;
     }
@@ -72,9 +82,10 @@ namespace AuLib {
     virtual void process(const AudioBase& obj,
 			 double scal, double offs = 0.,
 			 bool overwrite = true) {
-      if(obj.vsize() == m_vsize){
-	process(obj.output(),scal,offs,overwrite);
-      } else m_error = AULIB_ERROR;
+      m_scal = scal;
+      m_offs = offs;
+      m_ovw = overwrite;
+      process(obj.output());
     }     
 
     /** Clears the output vector

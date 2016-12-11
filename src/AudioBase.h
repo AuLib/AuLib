@@ -75,6 +75,12 @@ namespace AuLib {
     uint32_t vsize() const {
       return m_vsize;
     }
+    
+    /** Get number of channels
+     */
+    uint32_t nchnls() const {
+      return m_nchnls;
+    }
 
     /** Get error code
      */

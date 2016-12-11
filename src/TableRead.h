@@ -67,7 +67,8 @@ namespace AuLib {
 	and lookups up the table values
     */
     virtual void process(const AudioBase& obj){
-      if(obj.vsize() == m_vsize)
+      if(obj.vsize() == m_vsize &&
+	 obj.nchnls() == 1)
 	process(obj.output());
       else m_error = AULIB_ERROR;
     }

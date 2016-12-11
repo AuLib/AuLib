@@ -88,7 +88,8 @@ namespace AuLib {
         framecount.
     */
     uint32_t write(const AudioBase& obj){
-      if(obj.vsize() == m_vsize)
+      if(obj.vsize() == m_vsize &&
+	 obj.nchnls() == m_nchnls)
 	return write(obj.output());
       else m_error = AULIB_ERROR;
       return 0;

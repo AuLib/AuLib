@@ -13,13 +13,7 @@
 void
 AuLib::SigBus::process(const double *sig) {
   for(int i=0; i < m_vsize*m_nchnls; i++)
-    m_output[i] += sig[i];
+    m_output[i] = m_ovw ? m_scal*sig[i] + m_offs :
+      m_scal*sig[i] + m_offs + m_output[i];
 }
 
-void
-AuLib::SigBus::process(const double *sig, double scal,
-		       double offs, bool overwrite) {
-  for(int i=0; i < m_vsize*m_nchnls; i++) 
-    m_output[i] = overwrite ? sig[i]*scal + offs :
-      sig[i]*scal + offs + m_output[i];     
-}
