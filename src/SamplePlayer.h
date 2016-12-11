@@ -22,22 +22,23 @@ namespace AuLib {
 
   public:
     /** SamplePlayer constructor \n\n
+	table - function table \n
 	amp - amplitude \n
 	pitch - playback pitch \n
 	phase - init phase (0-1) \n 
-	table - function table \n
-	tsize - table size \n
-	sr - sampling rate \n
 	vsize - vector size \n
+	sr - sampling rate \n
     */
-    SamplePlayer(double amp = 0., double pitch = 0.,
+    SamplePlayer(FuncTable& ftable,
+		 double amp = 0., double pitch = 0.,
 		 double phase = 0.,
-		 const double *table = NULL,
-		 uint32_t tsize = def_tsize,
 		 uint32_t vsize = def_vsize, 
 		 double sr = def_sr) :
-      Oscili(amp,pitch*sr/tsize,phase,table,
-	     tsize,vsize,sr) { };
+      Oscili(amp,0.,ftable,phase,
+	     vsize,sr)
+    {
+      m_incr = pitch;
+    }
 
 
     /** Process one vector of audio

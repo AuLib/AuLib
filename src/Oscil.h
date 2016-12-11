@@ -12,6 +12,7 @@
 #define _OSCIL_H
 
 #include "AudioBase.h"
+#include "FuncTable.h"
 
 namespace AuLib {
   
@@ -31,7 +32,7 @@ namespace AuLib {
     const double *m_fm;
     bool m_sine;
 
-    /** AM/FM
+    /** AM/FM processing
      */
     void am_fm(uint32_t ndx){
       if(m_am != NULL) m_amp = m_am[ndx];
@@ -53,15 +54,24 @@ namespace AuLib {
 	amp - amplitude   \n
 	freq - frequency in Hz \n
 	phase - init phase (0-1) \n 
-	table - function table \n
-	tsize - table size \n
-	sr - sampling rate \n
 	vsize - vector size \n
+	sr - sampling rate \n\n
+        Uses internal sine wave table
     */
     Oscil(double amp = 0., double freq = 0.,
-	  double phase = 0.,
-	  const double *table = NULL,
-	  uint32_t tsize = def_tsize,
+	  double phase = 0., uint32_t vsize = def_vsize,
+	  double sr = def_sr);
+    
+    /** Oscil constructor \n\n
+	amp - amplitude   \n
+	freq - frequency in Hz \n
+	ftable - function table \n
+	phase - init phase (0-1) \n 
+	vsize - vector size \n
+	sr - sampling rate \n
+    */
+    Oscil(double amp, double freq,
+	  FuncTable& ftable, double phase = 0.,
 	  uint32_t vsize = def_vsize,
 	  double sr = def_sr);
 

@@ -16,7 +16,7 @@ using namespace AuLib;
 int main(){
   
   SawTable wave(50);
-  Oscilic sig(0.5, 440., 0., wave.table(), wave.size());
+  Oscilic sig(0.5, 440.,wave);
   SoundOut output("dac");
 
   if(wave.error() == AULIB_NOERROR &&

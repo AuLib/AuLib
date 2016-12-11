@@ -21,22 +21,32 @@ namespace AuLib {
 
   public:
     /** Oscilic constructor \n\n
-	amp - amplitude \n
+	amp - amplitude   \n
 	freq - frequency in Hz \n
-	phase - init phase (0-1) \n  
-	table - function table \n
-	tsize - table size \n
-	sr - sampling rate \n
+	phase - init phase (0-1) \n 
 	vsize - vector size \n
+	sr - sampling rate \n\n
+       Uses internal sine wave table
     */
     Oscilic(double amp = 0., double freq = 0.,
-	    double phase = 0.,
-	    const double *table = NULL,
-	    uint32_t tsize = def_tsize,
-	    uint32_t vsize = def_vsize,
-	    double sr = def_sr) :
-      Oscil(amp,freq,phase,table,
-	    tsize,vsize,sr) { };
+	  double phase = 0., uint32_t vsize = def_vsize,
+	  double sr = def_sr) :
+      Oscil(amp,freq,phase,vsize,sr) { };
+      
+    /** Oscilic constructor \n\n
+	amp - amplitude \n
+	freq - frequency in Hz \n
+	ftable - function table \n
+	phase - init phase (0-1) \n 
+	vsize - vector size \n
+	sr - sampling rate \n
+    */
+    Oscilic(double amp, double freq,
+	   FuncTable& ftable,
+	   double phase = .0,
+	   uint32_t vsize = def_vsize,
+	   double sr = def_sr) :
+      Oscil(amp,freq,ftable,phase,vsize,sr) { };
 
 
     /** Process one vector of audio

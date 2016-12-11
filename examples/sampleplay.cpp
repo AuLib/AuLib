@@ -18,14 +18,14 @@ int main(int argc, const char **argv){
   if(argc > 1){
     
     SampleTable wave(argv[1]);
-    SamplePlayer sig(0.5, 1, 0., wave.table(), wave.size());
+    SamplePlayer sig(wave);
     SoundOut output("dac");
   
     if(wave.error() == AULIB_NOERROR &&
        sig.error() == AULIB_NOERROR &&
        output.error() == AULIB_NOERROR) { 
       for(int i=0; i < def_sr*10; i+=def_vsize){
-	sig.process();
+	sig.process(0.5,1.);
 	output.write(sig.output());
       }
     }

@@ -11,6 +11,7 @@
 #ifndef _TABLEREAD_H
 #define _TABLEREAD_H
 #include "AudioBase.h"
+#include "FuncTable.h"
 
 namespace AuLib {
 
@@ -42,21 +43,19 @@ namespace AuLib {
 	phase - initial phase \n
 	norm - normalisation switch \n
 	wrap - wraparound switch \n
-	tsize - table size \n
 	vsize - vector size \n
     */
-    TableRead(const double *table, double phase = 0.,
+    TableRead(FuncTable& ftable, double phase = 0.,
 	      bool norm = true, bool wrap = true,
-	      uint32_t tsize = def_tsize,
 	      uint32_t vsize = def_vsize):
-      m_table(table), m_phs(phase),
+      m_table(ftable.table()), m_phs(phase),
       m_norm(norm), m_wrap(wrap),
-      m_tsize(tsize), AudioBase(1,vsize)
+      m_tsize(ftable.size()), AudioBase(1,vsize)
     {
       if(m_table == NULL) {
 	m_vsize = 0;
-	m_tsize = 0;
-      }
+	m_error = AULIB_ERROR;
+      } 
     };
   
     /** takes in a frame of phase values

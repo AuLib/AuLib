@@ -11,31 +11,46 @@
 #include "Oscil.h"
 
 AuLib::Oscil::Oscil(double amp, double freq,
-	     double phase, const double *table,
-	     uint32_t tsize,uint32_t vsize,
-	     double sr) :
+		    double phase, uint32_t vsize, double sr) :
   m_amp(amp), m_freq(freq),
-  m_phs(phase), m_tsize(tsize),
-  m_table(table), m_sine(false),
+  m_phs(phase), m_tsize(0),
+  m_table(NULL), m_sine(false),
   m_am(NULL), m_fm(NULL),
   AudioBase(1,vsize,sr)
 {
-  m_incr = m_freq*m_tsize/m_sr;
-  if(m_table == NULL) {
-    double *table = new double[def_tsize+1];
-    if(table != NULL) {
-      for(int i=0; i < def_tsize; i++)
-	table[i] = sin(i*twopi/def_tsize);
-      table[def_tsize] = table[0];
-      m_table = (const double *) table;
-      m_sine = true;
-    } else {
-      m_tsize = 0;
-      m_vsize = 0;  
-      m_error = AULIB_MEM_ERROR;
-      return;
-    }
+  double *table = new double[def_tsize+1];
+  if(table != NULL) {
+    for(int i=0; i < def_tsize; i++)
+      table[i] = sin(i*twopi/def_tsize);
+    table[def_tsize] = table[0];
+    m_table = (const double *) table;
+    m_tsize = def_tsize;
+    m_sine = true;
+  } else {
+    m_tsize = 0;
+    m_vsize = 0;  
+    m_error = AULIB_MEM_ERROR;
+    return;
   }
+  m_incr = m_freq*m_tsize/m_sr;
+  m_phs *= m_tsize;
+  mod();
+}
+AuLib::Oscil::Oscil(double amp, double freq,
+		    FuncTable& ftable, double phase,
+		    uint32_t vsize, double sr) :
+  m_amp(amp), m_freq(freq),
+  m_phs(phase), m_tsize(ftable.size()),
+  m_table(ftable.table()), m_sine(false),
+  m_am(NULL), m_fm(NULL),
+  AudioBase(1,vsize,sr)
+{
+  if(m_table == NULL){
+    m_vsize = 0;
+    m_error = AULIB_ERROR;
+    return;
+  }
+  m_incr = m_freq*m_tsize/m_sr;
   m_phs *= m_tsize;
   mod();
 }

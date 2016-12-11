@@ -18,7 +18,7 @@ int main(){
   
   TriangleTable wave(50);
   Phasor   phase(440.);
-  TableRead sig(wave.table());
+  TableRead sig(wave);
   SoundOut output("dac");
 
   if(wave.error() == AULIB_NOERROR &&
