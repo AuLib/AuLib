@@ -23,6 +23,14 @@ namespace AuLib {
     AULIB_READ_ERROR
   };
 
+  /** Standard Error messages
+   */
+  static const char* sampletable_error[] = {
+    "SampleTable: file open error",
+    "SampleTable: file read error"
+  };
+  
+  
   /** Sampled-sound table from a soundfile
    */
   class SampleTable : public FuncTable {
@@ -43,7 +51,17 @@ namespace AuLib {
     uint32_t nchnls(){
       return m_nchnls;
     }
- 
+
+    /** Get error message
+      */
+    virtual const char* error_message() const {
+      if(m_error > AULIB_ERROR)
+	return sampletable_error[m_error -
+				 AULIB_ERROR
+				 - 1];
+      else return aulib_error[m_error];
+    }
+
   };
 
 }

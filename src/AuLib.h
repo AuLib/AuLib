@@ -102,5 +102,13 @@ namespace AuLib {
     AULIB_ERROR
   };
 
+  /** Standard Error messages
+   */
+  static const char* aulib_error[] = {
+    "Aulib: no error",
+    "Aulib: memory allocation error",
+    "Aulib: general object error"
+  };
+  
 };
 #endif  // ifndef _AU_LIB_H

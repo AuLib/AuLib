@@ -30,9 +30,21 @@ namespace AuLib {
     = AULIB_ERROR + 1,
     AULIB_RTINIT_ERROR,
     AULIB_RTOPEN_ERROR,
-    AULIB_RTSTREAM_ERROR   
+    AULIB_RTSTREAM_ERROR,
+    AULIB_SOUNDOUT_ERROR
   };
 
+  /** Standard Error messages
+   */
+  static const char* soundout_error[] = {
+    "SoundOut: file open error",
+    "SoundOut: RT initialisation error",
+    "SoundOut: RT open error",
+    "SoundOut: RT stream start error",
+    "SoundOut: general error"
+  };
+
+  
   /** Generic audio output class
    */
   class SoundOut : public AudioBase {
@@ -71,7 +83,7 @@ namespace AuLib {
     */
     uint32_t write(const double *sig);
 
-     /** Writes the audio vector in obj to the output
+    /** Writes the audio vector in obj to the output
 	destination, returning the output current 
         framecount.
     */
@@ -80,6 +92,15 @@ namespace AuLib {
 	return write(obj.output());
       else m_error = AULIB_ERROR;
       return 0;
+    }
+
+    /** Get error message
+     */
+    virtual const char* error_message() const {
+      if(m_error > AULIB_ERROR)
+	return soundout_error[m_error -
+			      AULIB_ERROR - 1];
+      else return aulib_error[m_error];
     }
 
   };

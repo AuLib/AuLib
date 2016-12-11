@@ -78,10 +78,16 @@ namespace AuLib {
 
     /** Get error code
      */
-    uint32_t error(){
+    uint32_t error() const {
       return m_error;
     }
-  
+
+    /** Get error message
+     */
+    virtual const char* error_message() const {
+      return aulib_error[m_error];
+    }
+ 
   };
   
 }
