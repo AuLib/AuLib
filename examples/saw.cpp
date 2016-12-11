@@ -10,8 +10,10 @@
 #include <SoundOut.h>
 #include <WaveTables.h>
 #include <Oscilic.h>
+#include <iostream>
 
 using namespace AuLib;
+using namespace std;
 
 int main(){
   
@@ -19,13 +21,16 @@ int main(){
   Oscilic sig(0.5, 440.,wave);
   SoundOut output("dac");
 
-  if(wave.error() == AULIB_NOERROR &&
-     sig.error() == AULIB_NOERROR &&
-     output.error() == AULIB_NOERROR) {
-    for(int i=0; i < def_sr*10; i+=def_vsize){
-      sig.process();
-      output.write(sig);
-    }
-  }
+  if(wave.error() == AULIB_NOERROR) {
+    if(sig.error() == AULIB_NOERROR) {
+      if(output.error() == AULIB_NOERROR) {
+	for(int i=0; i < def_sr*10; i+=def_vsize){
+	  sig.process();
+	  output.write(sig);
+	} 
+      } else cout << output.error_message() << "\n";
+    } else cout << sig.error_message() << "\n";
+  } else cout << wave.error_message() << "\n";
+  
   return 0;
 }

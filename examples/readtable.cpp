@@ -11,8 +11,10 @@
 #include <SoundOut.h>
 #include <WaveTables.h>
 #include <Phasor.h>
+#include <iostream>
 
 using namespace AuLib;
+using namespace std;
 
 int main(){
   
@@ -21,15 +23,18 @@ int main(){
   TableRead sig(wave);
   SoundOut output("dac");
 
-  if(wave.error() == AULIB_NOERROR &&
-     phase.error() == AULIB_NOERROR &&
-     sig.error() == AULIB_NOERROR &&
-     output.error() == AULIB_NOERROR) {
-    for(int i=0; i < def_sr*10; i+=def_vsize){
-      phase.process();
-      sig.process(phase);
-      output.write(sig);
-    }
-  }
+  if(wave.error() == AULIB_NOERROR) {
+    if(phase.error() == AULIB_NOERROR) {
+      if(sig.error() == AULIB_NOERROR) {
+	if(output.error() == AULIB_NOERROR) {
+	  for(int i=0; i < def_sr*10; i+=def_vsize){
+	    phase.process();
+	    sig.process(phase);
+	    output.write(sig);
+	  } 
+	} else cout << output.error_message() << "\n";
+      } else cout << sig.error_message() << "\n";
+    } else cout << phase.error_message() << "\n";
+  } else cout << wave.error_message() << "\n";
   return 0;
 }

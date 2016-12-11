@@ -86,5 +86,8 @@ namespace AuLib {
 
   };
 
+  /*! \class SigBus SigBus.h AuLib/SigBus.h
+   */
+
 }
 #endif

@@ -9,20 +9,24 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <Oscili.h>
+#include <iostream>
 
 using namespace AuLib;
+using namespace std;
 
 int main(){
   
   Oscili sig;
   SoundOut output("dac");
 
-  if(sig.error() == AULIB_NOERROR &&
-     output.error() == AULIB_NOERROR) {
-    for(int i=0; i < def_sr*10; i+=def_vsize){
-      sig.process(0.5, 440.);
-      output.write(sig);
-    }
-  }
+  if(sig.error() == AULIB_NOERROR) {
+    if(output.error() == AULIB_NOERROR) {
+      for(int i=0; i < def_sr*10; i+=def_vsize){
+	sig.process(0.5, 440.);
+	output.write(sig);
+      }
+    } else cout << output.error_message() << "\n";
+  } else cout << sig.error_message() << "\n";
+  
   return 0;
 }

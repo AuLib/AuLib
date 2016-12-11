@@ -52,6 +52,9 @@ namespace AuLib {
   
   };
 
+  /*! \class SoundIn SoundIn.h AuLib/SoundIn.h
+   */
+
 }
 
 #endif

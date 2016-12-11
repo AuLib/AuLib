@@ -36,7 +36,7 @@ namespace AuLib {
     */
     virtual void process(const double* phs);
 
-   /** takes in a frame of phase values
+    /** takes in a frame of phase values
 	and lookups up the table values
     */
     virtual void process(const AudioBase& obj){
@@ -47,5 +47,8 @@ namespace AuLib {
 
   };
 
+  /*! \class TableReadi TableReadi.h AuLib/TableReadi.h
+   */
+  
 }
 #endif

@@ -105,5 +105,8 @@ namespace AuLib {
 
   };
 
+  /*! \class SoundOut SoundOut.h AuLib/SoundOut.h
+   */
+
 }
 #endif

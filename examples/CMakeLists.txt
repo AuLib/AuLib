@@ -22,6 +22,6 @@ target_link_libraries(fm AuLib ${LIBSNDFILE} ${PORTAUDIO})
 
 
 # installation targets
-INSTALL(TARGETS sampleplay saw readtable
+INSTALL(TARGETS sampleplay saw readtable sine fm
  RUNTIME DESTINATION bin
 )

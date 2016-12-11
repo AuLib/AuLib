@@ -89,6 +89,8 @@ namespace AuLib {
     }
  
   };
-  
+
+ /*! \class AudioBase AudioBase.h AuLib/AudioBase.h
+ */
 }
 #endif

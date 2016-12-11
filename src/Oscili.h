@@ -149,6 +149,8 @@ namespace AuLib {
     }
  
   };
-
+  
+  /*! \class Oscili Oscili.h AuLib/Oscili.h
+   */
 }
 #endif

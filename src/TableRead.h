@@ -74,5 +74,8 @@ namespace AuLib {
 
   };
 
+  /*! \class TableRead TableRead.h AuLib/TableRead.h
+   */
+  
 }
 #endif

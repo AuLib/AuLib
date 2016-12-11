@@ -57,5 +57,8 @@ namespace AuLib {
 
   };
 
+  /*! \class FourierTable FourierTable.h AuLib/FourierTable.h
+   */
+
 }
 #endif

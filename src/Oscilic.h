@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////
-// Oscili class: cubic interpolating oscillator
+// Oscilic class: cubic interpolating oscillator
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
@@ -151,5 +151,7 @@ namespace AuLib {
   
   };
 
+  /*! \class Oscilic Oscilic.h AuLib/Oscil.h
+   */
 }
 #endif

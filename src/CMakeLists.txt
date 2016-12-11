@@ -15,7 +15,7 @@ SigBus.cpp
 
 # installing headers
 FILE(GLOB files "${PROJECT_SOURCE_DIR}/src/*.h")
-INSTALL(FILES ${files} DESTINATION include)
+INSTALL(FILES ${files} DESTINATION include/AuLib)
 
 # installing library
 INSTALL(TARGETS AuLib

@@ -52,5 +52,13 @@ namespace AuLib {
       FourierTable(harms, TRIANGLE_TABLE, tsize){};
   };
 
+  
+  /*! \class SawTable WaveTables.h AuLib/WaveTables.h
+   */
+  /*! \class SquareTable WaveTables.h AuLib/WaveTables.h
+   */
+  /*! \class TriangleTable WaveTables.h AuLib/WaveTables.h
+   */
+
 }
 #endif

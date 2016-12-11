@@ -181,5 +181,7 @@ namespace AuLib {
 
   };
 
+  /*! \class Oscil Oscil.h AuLib/Oscil.h
+   */
 }
 #endif

@@ -58,6 +58,8 @@ namespace AuLib {
 
   };
 
+  /*! \class Phasor Phasor.h AuLib/Phasor.h
+   */
 
 }
 #endif

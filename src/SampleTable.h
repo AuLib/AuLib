@@ -53,7 +53,7 @@ namespace AuLib {
     }
 
     /** Get error message
-      */
+     */
     virtual const char* error_message() const {
       if(m_error > AULIB_ERROR)
 	return sampletable_error[m_error -
@@ -63,6 +63,9 @@ namespace AuLib {
     }
 
   };
+
+  /*! \class SampleTable SampleTable.h AuLib/SampleTable.h
+   */
 
 }
 #endif

@@ -68,5 +68,8 @@ namespace AuLib {
   
   };
 
+ /*! \class SamplePlayer SamplePlayer.h AuLib/SamplePlayer.h
+ */
+  
 }
 #endif
