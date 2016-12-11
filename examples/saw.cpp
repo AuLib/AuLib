@@ -24,7 +24,7 @@ int main(){
      output.error() == AULIB_NOERROR) {
     for(int i=0; i < def_sr*10; i+=def_vsize){
       sig.process();
-      output.write(sig.output());
+      output.write(sig);
     }
   }
   return 0;

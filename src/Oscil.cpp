@@ -37,7 +37,7 @@ AuLib::Oscil::Oscil(double amp, double freq,
   mod();
 }
 AuLib::Oscil::Oscil(double amp, double freq,
-		    FuncTable& ftable, double phase,
+		    const FuncTable& ftable, double phase,
 		    uint32_t vsize, double sr) :
   m_amp(amp), m_freq(freq),
   m_phs(phase), m_tsize(ftable.size()),

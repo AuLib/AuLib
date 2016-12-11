@@ -11,7 +11,7 @@
 #include "TableReadic.h"
 
 void
-AuLib::TableReadic::process(double *phs){
+AuLib::TableReadic::process(const double* phs){
   uint32_t posi;
   double   pos, frac, fracsq, fracb;
   double   tmp, a, b, c, d;

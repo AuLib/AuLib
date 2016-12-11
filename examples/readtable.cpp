@@ -27,8 +27,8 @@ int main(){
      output.error() == AULIB_NOERROR) {
     for(int i=0; i < def_sr*10; i+=def_vsize){
       phase.process();
-      sig.process(phase.output());
-      output.write(sig.output());
+      sig.process(phase);
+      output.write(sig);
     }
   }
   return 0;

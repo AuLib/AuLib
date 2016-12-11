@@ -36,11 +36,11 @@ namespace AuLib {
       m_scal(scal), m_offs(offs),
       AudioBase(nchnls,vsize) { };
 
-    /** Adds a signal vector to the bus
-	requires an explicit call to clear()
+    /** Adds a signal vector to the bus.
+	Requires an explicit call to clear()
 	once the bus data has been consumed
     */
-    void process(const double *sig);
+    virtual void process(const double* sig);
 
     /** Applies a gain scaling and optional
 	offset to a signal vector. If
@@ -48,9 +48,34 @@ namespace AuLib {
 	overwritten and a call to 
 	clear() is not required.
     */
-    void process(const double *sig,
-		 double scal, double offs = 0.,
-		 bool overwrite = true);
+    virtual void process(const double* sig,
+			 double scal, double offs = 0.,
+			 bool overwrite = true);
+
+
+    /** Adds a signal vector to the bus from obj.
+	Requires an explicit call to clear()
+	once the bus data has been consumed
+    */
+    virtual void process(const AudioBase& obj) {
+      if(obj.vsize() == m_vsize){
+	process(obj.output());
+      } else m_error = AULIB_ERROR;
+    }
+
+    /** Applies a gain scaling and optional
+	offset to a signal vector from obj. If
+	overwrite is true, the output vector is
+	overwritten and a call to 
+	clear() is not required.
+    */
+    virtual void process(const AudioBase& obj,
+			 double scal, double offs = 0.,
+			 bool overwrite = true) {
+      if(obj.vsize() == m_vsize){
+	process(obj.output(),scal,offs,overwrite);
+      } else m_error = AULIB_ERROR;
+    }     
 
     /** Clears the output vector
      */

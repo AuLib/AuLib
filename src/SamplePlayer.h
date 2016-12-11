@@ -29,7 +29,7 @@ namespace AuLib {
 	vsize - vector size \n
 	sr - sampling rate \n
     */
-    SamplePlayer(FuncTable& ftable,
+    SamplePlayer(const FuncTable& ftable,
 		 double amp = 0., double pitch = 0.,
 		 double phase = 0.,
 		 uint32_t vsize = def_vsize, 

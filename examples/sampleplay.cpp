@@ -26,7 +26,7 @@ int main(int argc, const char **argv){
        output.error() == AULIB_NOERROR) { 
       for(int i=0; i < def_sr*10; i+=def_vsize){
 	sig.process(0.5,1.);
-	output.write(sig.output());
+	output.write(sig);
       }
     }
   }

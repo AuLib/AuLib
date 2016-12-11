@@ -57,17 +57,23 @@ namespace AuLib {
 
     /** Get the audio output vector
      */ 
-    const double *output(){
+    const double* output() const {
       return (const double *) m_output;
     }
   
     /** Get a single sample at ndx 
 	off the output audio vector
     */  
-    double output(uint32_t ndx){
+    double output(uint32_t ndx) const {
       if(ndx < m_vsize)
 	return m_output[ndx];
       else return 0.;
+    }
+
+    /** Get vector size
+     */
+    uint32_t vsize() const {
+      return m_vsize;
     }
 
     /** Get error code

@@ -57,20 +57,20 @@ namespace AuLib {
 
     /** Get the function table
      */ 
-    const double *table(){
+    const double* table() const {
       return (const double *) m_table;
     }
 
     /** Get a single point at pos
 	from the function table
     */ 
-    double table(uint32_t pos){
+    double table(uint32_t pos) const {
       return m_table[pos];
     }
 
     /** Get table size
      */
-    uint32_t size(){
+    uint32_t size() const {
       return m_tsize;
     }
 

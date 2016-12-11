@@ -71,7 +71,7 @@ namespace AuLib {
 	sr - sampling rate \n
     */
     Oscil(double amp, double freq,
-	  FuncTable& ftable, double phase = 0.,
+	  const FuncTable& ftable, double phase = 0.,
 	  uint32_t vsize = def_vsize,
 	  double sr = def_sr);
 
@@ -105,7 +105,7 @@ namespace AuLib {
     /** Process one vector of audio
 	with amplitude and (optional) freq modulation
     */
-    virtual void process(const double *amp, const double *freq = NULL){
+    virtual void process(const double* amp, const double* freq = NULL){
       m_am = amp;
       m_fm = freq;
       process();
@@ -115,7 +115,7 @@ namespace AuLib {
 	with amplitude amp 
 	and freq modulation
     */
-    virtual void process(double amp, const double *freq){
+    virtual void process(double amp, const double* freq){
       m_amp = amp;
       m_fm = freq;
       process();
@@ -125,11 +125,58 @@ namespace AuLib {
 	with amplitude modulation 
 	and frequency freq
     */ 
-    virtual void process(const double *amp, double freq){
+    virtual void process(const double* amp, double freq){
       m_am = amp;
       m_freq = freq;
       m_incr = m_freq*m_tsize/m_sr;
       process();
+    }
+
+    /** Process one vector of audio
+	with amplitude modulation from obja
+    */ 
+    virtual void process(const AudioBase& obja){
+      if(obja.vsize() == m_vsize) {
+	m_am = obja.output();
+        process();
+      } else m_error = AULIB_ERROR;
+    }
+
+    /** Process one vector of audio
+	with amplitude modulation from obja
+	and frequency freq
+    */ 
+    virtual void process(const AudioBase& obja, double freq){
+      if(obja.vsize() == m_vsize) {
+	m_am = obja.output();
+	m_freq = freq;
+        m_incr = m_freq*m_tsize/m_sr;
+        process();
+      } else m_error = AULIB_ERROR;
+    }
+
+    /** Process one vector of audio
+	with amplitude amp 
+	and freq modulation from objf
+    */
+    virtual void process(double amp, const AudioBase& objf){
+      if(objf.vsize() == m_vsize) {
+	m_amp = amp;
+	m_fm = objf.output();
+        process();
+      } else m_error = AULIB_ERROR;
+    }
+
+    /** Process one vector of audio
+	with amplitude from obja and freq modulation from objf
+    */
+    virtual void process(const AudioBase& obja, const AudioBase& objf){
+      if(obja.vsize() == m_vsize &&
+	 objf.vsize() == m_vsize) {
+	m_am = obja.output();
+	m_fm = objf.output();
+        process();
+      } else m_error = AULIB_ERROR;
     }
 
   };

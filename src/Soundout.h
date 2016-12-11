@@ -66,9 +66,21 @@ namespace AuLib {
     ~SoundOut();
 
     /** Writes sig to the output
-	destination.
+	destination, returning the output current 
+        framecount.
     */
-    uint32_t write(const double *sig); 
+    uint32_t write(const double *sig);
+
+     /** Writes the audio vector in obj to the output
+	destination, returning the output current 
+        framecount.
+    */
+    uint32_t write(const AudioBase& obj){
+      if(obj.vsize() == m_vsize)
+	return write(obj.output());
+      else m_error = AULIB_ERROR;
+      return 0;
+    }
 
   };
 

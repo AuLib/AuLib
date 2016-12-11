@@ -11,7 +11,7 @@
 #include "TableReadi.h"
 
 void
-AuLib::TableReadi::process(double *phs){
+AuLib::TableReadi::process(const double* phs){
   uint32_t posi;
   double   pos, frac, a, b;
   for(int i=0; i < m_vsize; i++){   
