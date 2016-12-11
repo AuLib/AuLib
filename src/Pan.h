@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////
-// 
+// Pan class: stereo panning
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
