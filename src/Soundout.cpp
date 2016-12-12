@@ -15,7 +15,7 @@
 #include <iostream>
 
 AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
-		   uint32_t vsize, uint32_t bsize, double sr) :
+			  uint32_t vsize, uint32_t bsize, double sr) :
   m_dest(dest), m_bsize(bsize), m_buffer(NULL),
   m_handle(NULL), m_mode(0), m_cnt(0),
   m_framecnt(0), AudioBase(nchnls,vsize,sr)
@@ -23,8 +23,10 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
   if(strcmp("dac",m_dest) == 0){
     // RT audio
     PaError err;
-    m_buffer = (void *) new float[m_bsize*m_nchnls];
-    if(m_buffer == NULL) {
+    try {
+      m_buffer = (void *) new float[m_bsize*m_nchnls];
+    }
+    catch (std::bad_alloc) {
       m_bsize = 0;
       m_vsize = 0;
       return;
@@ -72,7 +74,14 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
     info.samplerate = (int) m_sr;
     info.channels = m_nchnls;
     info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
-    m_buffer = (void *) new double[m_bsize*m_nchnls];
+    try {
+      m_buffer = (void *) new double[m_bsize*m_nchnls];
+    } catch (std::bad_alloc) {
+      m_bsize = 0;
+      m_vsize = 0;
+      m_buffer = NULL;
+      return;
+    }
     SNDFILE *sf = sf_open(m_dest,SFM_WRITE, &info);
     if(sf != NULL) {
       m_handle = (void *) sf;
@@ -91,13 +100,15 @@ AuLib::SoundOut::~SoundOut(){
     Pa_CloseStream((PaStream*) m_handle);
     Pa_Terminate();
     float *buffer = (float *) m_buffer;
-    delete[] buffer;
+    if(buffer)
+      delete[] buffer;
   }
   else if(m_mode == SOUNDOUT_SNDFILE &&
 	  m_handle != NULL){
     sf_close((SNDFILE *) m_handle);
     double *buffer = (double *) m_buffer;
-    delete[] buffer;
+    if(buffer)
+      delete[] buffer;
   }
 }
 

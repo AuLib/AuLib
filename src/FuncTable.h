@@ -39,7 +39,7 @@ namespace AuLib {
     }
 
   public:
-     /** swap function for copy assignment 
+    /** swap function for copy assignment 
      */
     friend void swap(FuncTable& obja,
 		     FuncTable& objb) 
@@ -62,13 +62,14 @@ namespace AuLib {
     {
       if(m_tsize > 0) {
 	try {
-	m_table = new double[m_tsize+1];
+	  m_table = new double[m_tsize+1];
 	} catch (std::bad_alloc) {
 	  m_tsize = 0;
 	  m_error = AULIB_MEM_ERROR;
+	  m_table = NULL;
 	  return;
 	} 
-	 memcpy(m_table,obj.m_table,sizeof(double)*(m_tsize+1));
+	memcpy(m_table,obj.m_table,sizeof(double)*(m_tsize+1));
       } else m_table = NULL;
     }
     
@@ -79,17 +80,18 @@ namespace AuLib {
       : m_tsize(tsize), m_error(AULIB_NOERROR) {
       if(m_tsize > 0) {
 	try {
-	m_table = new double[m_tsize+1];
+	  m_table = new double[m_tsize+1];
 	} catch (std::bad_alloc) {
 	  m_tsize = 0;
 	  m_error = AULIB_MEM_ERROR;
 	  return;
 	} 
-	 memset(m_table,0,sizeof(double)*(m_tsize+1));
+	memset(m_table,0,sizeof(double)*(m_tsize+1));
       } else m_table = NULL;
     }
     ~FuncTable(){
-      delete[] m_table;
+      if(m_table)
+	delete[] m_table;
     }
 
     /** Get the function table

@@ -49,17 +49,18 @@ namespace AuLib {
       return *this;
     }
 
-     /** AudioBase copy constructor 
+    /** AudioBase copy constructor 
      */
     AudioBase(const AudioBase& obj) :
       m_nchnls(obj.m_nchnls), m_sr(obj.m_sr),
       m_vsize(obj.m_vsize), m_error(obj.m_error){
       if(m_vsize != 0) {
        	try {
-	    m_output = new double[m_vsize*m_nchnls];
-	  } catch (std::bad_alloc){
+	  m_output = new double[m_vsize*m_nchnls];
+	} catch (std::bad_alloc){
 	  m_error = AULIB_MEM_ERROR;
 	  m_vsize = 0;
+	  m_output = NULL;
 	  return;
 	}
 	memcpy(m_output,obj.m_output,
@@ -80,10 +81,11 @@ namespace AuLib {
       m_vsize(vsize), m_error(AULIB_NOERROR) {
       if(m_vsize != 0) {
 	try {
-	    m_output = new double[m_vsize*m_nchnls];
-	  } catch (std::bad_alloc){
+	  m_output = new double[m_vsize*m_nchnls];
+	} catch (std::bad_alloc){
 	  m_error = AULIB_MEM_ERROR;
 	  m_vsize = 0;
+	  m_output = NULL;
 	  return;
 	}
 	memset(m_output, 0, m_vsize*sizeof(double));
@@ -93,7 +95,8 @@ namespace AuLib {
     /** AudioBase destructor
      */
     virtual ~AudioBase(){
-      delete[] m_output;
+      if(m_output)
+	delete[] m_output;
     }
 
     /** Get the audio output vector
