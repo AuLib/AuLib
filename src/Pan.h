@@ -28,7 +28,7 @@ namespace AuLib {
 	vsize - vector size \n
         sr - sampling rate
     */  
-  Pan(double pos,
+  Pan(double pos = .5,
       uint32_t vsize = def_vsize) :
     m_pos(pos),
       AudioBase(2,vsize) { };
