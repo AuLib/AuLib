@@ -10,8 +10,8 @@
 /////////////////////////////////////////////////////////////////////
 #include "TableReadi.h"
 
-const double*
-AuLib::TableReadi::process(const double* phs){
+void
+AuLib::TableReadi::lookup(const double* phs){
   uint32_t posi;
   double   pos, frac, a, b;
   for(int i=0; i < m_vsize; i++){   
@@ -24,5 +24,4 @@ AuLib::TableReadi::process(const double* phs){
     b = m_table[posi+1];
     m_output[i] = a + frac*(b - a);
   }
-  return m_output;
 }

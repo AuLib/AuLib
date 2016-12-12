@@ -10,8 +10,8 @@
 /////////////////////////////////////////////////////////////////////
 #include "Oscili.h"
 
-const AuLib::Oscili&
-AuLib::Oscili::process(){
+void
+AuLib::Oscili::oscillator(){
   uint32_t phi;
   double frac,a,b;
   for(int i=0; i < m_vsize; i++){
@@ -25,5 +25,4 @@ AuLib::Oscili::process(){
     m_phs += m_incr;
     mod();
   }
-  return *this;
 }

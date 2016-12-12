@@ -84,14 +84,13 @@ AuLib::Oscil::~Oscil(){
 }
 
 
-const AuLib::Oscil&
-AuLib::Oscil::process(){
+void
+AuLib::Oscil::oscillator(){
   for(int i=0; i < m_vsize; i++){
     am_fm(i);
     m_output[i] = m_amp*m_table[(uint32_t)m_phs];
     m_phs += m_incr;
     mod();
   }
-  return *this;
 }
 

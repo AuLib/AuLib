@@ -17,7 +17,13 @@ namespace AuLib {
   /** Table reader with cubic interpolation
    */
   class TableReadic : public TableRead {
-
+    
+  protected:
+    
+    /** truncated table lookup
+     */
+    virtual void lookup(const double *phs);
+    
   public:
     /** TableReadic constructor \n\n
 	ftable - function table \n
@@ -30,24 +36,7 @@ namespace AuLib {
 		bool norm = true, bool wrap = true,
 		uint32_t tsize = def_tsize,
 		uint32_t vsize = def_vsize) :
-      TableRead(ftable,phase,norm,wrap,vsize) { };
-
-    /** takes in a frame of phase values
-	and lookups up the table values
-    */
-    virtual const double* process(const double* phs);
-
-    /** takes in a frame of phase values
-	and lookups up the table values
-    */
-    virtual const TableReadic& process(const AudioBase& obj){
-      if(obj.vsize() == m_vsize &&
-	 obj.nchnls() == 1)
-	process(obj.output());
-      else m_error = AULIB_ERROR;
-      return *this;
-    }
-    
+      TableRead(ftable,phase,norm,wrap,vsize) { };    
   };
 
   /*! \class TableReadic TableReadic.h AuLib/TableReadic.h

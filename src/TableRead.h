@@ -26,6 +26,12 @@ namespace AuLib {
     uint32_t m_tsize;
     const double *m_table;
 
+    /** truncated table lookup
+     */
+    virtual void lookup(const double *phs);
+    
+    /** modulo function
+     */
     double mod(double pos){
       if(m_wrap) {
 	while(pos >= m_tsize) pos -= m_tsize;
@@ -61,7 +67,10 @@ namespace AuLib {
     /** takes in a frame of phase values
 	and lookups up the table values
     */
-    virtual const double* process(const double* phs);
+    virtual const double* process(const double* phs){
+      lookup(phs);
+      return m_output;
+    }
 
     /** takes in a frame of phase values
 	and lookups up the table values
@@ -69,7 +78,7 @@ namespace AuLib {
     virtual const TableRead& process(const AudioBase& obj){
       if(obj.vsize() == m_vsize &&
 	 obj.nchnls() == 1)
-	process(obj.output());
+	lookup(obj.output());
       else m_error = AULIB_ERROR;
       return *this;
     }

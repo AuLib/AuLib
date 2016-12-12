@@ -10,8 +10,8 @@
 /////////////////////////////////////////////////////////////////////
 #include "TableRead.h"
 
-const double*
-AuLib::TableRead::process(const double *phs){
+void
+AuLib::TableRead::lookup(const double *phs){
   uint32_t pos;
   for(int i=0; i < m_vsize; i++){   
     pos = (uint32_t) mod((m_norm ?
@@ -19,5 +19,4 @@ AuLib::TableRead::process(const double *phs){
 	      + m_phs);
     m_output[i] = m_table[pos];
   }
-  return m_output;
 }

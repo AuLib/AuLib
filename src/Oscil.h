@@ -32,6 +32,10 @@ namespace AuLib {
     const double *m_am;
     const double *m_fm;
 
+    /** truncating oscillator process
+     */
+    virtual void oscillator();
+
     /** AM/FM processing
      */
     void am_fm(uint32_t ndx){
@@ -107,7 +111,10 @@ namespace AuLib {
 
     /** Process one vector of audio
      */
-    virtual const Oscil& process();
+    virtual const Oscil& process() {
+      oscillator();
+      return *this;
+    }
   
     /** Process one vector of audio
 	with amplitude amp
