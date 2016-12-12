@@ -96,6 +96,12 @@ namespace AuLib {
       return 0;
     }
 
+    /** Get the current output stream time
+     */
+    double time() const {
+      return m_framecnt/m_sr;
+    }
+    
     /** Get error message
      */
     virtual const char* error_message() const {

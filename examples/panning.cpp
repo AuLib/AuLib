@@ -23,13 +23,15 @@ int main(){
   const uint32_t end = def_sr*10;
 
   if(sig.error() == AULIB_NOERROR) {
-    if(output.error() == AULIB_NOERROR) {
-      for(int i=0; i < end; i+=def_vsize){
-	sig.process(0.5, 440.);
-	panner.process(sig, double(i)/end);
-	output.write(panner);
-      }
-    } else cout << output.error_message() << "\n";
+    if(panner.error() == AULIB_NOERROR) {
+      if(output.error() == AULIB_NOERROR) {
+	for(int i=0; i < end; i+=def_vsize){
+	  sig.process(0.5, 440.);
+	  panner.process(sig, double(i)/end);
+	  output.write(panner);
+	}
+      } else cout << output.error_message() << "\n";
+    } else cout << panner.error_message() << "\n";
   } else cout << sig.error_message() << "\n";
   
   return 0;
