@@ -84,7 +84,7 @@ AuLib::Oscil::~Oscil(){
 }
 
 
-void
+const AuLib::Oscil&
 AuLib::Oscil::process(){
   for(int i=0; i < m_vsize; i++){
     am_fm(i);
@@ -92,5 +92,6 @@ AuLib::Oscil::process(){
     m_phs += m_incr;
     mod();
   }
+  return *this;
 }
 

@@ -45,15 +45,15 @@ namespace AuLib {
 
     /** Process one vector of audio
      */
-    virtual void process();
+    virtual const Phasor& process();
   
     /** Process one vector of audio with
 	frequency freq
     */
-    virtual void process(double freq){
+    virtual const Phasor& process(double freq){
       m_freq = freq;
       m_incr = m_freq/m_sr;
-      process();
+      return process();
     }
 
   };

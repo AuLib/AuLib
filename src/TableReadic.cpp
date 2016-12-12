@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "TableReadic.h"
 
-void
+const double*
 AuLib::TableReadic::process(const double* phs){
   uint32_t posi;
   double   pos, frac, fracsq, fracb;
@@ -26,14 +26,15 @@ AuLib::TableReadic::process(const double* phs){
     b = m_table[posi];
     c = m_table[posi+1];
     d = posi < m_tsize ?
-      m_table[posi+2] :
+	       m_table[posi+2] :
       m_table[posi];   
     tmp = d + 3.f*b;
     fracsq = frac*frac;
     fracb = frac*fracsq;
     m_output[i] =
-       fracb*(- a - 3.f*c + tmp)/6.f +
-       fracsq*((a+c)/2.f - b) +
-       frac*(c + (-2.f*a - tmp)/6.f) + b;
-  } 
+	       fracb*(- a - 3.f*c + tmp)/6.f +
+	       fracsq*((a+c)/2.f - b) +
+	       frac*(c + (-2.f*a - tmp)/6.f) + b;
+  }
+  return m_output;
 }

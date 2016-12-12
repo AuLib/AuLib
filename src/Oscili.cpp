@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "Oscili.h"
 
-void
+const AuLib::Oscili&
 AuLib::Oscili::process(){
   uint32_t phi;
   double frac,a,b;
@@ -25,4 +25,5 @@ AuLib::Oscili::process(){
     m_phs += m_incr;
     mod();
   }
+  return *this;
 }

@@ -102,7 +102,7 @@ namespace AuLib {
     /** Get the audio output vector
      */ 
     const double* output() const {
-      return (const double *) m_output;
+      return m_output;
     }
   
     /** Get a single sample at ndx 

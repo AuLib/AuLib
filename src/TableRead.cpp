@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "TableRead.h"
 
-void
+const double*
 AuLib::TableRead::process(const double *phs){
   uint32_t pos;
   for(int i=0; i < m_vsize; i++){   
@@ -18,5 +18,6 @@ AuLib::TableRead::process(const double *phs){
 	       phs[i]*m_tsize : phs[i])
 	      + m_phs);
     m_output[i] = m_table[pos];
-  } 
+  }
+  return m_output;
 }

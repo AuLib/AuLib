@@ -21,11 +21,9 @@ int main(){
 
   if(sig.error() == AULIB_NOERROR &&
      output.error() == AULIB_NOERROR) {
-    for(int i=0; i < def_sr*10; i+=def_vsize){
-      mod.process(ndx,fm);
-      sig.process(mod,fm,fc);
-      car.process(0.5,sig);
-      output.write(car);
+    for(int i=0; i < def_sr*10; i+=def_vsize){ 
+      output.write(car.process(0.5,sig.process(mod.process(ndx,fm),
+					       fm,fc)));
     }
   }
   return 0;

@@ -19,11 +19,12 @@ AuLib::Phasor::Phasor(double freq, double phase,
   mod();
 }
 
-void
+const AuLib::Phasor&
 AuLib::Phasor::process(){
   for(int i=0; i < m_vsize; i++){
     m_output[i] = m_phs;
     m_phs += m_incr;
     mod();
   }
+  return *this;
 }

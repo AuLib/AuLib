@@ -35,17 +35,19 @@ namespace AuLib {
     /** takes in a frame of phase values
 	and lookups up the table values
     */
-    virtual void process(const double* phs);
+    virtual const double* process(const double* phs);
 
     /** takes in a frame of phase values
 	and lookups up the table values
     */
-    virtual void process(const AudioBase& obj){
+    virtual const TableReadic& process(const AudioBase& obj){
       if(obj.vsize() == m_vsize &&
 	 obj.nchnls() == 1)
 	process(obj.output());
       else m_error = AULIB_ERROR;
+      return *this;
     }
+    
   };
 
   /*! \class TableReadic TableReadic.h AuLib/TableReadic.h

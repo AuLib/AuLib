@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "Oscilic.h"
 
-void
+const AuLib::Oscilic&
 AuLib::Oscilic::process(){
   uint32_t phi;
   double frac,a,b,c,d;
@@ -36,5 +36,6 @@ AuLib::Oscilic::process(){
     m_phs += m_incr;
     mod();
   }
+  return *this;
 }
 

@@ -43,15 +43,17 @@ namespace AuLib {
 
     /** Process one vector of audio
      */
-    virtual void process() {
+    virtual const SamplePlayer& process() {
       Oscili::process();
+      return *this;
     }
 
     /** Process one vector of audio
 	with amplitude amp
     */
-    virtual void process(double amp) {
+    virtual const SamplePlayer& process(double amp) {
       Oscili::process(amp);
+      return *this;
     }
 
 
@@ -59,11 +61,12 @@ namespace AuLib {
 	with amplitude amp and
 	pitch transposition
     */
-    virtual void process(double amp, double pitch){
+    virtual const SamplePlayer& process(double amp, double pitch){
       m_amp = amp;
       m_freq = pitch*m_sr/m_tsize;
       m_incr = pitch;
       Oscili::process();
+      return *this;
     }
   
   };

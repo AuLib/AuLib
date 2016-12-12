@@ -35,29 +35,31 @@ namespace AuLib {
 
     /** Pan a signal sig 
      */
-    virtual void process(const double* sig);
+    virtual const double* process(const double* sig);
 
     /** Pan a signal sig according to position pos (0-1)
      */
-    virtual void process(const double* sig, double pos) {
+    virtual const double* process(const double* sig, double pos) {
       m_pos = pos;
-      process(sig);
+      return process(sig);
     }
 
     /** Pan a signal in obj
      */
-    virtual void process(const AudioBase& obj) {
+    virtual const Pan& process(const AudioBase& obj) {
       if(obj.vsize() == m_vsize &&
 	 obj.nchnls() == 1) {
 	process(obj.output());
       } else m_error = AULIB_ERROR;
+      return *this;
     }
 
     /** Pan a signal in obj according to position pos (0-1)
      */
-    virtual void process(const AudioBase& obj, double pos) {
+    virtual const Pan& process(const AudioBase& obj, double pos) {
       m_pos = pos;
       process(obj);
+      return *this;
     }    
 
   };
