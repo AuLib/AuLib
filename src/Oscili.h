@@ -74,7 +74,8 @@ namespace AuLib {
     /** Process one vector of audio
 	with amplitude and (optional) freq modulation
     */
-    virtual void process(const double* amp, const double* freq = NULL){
+    virtual void process(const double* amp,
+			 const double* freq = NULL){
       m_am = amp;
       m_fm = freq;
       process();

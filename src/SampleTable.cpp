@@ -12,7 +12,7 @@
 #include "sndfile.h"
 
 AuLib::SampleTable::SampleTable(const char *name,
-			 uint32_t chn) :
+				uint32_t chn) : 
   FuncTable(0) {
   SF_INFO info;
   SNDFILE *sf = sf_open(name,SFM_READ,&info);

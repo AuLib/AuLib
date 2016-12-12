@@ -57,8 +57,7 @@ namespace AuLib {
     virtual const char* error_message() const {
       if(m_error > AULIB_ERROR)
 	return sampletable_error[m_error -
-				 AULIB_ERROR
-				 - 1];
+				 AULIB_ERROR - 1];
       else return aulib_error[m_error];
     }
 

@@ -27,10 +27,10 @@ namespace AuLib {
     double m_amp;
     double m_incr;
     uint32_t m_tsize;
+    double *m_sine;
     const double *m_table;
     const double *m_am;
     const double *m_fm;
-    bool m_sine;
 
     /** AM/FM processing
      */
@@ -50,6 +50,32 @@ namespace AuLib {
     }
 
   public:
+    /** swap function for copy assignment 
+     */
+    friend void swap(Oscil& obja,
+		     Oscil& objb) 
+    {
+      using std::swap;
+      swap(obja.m_phs,objb.m_phs);
+      swap(obja.m_freq,objb.m_freq);
+      swap(obja.m_amp,objb.m_amp);
+      swap(obja.m_incr,objb.m_incr);
+      swap(obja.m_tsize,objb.m_tsize);
+      swap(obja.m_sine,objb.m_sine);
+      swap(obja.m_table,objb.m_table);
+      swap(obja.m_am,objb.m_am);
+      swap(obja.m_fm,objb.m_fm);
+    }
+    /** Oscil copy assignment operator 
+     */
+    const Oscil& operator=(Oscil obj){
+      swap(*this, obj);
+      return *this;
+    }
+    
+    /** Oscil copy constructor */
+    Oscil(const Oscil& obj);
+    
     /** Oscil constructor \n\n
 	amp - amplitude   \n
 	freq - frequency in Hz \n

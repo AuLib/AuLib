@@ -49,7 +49,6 @@ namespace AuLib {
    */
   class SoundOut : public AudioBase {
 
-  protected:
     const char *m_dest;
     uint32_t m_mode;
     uint32_t m_cnt;
@@ -57,6 +56,8 @@ namespace AuLib {
     void *m_buffer;
     uint32_t m_bsize;
     void *m_handle;
+
+    NONCOPYABLE(SoundOut);
 
   public:
     /** SoundOut constructor \n\n

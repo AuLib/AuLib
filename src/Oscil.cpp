@@ -10,28 +10,51 @@
 /////////////////////////////////////////////////////////////////////
 #include "Oscil.h"
 
+
+AuLib::Oscil::Oscil(const Oscil& obj) :
+  m_amp(obj.m_amp), m_freq(obj.m_freq),
+  m_phs(obj.m_phs), m_tsize(obj.m_tsize),
+  m_table(obj.m_table), m_am(obj.m_am),
+  m_fm(obj.m_fm), m_incr(obj.m_incr),
+  AudioBase(obj)
+{
+  if(obj.m_sine) {
+    try {
+      m_sine = new double[m_tsize+1];
+    } catch (std::bad_alloc){
+      m_tsize = 0;
+      m_vsize = 0;  
+      m_error = AULIB_MEM_ERROR;
+      return;
+    }
+    memcpy(m_sine,obj.m_sine,
+	   sizeof(double)*(m_tsize+1));
+    m_table = (const double *) m_sine;
+  }
+}
+
+
 AuLib::Oscil::Oscil(double amp, double freq,
-		    double phase, uint32_t vsize, double sr) :
+		    double phase, uint32_t vsize,
+		    double sr) :
   m_amp(amp), m_freq(freq),
-  m_phs(phase), m_tsize(0),
-  m_table(NULL), m_sine(false),
+  m_phs(phase), m_tsize(def_tsize),
+  m_table(NULL), m_sine(NULL),
   m_am(NULL), m_fm(NULL),
   AudioBase(1,vsize,sr)
 {
-  double *table = new double[def_tsize+1];
-  if(table != NULL) {
-    for(int i=0; i < def_tsize; i++)
-      table[i] = sin(i*twopi/def_tsize);
-    table[def_tsize] = table[0];
-    m_table = (const double *) table;
-    m_tsize = def_tsize;
-    m_sine = true;
-  } else {
+  try {
+    m_sine = new double[m_tsize+1];
+  } catch (std::bad_alloc){
     m_tsize = 0;
     m_vsize = 0;  
     m_error = AULIB_MEM_ERROR;
     return;
   }
+  for(int i=0; i < def_tsize; i++)
+    m_sine[i] = sin(i*twopi/def_tsize);
+  m_sine[m_tsize] = m_sine[0];
+  m_table = (const double *) m_sine;
   m_incr = m_freq*m_tsize/m_sr;
   m_phs *= m_tsize;
   mod();
@@ -41,7 +64,7 @@ AuLib::Oscil::Oscil(double amp, double freq,
 		    uint32_t vsize, double sr) :
   m_amp(amp), m_freq(freq),
   m_phs(phase), m_tsize(ftable.size()),
-  m_table(ftable.table()), m_sine(false),
+  m_table(ftable.table()),m_sine(NULL),
   m_am(NULL), m_fm(NULL),
   AudioBase(1,vsize,sr)
 {
@@ -57,7 +80,7 @@ AuLib::Oscil::Oscil(double amp, double freq,
 
 AuLib::Oscil::~Oscil(){
   if(m_sine)
-    delete[] m_table;
+    delete[] m_sine;
 }
 
 

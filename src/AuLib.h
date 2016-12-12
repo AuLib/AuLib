@@ -56,6 +56,11 @@
 #include <cstdint>
 #include <cstring>
 
+#define NONCOPYABLE(A) \
+private: \
+A(const A&); \
+A& operator=(A) \
+
 namespace AuLib {
   
   /** default signal vectorsize.

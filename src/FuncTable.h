@@ -12,6 +12,8 @@
 #define _FUNCTABLE_H
 
 #include "AuLib.h"
+#include <algorithm>
+#include <utility>
 
 namespace AuLib {
   /** Function table base class
@@ -37,18 +39,53 @@ namespace AuLib {
     }
 
   public:
+     /** swap function for copy assignment 
+     */
+    friend void swap(FuncTable& obja,
+		     FuncTable& objb) 
+    {
+      using std::swap;
+      swap(obja.m_tsize,objb.m_tsize);
+      swap(obja.m_table,objb.m_table);
+      swap(obja.m_error,objb.m_error);
+    }
+
+    /* Copy assignment operator
+     */
+    FuncTable& operator=(FuncTable obj){ 
+      swap(*this, obj);
+      return *this;
+    }
+    
+    FuncTable(const FuncTable& obj) :
+      m_tsize(obj.m_tsize), m_error(obj.m_error)
+    {
+      if(m_tsize > 0) {
+	try {
+	m_table = new double[m_tsize+1];
+	} catch (std::bad_alloc) {
+	  m_tsize = 0;
+	  m_error = AULIB_MEM_ERROR;
+	  return;
+	} 
+	 memcpy(m_table,obj.m_table,sizeof(double)*(m_tsize+1));
+      } else m_table = NULL;
+    }
+    
     /** FuncTable constructor \n\n
 	tsize - table size \n
     */ 
     FuncTable(uint32_t tsize = def_tsize)
       : m_tsize(tsize), m_error(AULIB_NOERROR) {
       if(m_tsize > 0) {
+	try {
 	m_table = new double[m_tsize+1];
-	if(m_table == NULL) {
+	} catch (std::bad_alloc) {
 	  m_tsize = 0;
 	  m_error = AULIB_MEM_ERROR;
-	} else 
-	  memset(m_table,0,sizeof(double)*(m_tsize+1));
+	  return;
+	} 
+	 memset(m_table,0,sizeof(double)*(m_tsize+1));
       } else m_table = NULL;
     }
     ~FuncTable(){

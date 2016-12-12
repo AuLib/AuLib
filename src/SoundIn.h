@@ -23,7 +23,6 @@ namespace AuLib {
    */
   class SoundIn : AudioBase {
 
-  protected:
     const char *m_src;
     uint32_t m_mode;
     uint32_t m_cnt;
@@ -31,6 +30,8 @@ namespace AuLib {
     void *m_buffer;
     uint32_t m_bsize;
     void *m_handle;
+
+    NONCOPYABLE(SoundIn);   
 
   public:
     /** SoundIn constructor \n\n

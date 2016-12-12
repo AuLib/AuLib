@@ -12,7 +12,8 @@
 #define _AUDIOBASE_H
 
 #include "AuLib.h"
-#include <iostream>
+#include <algorithm>
+#include <utility>
 
 namespace AuLib {
   
@@ -28,6 +29,45 @@ namespace AuLib {
     uint32_t m_error;
 
   public:
+    /** swap function for copy assignment 
+     */
+    friend void swap(AudioBase& obja,
+		     AudioBase& objb) 
+    {
+      using std::swap;
+      swap(obja.m_nchnls,objb.m_nchnls);
+      swap(obja.m_vsize,objb.m_vsize);
+      swap(obja.m_sr,objb.m_sr);
+      swap(obja.m_error,objb.m_error);
+      swap(obja.m_output,objb.m_output);
+    }
+
+    /* Copy assignment operator
+     */
+    AudioBase& operator=(AudioBase obj){ 
+      swap(*this, obj);
+      return *this;
+    }
+
+     /** AudioBase copy constructor 
+     */
+    AudioBase(const AudioBase& obj) :
+      m_nchnls(obj.m_nchnls), m_sr(obj.m_sr),
+      m_vsize(obj.m_vsize), m_error(obj.m_error){
+      if(m_vsize != 0) {
+       	try {
+	    m_output = new double[m_vsize*m_nchnls];
+	  } catch (std::bad_alloc){
+	  m_error = AULIB_MEM_ERROR;
+	  m_vsize = 0;
+	  return;
+	}
+	memcpy(m_output,obj.m_output,
+	       sizeof(double)*m_vsize);
+      }
+      else m_output = NULL;
+    }
+    
     /** AudioBase constructor \n\n
 	nchnls - number of channels \n
 	sr - sampling rate \n
@@ -39,14 +79,15 @@ namespace AuLib {
       m_nchnls(nchnls), m_sr(sr),
       m_vsize(vsize), m_error(AULIB_NOERROR) {
       if(m_vsize != 0) {
-	m_output = new double[m_vsize*m_nchnls];
-	if(m_output == NULL) {
+	try {
+	    m_output = new double[m_vsize*m_nchnls];
+	  } catch (std::bad_alloc){
 	  m_error = AULIB_MEM_ERROR;
-	  m_output = NULL;
 	  m_vsize = 0;
-	} else
-	  memset(m_output, 0, m_vsize*sizeof(double));
-      } 
+	  return;
+	}
+	memset(m_output, 0, m_vsize*sizeof(double));
+      } else m_output = NULL; 
     }
   
     /** AudioBase destructor
@@ -82,6 +123,13 @@ namespace AuLib {
       return m_nchnls;
     }
 
+    /** Get sampling reate
+     */
+    uint32_t sr() const {
+      return m_sr;
+    }
+
+
     /** Get error code
      */
     uint32_t error() const {
@@ -96,7 +144,7 @@ namespace AuLib {
  
   };
 
- /*! \class AudioBase AudioBase.h AuLib/AudioBase.h
- */
+  /*! \class AudioBase AudioBase.h AuLib/AudioBase.h
+   */
 }
 #endif
