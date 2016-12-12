@@ -44,7 +44,12 @@ namespace AuLib {
         if overwrite is switched off
 	once the bus data has been consumed
     */
-    virtual const double* process(const double* sig);
+    virtual const double* process(const double* sig){
+      for(int i=0; i < m_vsize*m_nchnls; i++)
+	m_output[i] = m_ovw ? m_scal*sig[i] + m_offs :
+	  m_scal*sig[i] + m_offs + m_output[i];
+      return m_output;
+    }
 
     /** Applies a gain scaling and optional
 	offset to a signal vector. If
@@ -53,8 +58,8 @@ namespace AuLib {
 	clear() is not required.
     */
     virtual const SigBus& process(const double* sig,
-			 double scal, double offs = 0.,
-			 bool overwrite = true){
+				  double scal, double offs = 0.,
+				  bool overwrite = true){
       m_scal = scal;
       m_offs = offs;
       m_ovw = overwrite;
@@ -82,8 +87,8 @@ namespace AuLib {
 	clear() is not required.
     */
     virtual const SigBus& process(const AudioBase& obj,
-			 double scal, double offs = 0.,
-			 bool overwrite = true) {
+				  double scal, double offs = 0.,
+				  bool overwrite = true) {
       m_scal = scal;
       m_offs = offs;
       m_ovw = overwrite;

@@ -14,6 +14,7 @@
 #include "AuLib.h"
 #include <algorithm>
 #include <utility>
+#include <iostream>
 
 namespace AuLib {
   
@@ -44,11 +45,11 @@ namespace AuLib {
 
     /* Copy assignment operator
      */
-    AudioBase& operator=(AudioBase obj){ 
+    const AudioBase& operator=(AudioBase obj){ 
       swap(*this, obj);
       return *this;
     }
-
+ 
     /** AudioBase copy constructor 
      */
     AudioBase(const AudioBase& obj) :
@@ -99,17 +100,91 @@ namespace AuLib {
 	delete[] m_output;
     }
 
+    /** Scale the output vector
+     */
+    const AudioBase& operator*=(double scal){
+      for(int i=0; i < m_vsize*m_nchnls;i++)
+	m_output[i] *= scal;
+      return *this;
+    }
+
+    /** Multiply the output by a sig vector
+     */
+    const AudioBase& operator*=(const double *sig){
+      for(int i=0; i < m_vsize*m_nchnls;i++)
+	m_output[i] *= sig[i];
+      return *this;
+    }
+
+    /** Multiply the output by the output from obj
+     */
+    const AudioBase& operator*=(const AudioBase& obj){
+      if(m_vsize == obj.m_vsize &&
+	 m_nchnls == obj.m_nchnls)
+	return *this *= obj.output();
+      else return *this;
+    }
+
+    /** DC offset the output vector
+     */
+    const AudioBase& operator+=(double offs){
+      for(int i=0; i < m_vsize*m_nchnls;i++)
+	m_output[i] += offs;
+      return *this;
+    }
+
+    /** Add a vector sig to the output vector
+     */
+    const AudioBase& operator+=(const double *sig){
+      for(int i=0; i < m_vsize*m_nchnls;i++)
+	m_output[i] += sig[i];
+      return *this;
+    }
+
+    /** Add a vector sig from obj to the output vector
+     */
+    const AudioBase& operator+=(const AudioBase& obj){
+      if(m_vsize == obj.m_vsize &&
+	 m_nchnls == obj.m_nchnls)
+	return *this += obj.output();
+      else return *this;
+    }
+    
+    /** set the output vector to a sig vector
+     */
+    const AudioBase& set(const double *sig){
+      memcpy(m_output,sig,(m_vsize*m_nchnls)*sizeof(double));
+      return *this;
+    }
+
+    /** set the output vector to a value v 
+     */
+    const AudioBase& set(double v){
+      std::fill(m_output,m_output+m_vsize*m_nchnls,v);
+      return *this;
+    } 
+    
     /** Get the audio output vector
      */ 
     const double* output() const {
       return m_output;
     }
   
-    /** Get a single sample at ndx 
+    /** Get a single sample at frame ndx
+        and channel chn off the output audio vector
+    */  
+    double output(uint32_t frndx, uint32_t chn=0)
+      const {
+      if(frndx < m_vsize)
+	return m_output[frndx*m_nchnls+chn];
+      else return 0.;
+    }
+
+    /** Get a single sample at sample pos ndx 
 	off the output audio vector
     */  
     double output(uint32_t ndx) const {
-      if(ndx < m_vsize)
+      if(ndx < m_vsize*m_nchnls)
 	return m_output[ndx];
       else return 0.;
     }

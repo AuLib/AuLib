@@ -21,6 +21,8 @@ add_executable(fm fm.cpp)
 target_link_libraries(fm AuLib ${LIBSNDFILE} ${PORTAUDIO})
 add_executable(panning panning.cpp)
 target_link_libraries(panning AuLib ${LIBSNDFILE} ${PORTAUDIO})
+add_executable(ringmod ringmod.cpp)
+target_link_libraries(ringmod AuLib ${LIBSNDFILE} ${PORTAUDIO})
 
 # installation targets
 INSTALL(TARGETS sampleplay saw readtable sine fm

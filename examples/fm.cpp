@@ -9,21 +9,22 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <Oscili.h>
-#include <SigBus.h>
 
 using namespace AuLib;
 
 int main(){
   double fm = 440., fc = 220., ndx = 5.;
   Oscili mod,car;
-  SigBus sig;
   SoundOut output("dac");
 
-  if(sig.error() == AULIB_NOERROR &&
+  if(mod.error() == AULIB_NOERROR &&
+     car.error() == AULIB_NOERROR &&
      output.error() == AULIB_NOERROR) {
-    for(int i=0; i < def_sr*10; i+=def_vsize){ 
-      output.write(car.process(0.5,sig.process(mod.process(ndx,fm),
-					       fm,fc)));
+    for(int i=0; i < def_sr*10; i+=def_vsize){
+      mod.process(ndx*fm,fm);
+      car.process(0.5,mod+=fc);
+      output.write(car);
+      
     }
   }
   return 0;

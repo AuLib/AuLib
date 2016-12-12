@@ -52,7 +52,7 @@ namespace AuLib {
 
     /* Copy assignment operator
      */
-    FuncTable& operator=(FuncTable obj){ 
+    const FuncTable& operator=(FuncTable obj){ 
       swap(*this, obj);
       return *this;
     }
@@ -104,7 +104,9 @@ namespace AuLib {
 	from the function table
     */ 
     double table(uint32_t pos) const {
-      return m_table[pos];
+      if(pos <= m_tsize)
+         return m_table[pos];
+      else return 0.;
     }
 
     /** Get table size

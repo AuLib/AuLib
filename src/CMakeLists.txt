@@ -10,7 +10,6 @@ TableReadic.cpp
 SoundOut.cpp
 FourierTable.cpp
 SampleTable.cpp
-SigBus.cpp
 Pan.cpp
 )
 
