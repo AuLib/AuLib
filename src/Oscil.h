@@ -12,7 +12,7 @@
 #define _OSCIL_H
 
 #include "AudioBase.h"
-#include "FuncTable.h"
+#include "FourierTable.h"
 
 namespace AuLib {
   
@@ -27,10 +27,10 @@ namespace AuLib {
     double m_amp;
     double m_incr;
     uint32_t m_tsize;
-    double *m_sine;
     const double *m_table;
     const double *m_am;
     const double *m_fm;
+    FourierTable m_sine;
 
     /** truncating oscillator process
      */
@@ -54,33 +54,8 @@ namespace AuLib {
     }
 
   public:
-    /** swap function for copy assignment 
-     */
-    friend void swap(Oscil& obja,
-		     Oscil& objb) 
-    {
-      using std::swap;
-      swap(obja.m_phs,objb.m_phs);
-      swap(obja.m_freq,objb.m_freq);
-      swap(obja.m_amp,objb.m_amp);
-      swap(obja.m_incr,objb.m_incr);
-      swap(obja.m_tsize,objb.m_tsize);
-      swap(obja.m_sine,objb.m_sine);
-      swap(obja.m_table,objb.m_table);
-      swap(obja.m_am,objb.m_am);
-      swap(obja.m_fm,objb.m_fm);
-    }
-    /** Oscil copy assignment operator 
-     */
-    const Oscil& operator=(Oscil obj){
-      swap(*this, obj);
-      return *this;
-    }
     
-    /** Oscil copy constructor */
-    Oscil(const Oscil& obj);
-    
-    /** Oscil constructor \n\n
+    /** Sinusoidal Oscil constructor \n\n
 	amp - amplitude   \n
 	freq - frequency in Hz \n
 	phase - init phase (0-1) \n 
@@ -104,10 +79,6 @@ namespace AuLib {
 	  const FuncTable& ftable, double phase = 0.,
 	  uint32_t vsize = def_vsize,
 	  double sr = def_sr);
-
-    /** Oscil destructor
-     */
-    virtual ~Oscil();
 
     /** Process one vector of audio
      */
@@ -143,7 +114,7 @@ namespace AuLib {
       m_am = amp;
       m_fm = freq;
       process();
-      return m_output;
+      return m_vector;
     }
 
     /** Process one vector of audio
@@ -154,7 +125,7 @@ namespace AuLib {
       m_amp = amp;
       m_fm = freq;
       process();
-      return m_output;
+      return m_vector;
     }
 
     /** Process one vector of audio
@@ -166,7 +137,7 @@ namespace AuLib {
       m_freq = freq;
       m_incr = m_freq*m_tsize/m_sr;
       process();
-      return m_output;
+      return m_vector;
     }
 
     /** Process one vector of audio
@@ -174,7 +145,7 @@ namespace AuLib {
     */ 
     virtual const Oscil& process(const AudioBase& obja){
       if(obja.vsize() == m_vsize) {
-	m_am = obja.output();
+	m_am = obja.vector();
         process();
       } else m_error = AULIB_ERROR;
       return *this;
@@ -199,7 +170,7 @@ namespace AuLib {
       if(objf.vsize() == m_vsize &&
 	 objf.nchnls() == 1) {
 	m_amp = amp;
-	m_fm = objf.output();
+	m_fm = objf.vector();
         process();
       } else m_error = AULIB_ERROR;
       return *this;
@@ -213,8 +184,8 @@ namespace AuLib {
 	 objf.vsize() == m_vsize &&
 	 obja.nchnls() == 1 &&
 	 objf.nchnls() == 1) {
-	m_am = obja.output();
-	m_fm = objf.output();
+	m_am = obja.vector();
+	m_fm = objf.vector();
         process();
       } else m_error = AULIB_ERROR;
      return *this;

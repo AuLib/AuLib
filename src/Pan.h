@@ -49,7 +49,7 @@ namespace AuLib {
     virtual const Pan& process(const AudioBase& obj) {
       if(obj.vsize() == m_vsize &&
 	 obj.nchnls() == 1) {
-	process(obj.output());
+	process(obj.vector());
       } else m_error = AULIB_ERROR;
       return *this;
     }

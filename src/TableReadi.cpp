@@ -22,6 +22,6 @@ AuLib::TableReadi::lookup(const double* phs){
     frac = pos - posi;
     a = m_table[posi];
     b = m_table[posi+1];
-    m_output[i] = a + frac*(b - a);
+    m_vector[i] = a + frac*(b - a);
   }
 }

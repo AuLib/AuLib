@@ -20,7 +20,7 @@ AuLib::Oscili::oscillator(){
     frac = m_phs - phi;
     a = m_table[phi];
     b = m_table[phi+1];
-    m_output[i] = 
+    m_vector[i] = 
       m_amp*(a + frac*(b - a));
     m_phs += m_incr;
     mod();

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////
-// SoundOut class: audio output
+// SoundOut class: audio vector
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ namespace AuLib {
   };
 
   
-  /** Generic audio output class
+  /** Generic audio vector class
    */
   class SoundOut : public AudioBase {
 
@@ -53,50 +53,46 @@ namespace AuLib {
     uint32_t m_mode;
     uint32_t m_cnt;
     uint32_t m_framecnt;
-    void *m_buffer;
-    uint32_t m_bsize;
     void *m_handle;
 
     NONCOPYABLE(SoundOut);
 
   public:
     /** SoundOut constructor \n\n
-	dest - output destination 
+	dest - vector destination 
 	("dac", "stdout", or file path) \n
 	nchnls - number of channels \n
 	sr - sampling rate \n
 	vsize - vector size \n
-	bsize - buffer size \n
     */
     SoundOut(const char *dest,
 	     uint32_t nchnls = def_nchnls,
-	     uint32_t vsize = def_vsize,
-	     uint32_t bsize = def_bsize,
+	     uint32_t vsize = def_bsize,
 	     double sr = def_sr);
   
     /** SoundOut destructor
      */
     ~SoundOut();
 
-    /** Writes sig to the output
-	destination, returning the output current 
+    /** Writes sig to the vector
+	destination, returning the vector current 
         framecount.
     */
-    uint32_t write(const double *sig);
+    uint32_t write(const double *sig,
+		   uint32_t frames = def_vsize);
 
-    /** Writes the audio vector in obj to the output
-	destination, returning the output current 
+    /** Writes the audio vector in obj to the vector
+	destination, returning the vector current 
         framecount.
     */
     uint32_t write(const AudioBase& obj){
-      if(obj.vsize() == m_vsize &&
-	 obj.nchnls() == m_nchnls)
-	return write(obj.output());
+      if(obj.nchnls() == m_nchnls)
+	return write(obj.vector(),obj.vsize());
       else m_error = AULIB_ERROR;
       return 0;
     }
 
-    /** Get the current output stream time
+    /** Get the current vector stream time
      */
     double time() const {
       return m_framecnt/m_sr;

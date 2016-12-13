@@ -12,25 +12,17 @@
 #include "SoundOut.h"
 #include <sndfile.h>
 #include <portaudio.h>
+#include <cstring>
 #include <iostream>
 
 AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
-			  uint32_t vsize, uint32_t bsize, double sr) :
-  m_dest(dest), m_bsize(bsize), m_buffer(NULL),
-  m_handle(NULL), m_mode(0), m_cnt(0),
+			  uint32_t vsize, double sr) :
+  m_dest(dest), m_handle(NULL), m_mode(0), m_cnt(0),
   m_framecnt(0), AudioBase(nchnls,vsize,sr)
 {
   if(strcmp("dac",m_dest) == 0){
     // RT audio
     PaError err;
-    try {
-      m_buffer = (void *) new float[m_bsize*m_nchnls];
-    }
-    catch (std::bad_alloc) {
-      m_bsize = 0;
-      m_vsize = 0;
-      return;
-    }
     err = Pa_Initialize();
     if(err == paNoError){
       PaStreamParameters outparam;
@@ -42,10 +34,10 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
       outparam.channelCount = m_nchnls;
       outparam.sampleFormat = paFloat32;
       outparam.suggestedLatency = (PaTime)
-	(m_bsize/m_sr);
+	(m_vsize/m_sr);
       err = Pa_OpenStream(&stream,NULL,&outparam,
-			  m_sr,m_bsize,paNoFlag, 
-			  NULL, NULL);
+      	  m_sr,m_vsize,paNoFlag, 
+      		  NULL, NULL);
       if(err == paNoError){
 	err = Pa_StartStream(stream);
 	if(err == paNoError){
@@ -74,14 +66,6 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
     info.samplerate = (int) m_sr;
     info.channels = m_nchnls;
     info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
-    try {
-      m_buffer = (void *) new double[m_bsize*m_nchnls];
-    } catch (std::bad_alloc) {
-      m_bsize = 0;
-      m_vsize = 0;
-      m_buffer = NULL;
-      return;
-    }
     SNDFILE *sf = sf_open(m_dest,SFM_WRITE, &info);
     if(sf != NULL) {
       m_handle = (void *) sf;
@@ -99,35 +83,30 @@ AuLib::SoundOut::~SoundOut(){
     Pa_StopStream((PaStream*) m_handle);
     Pa_CloseStream((PaStream*) m_handle);
     Pa_Terminate();
-    float *buffer = (float *) m_buffer;
-    if(buffer)
-      delete[] buffer;
   }
   else if(m_mode == SOUNDOUT_SNDFILE &&
 	  m_handle != NULL){
     sf_close((SNDFILE *) m_handle);
-    double *buffer = (double *) m_buffer;
-    if(buffer)
-      delete[] buffer;
   }
 }
 
 uint32_t
-AuLib::SoundOut::write(const double *sig){
-  uint32_t samples = m_vsize*m_nchnls;
+AuLib::SoundOut::write(const double *sig,
+		       uint32_t frames){
+  uint32_t samples = frames*m_nchnls;
   if(m_mode == SOUNDOUT_RT &&
      m_handle != NULL) {
     PaError err;
-    uint32_t bsamples = m_bsize*m_nchnls;
-    float *buffer = (float *) m_buffer;
+    uint32_t bsamples = m_vsize*m_nchnls;
+    float *buffer = (float *) m_vector;
     for(int i = 0; i < samples; i++) {
       buffer[m_cnt++] = sig[i];
       if(m_cnt == bsamples){
 	err = Pa_WriteStream((PaStream*) m_handle,
-			     buffer,m_bsize);
+			     buffer,m_vsize);
 	if(err == paNoError){
 	  m_framecnt += m_cnt/m_nchnls;
-	}
+	 }
 	m_cnt = 0;
       }
     }
@@ -142,14 +121,13 @@ AuLib::SoundOut::write(const double *sig){
   }
   else if(m_mode == SOUNDOUT_SNDFILE &&
 	  m_handle != NULL) {
-    uint32_t bsamples = m_bsize*m_nchnls;
-    double *buffer = (double *) m_buffer;
+    uint32_t bsamples = m_vsize*m_nchnls;
     for(int i = 0; i < samples; i++) {
-      buffer[m_cnt++] = sig[i];
+      m_vector[m_cnt++] = sig[i];
       if(m_cnt == bsamples) {
 	m_framecnt +=
 	  sf_writef_double((SNDFILE*) m_handle,
-			   buffer, m_bsize);
+			   m_vector, m_vsize);
 	m_cnt = 0;
       }
     }

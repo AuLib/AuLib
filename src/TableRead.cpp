@@ -17,6 +17,6 @@ AuLib::TableRead::lookup(const double *phs){
     pos = (uint32_t) mod((m_norm ?
 	       phs[i]*m_tsize : phs[i])
 	      + m_phs);
-    m_output[i] = m_table[pos];
+    m_vector[i] = m_table[pos];
   }
 }

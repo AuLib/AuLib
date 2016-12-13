@@ -55,16 +55,14 @@ AuLib::FourierTable::create(uint32_t harms,
 		     double phase)
 { 
   double w,a;
-  if(amps != NULL) {
   phase *= twopi;
   for(int i=0; i < harms; i++)
     for(int n=0; n < m_tsize; n++){
       a = amps != NULL ? amps[i] : 1.f;	   
       w = (i+1)*(n*twopi/m_tsize);
-      m_table[n] += (float) (a*cos(w+phase));
+      m_vector[n] += (float) (a*cos(w+phase));
     }
-  m_table[m_tsize] = m_table[0];
+  m_vector[m_tsize] = m_vector[0];
+  m_vector[m_tsize+1] = m_vector[1];
   normalise_table();
-  }
-  else m_error = AULIB_ERROR;
 }

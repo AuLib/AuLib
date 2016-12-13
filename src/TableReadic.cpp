@@ -31,7 +31,7 @@ AuLib::TableReadic::lookup(const double* phs){
     tmp = d + 3.f*b;
     fracsq = frac*frac;
     fracb = frac*fracsq;
-    m_output[i] =
+    m_vector[i] =
 	       fracb*(- a - 3.f*c + tmp)/6.f +
 	       fracsq*((a+c)/2.f - b) +
 	       frac*(c + (-2.f*a - tmp)/6.f) + b;

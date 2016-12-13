@@ -46,14 +46,14 @@ namespace AuLib {
     */
     virtual const double* process(const double* sig){
       for(int i=0; i < m_vsize*m_nchnls; i++)
-	m_output[i] = m_ovw ? m_scal*sig[i] + m_offs :
-	  m_scal*sig[i] + m_offs + m_output[i];
-      return m_output;
+	m_vector[i] = m_ovw ? m_scal*sig[i] + m_offs :
+	  m_scal*sig[i] + m_offs + m_vector[i];
+      return m_vector;
     }
 
     /** Applies a gain scaling and optional
 	offset to a signal vector. If
-	overwrite is true, the output vector is
+	overwrite is true, the vector vector is
 	overwritten and a call to 
 	clear() is not required.
     */
@@ -75,14 +75,14 @@ namespace AuLib {
     virtual const SigBus& process(const AudioBase& obj) {
       if(obj.vsize() == m_vsize &&
 	 obj.nchnls() == m_nchnls){
-	process(obj.output());
+	process(obj.vector());
       } else m_error = AULIB_ERROR;
       return *this;
     }
 
     /** Applies a gain scaling and optional
 	offset to a signal vector from obj. If
-	overwrite is true, the output vector is
+	overwrite is true, the vector vector is
 	overwritten and a call to 
 	clear() is not required.
     */
@@ -92,14 +92,14 @@ namespace AuLib {
       m_scal = scal;
       m_offs = offs;
       m_ovw = overwrite;
-      process(obj.output());
+      process(obj.vector());
       return *this;
     }     
 
-    /** Clears the output vector
+    /** Clears the vector vector
      */
     void clear(){
-      memset(m_output,0,
+      memset(m_vector,0,
 	     sizeof(double)*m_vsize*m_nchnls);
     }
 

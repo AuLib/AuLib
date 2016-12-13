@@ -14,7 +14,6 @@
 #include "AuLib.h"
 #include <algorithm>
 #include <utility>
-#include <iostream>
 
 namespace AuLib {
   
@@ -26,7 +25,7 @@ namespace AuLib {
     uint32_t m_nchnls;
     double m_sr;
     uint32_t m_vsize;
-    double *m_output;
+    double *m_vector;
     uint32_t m_error;
 
   public:
@@ -40,7 +39,7 @@ namespace AuLib {
       swap(obja.m_vsize,objb.m_vsize);
       swap(obja.m_sr,objb.m_sr);
       swap(obja.m_error,objb.m_error);
-      swap(obja.m_output,objb.m_output);
+      swap(obja.m_vector,objb.m_vector);
     }
 
     /* Copy assignment operator
@@ -57,17 +56,17 @@ namespace AuLib {
       m_vsize(obj.m_vsize), m_error(obj.m_error){
       if(m_vsize != 0) {
        	try {
-	  m_output = new double[m_vsize*m_nchnls];
+	  m_vector = new double[m_vsize*m_nchnls];
 	} catch (std::bad_alloc){
 	  m_error = AULIB_MEM_ERROR;
 	  m_vsize = 0;
-	  m_output = NULL;
+	  m_vector = NULL;
 	  return;
 	}
-	memcpy(m_output,obj.m_output,
+	memcpy(m_vector,obj.m_vector,
 	       sizeof(double)*m_vsize);
       }
-      else m_output = NULL;
+      else m_vector = NULL;
     }
     
     /** AudioBase constructor \n\n
@@ -82,110 +81,110 @@ namespace AuLib {
       m_vsize(vsize), m_error(AULIB_NOERROR) {
       if(m_vsize != 0) {
 	try {
-	  m_output = new double[m_vsize*m_nchnls];
+	  m_vector = new double[m_vsize*m_nchnls];
 	} catch (std::bad_alloc){
 	  m_error = AULIB_MEM_ERROR;
 	  m_vsize = 0;
-	  m_output = NULL;
+	  m_vector = NULL;
 	  return;
 	}
-	memset(m_output, 0, m_vsize*sizeof(double));
-      } else m_output = NULL; 
+	memset(m_vector, 0, m_vsize*sizeof(double));
+      } else m_vector = NULL; 
     }
   
     /** AudioBase destructor
      */
     virtual ~AudioBase(){
-      if(m_output)
-	delete[] m_output;
+      if(m_vector)
+	delete[] m_vector;
     }
 
-    /** Scale the output vector
+    /** Scale the data vector
      */
     const AudioBase& operator*=(double scal){
       for(int i=0; i < m_vsize*m_nchnls;i++)
-	m_output[i] *= scal;
+	m_vector[i] *= scal;
       return *this;
     }
 
-    /** Multiply the output by a sig vector
+    /** Multiply the data vector by a sig vector
      */
     const AudioBase& operator*=(const double *sig){
       for(int i=0; i < m_vsize*m_nchnls;i++)
-	m_output[i] *= sig[i];
+	m_vector[i] *= sig[i];
       return *this;
     }
 
-    /** Multiply the output by the output from obj
+    /** Multiply the data vector by the vector from obj
      */
     const AudioBase& operator*=(const AudioBase& obj){
       if(m_vsize == obj.m_vsize &&
 	 m_nchnls == obj.m_nchnls)
-	return *this *= obj.output();
+	return *this *= obj.vector();
       else return *this;
     }
 
-    /** DC offset the output vector
+    /** DC offset the data vector
      */
     const AudioBase& operator+=(double offs){
       for(int i=0; i < m_vsize*m_nchnls;i++)
-	m_output[i] += offs;
+	m_vector[i] += offs;
       return *this;
     }
 
-    /** Add a vector sig to the output vector
+    /** Add a vector sig to the data vector
      */
     const AudioBase& operator+=(const double *sig){
       for(int i=0; i < m_vsize*m_nchnls;i++)
-	m_output[i] += sig[i];
+	m_vector[i] += sig[i];
       return *this;
     }
 
-    /** Add a vector sig from obj to the output vector
+    /** Add a vector sig from obj to the data vector
      */
     const AudioBase& operator+=(const AudioBase& obj){
       if(m_vsize == obj.m_vsize &&
 	 m_nchnls == obj.m_nchnls)
-	return *this += obj.output();
+	return *this += obj.vector();
       else return *this;
     }
     
-    /** set the output vector to a sig vector
+    /** set the data vector to a sig vector
      */
     const AudioBase& set(const double *sig){
-      memcpy(m_output,sig,(m_vsize*m_nchnls)*sizeof(double));
+      memcpy(m_vector,sig,(m_vsize*m_nchnls)*sizeof(double));
       return *this;
     }
 
-    /** set the output vector to a value v 
+    /** set the data vector to a value v 
      */
     const AudioBase& set(double v){
-      std::fill(m_output,m_output+m_vsize*m_nchnls,v);
+      std::fill(m_vector,m_vector+m_vsize*m_nchnls,v);
       return *this;
     } 
     
-    /** Get the audio output vector
+    /** Get the audio vector vector
      */ 
-    const double* output() const {
-      return m_output;
+    const double* vector() const {
+      return m_vector;
     }
   
     /** Get a single sample at frame ndx
-        and channel chn off the output audio vector
+        and channel chn off the data vector
     */  
-    double output(uint32_t frndx, uint32_t chn=0)
+    double vector(uint32_t frndx, uint32_t chn=0)
       const {
       if(frndx < m_vsize)
-	return m_output[frndx*m_nchnls+chn];
+	return m_vector[frndx*m_nchnls+chn];
       else return 0.;
     }
 
     /** Get a single sample at sample pos ndx 
-	off the output audio vector
+	off the data vector
     */  
-    double output(uint32_t ndx) const {
+    double vector(uint32_t ndx) const {
       if(ndx < m_vsize*m_nchnls)
-	return m_output[ndx];
+	return m_vector[ndx];
       else return 0.;
     }
 
@@ -206,7 +205,6 @@ namespace AuLib {
     uint32_t sr() const {
       return m_sr;
     }
-
 
     /** Get error code
      */

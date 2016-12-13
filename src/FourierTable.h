@@ -52,7 +52,7 @@ namespace AuLib {
 	tsize - table size \n
     */
     FourierTable(uint32_t harms,
-		 uint32_t type = SAW_TABLE,
+		 uint32_t type,
 		 uint32_t tsize = def_tsize);
 
   };

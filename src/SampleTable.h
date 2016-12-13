@@ -35,9 +35,6 @@ namespace AuLib {
    */
   class SampleTable : public FuncTable {
 
-  protected:
-    uint32_t m_nchnls;
-
   public:
     /** SampleTable constructor \n\n
 	name - filename \n
@@ -46,18 +43,12 @@ namespace AuLib {
     SampleTable(const char *name,
 		uint32_t chn = 1);
 
-    /** Get the number of channels
-     */
-    uint32_t nchnls(){
-      return m_nchnls;
-    }
-
+ 
     /** Get error message
      */
     virtual const char* error_message() const {
       if(m_error > AULIB_ERROR)
-	return sampletable_error[m_error -
-				 AULIB_ERROR - 1];
+	return sampletable_error[m_error - AULIB_ERROR - 1];
       else return aulib_error[m_error];
     }
 

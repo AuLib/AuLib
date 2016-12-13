@@ -16,7 +16,7 @@ using namespace std;
 
 int main(){
   
-  Oscili sig;
+  Oscil sig;
   SoundOut output("dac");
 
   if(sig.error() == AULIB_NOERROR) {

@@ -27,8 +27,6 @@ namespace AuLib {
     uint32_t m_mode;
     uint32_t m_cnt;
     uint32_t m_framecnt;
-    void *m_buffer;
-    uint32_t m_bsize;
     void *m_handle;
 
     NONCOPYABLE(SoundIn);   
@@ -40,16 +38,16 @@ namespace AuLib {
 	bsize - buffer size \n
     */
     SoundIn(const char *src, uint32_t nchnls = def_nchnls,
-	    uint32_t vsize = def_vsize, uint32_t bsize = def_bsize,
-	    double sr = def_sr);
+	    uint32_t vsize = def_bsize, double sr = def_sr);
   
     /** SoundOut destructor
      */
     ~SoundIn();
 
-    /** Reads audio into output vector
+    /** Reads frames of audio to output 
      */
-    uint32_t read(); 
+    const double* read(uint32_t frames);
+
   
   };
 

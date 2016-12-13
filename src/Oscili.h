@@ -26,7 +26,7 @@ namespace AuLib {
     virtual void oscillator();
     
   public:
-    /** Oscili constructor \n\n
+    /** Sinusoidal Oscili constructor \n\n
 	amp - amplitude   \n
 	freq - frequency in Hz \n
 	phase - init phase (0-1) \n 

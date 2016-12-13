@@ -56,7 +56,7 @@ namespace AuLib {
 	      uint32_t vsize = def_vsize):
       m_table(ftable.table()), m_phs(phase),
       m_norm(norm), m_wrap(wrap),
-      m_tsize(ftable.size()), AudioBase(1,vsize)
+      m_tsize(ftable.vsize()), AudioBase(1,vsize)
     {
       if(m_table == NULL) {
 	m_vsize = 0;
@@ -69,7 +69,7 @@ namespace AuLib {
     */
     virtual const double* process(const double* phs){
       lookup(phs);
-      return m_output;
+      return m_vector;
     }
 
     /** takes in a frame of phase values
@@ -78,7 +78,7 @@ namespace AuLib {
     virtual const TableRead& process(const AudioBase& obj){
       if(obj.vsize() == m_vsize &&
 	 obj.nchnls() == 1)
-	lookup(obj.output());
+	lookup(obj.vector());
       else m_error = AULIB_ERROR;
       return *this;
     }

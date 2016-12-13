@@ -54,7 +54,8 @@
 
 #include <cmath>
 #include <cstdint>
-#include <cstring>
+#include <cstdlib>
+#include <iostream>
 
 #define NONCOPYABLE(A) \
 private: \
