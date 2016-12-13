@@ -27,15 +27,15 @@ AuLib::FourierTable::FourierTable(uint32_t harms,
   double phase = -0.25;
   memset(amps, 0, sizeof(double)*harms);
   switch(type) {
-  case SAW_TABLE:
+  case SAW:
     for(int i=0; i < harms; i++)
       amps[i] = 1.f/(i+1);
     break;
-  case SQUARE_TABLE:
+  case SQUARE:
     for(int i=0; i < harms; i+=2)
       amps[i] = 1.f/(i+1);
     break;
-  case TRIANGLE_TABLE:
+  case TRIANGLE:
     phase = 0.;
     for(int i=0; i < harms; i+=2)
       amps[i] = 1.f/((i+1)*(i+1));
@@ -55,14 +55,16 @@ AuLib::FourierTable::create(uint32_t harms,
 		     double phase)
 { 
   double w,a;
+  if(harms) {
   phase *= twopi;
   for(int i=0; i < harms; i++)
     for(int n=0; n < m_tsize; n++){
       a = amps != NULL ? amps[i] : 1.f;	   
       w = (i+1)*(n*twopi/m_tsize);
       m_vector[n] += (float) (a*cos(w+phase));
-    }
+   }
   m_vector[m_tsize] = m_vector[0];
   m_vector[m_tsize+1] = m_vector[1];
   normalise_table();
+  }
 }

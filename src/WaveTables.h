@@ -25,7 +25,7 @@ namespace AuLib {
     */
     SawTable(uint32_t harms,
 	     uint32_t tsize=def_tsize) :
-      FourierTable(harms,SAW_TABLE,tsize){};
+      FourierTable(harms,SAW,tsize){};
   };
 
   /** Square wave table
@@ -37,7 +37,7 @@ namespace AuLib {
     */ 
     SquareTable(uint32_t harms,
 		uint32_t tsize=def_tsize) :
-      FourierTable(harms, SQUARE_TABLE, tsize){};
+      FourierTable(harms, SQUARE, tsize){};
   };
 
   /** Triangle wave table
@@ -49,7 +49,7 @@ namespace AuLib {
     */
     TriangleTable(uint32_t harms,
 		  uint32_t tsize=def_tsize) :
-      FourierTable(harms, TRIANGLE_TABLE, tsize){};
+      FourierTable(harms, TRIANGLE, tsize){};
   };
 
   

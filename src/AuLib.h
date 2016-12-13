@@ -86,11 +86,11 @@ namespace AuLib {
 
   /** default function table length
    */
-  const uint32_t   def_tsize = 16384;
+  const uint32_t def_tsize = 8192;
 
   /** filter modes 
    */
-  enum filter_types { BP = 0,BR,LP,HP };
+  enum filter_types {BP=0,BR,LP,HP};
 
   /** the pi definition. 
    */ 

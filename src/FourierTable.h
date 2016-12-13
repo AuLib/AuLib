@@ -18,9 +18,9 @@ namespace AuLib {
   /** Table type constants
    */
   enum wave_types {
-    SAW_TABLE=1,
-    SQUARE_TABLE,
-    TRIANGLE_TABLE};
+    SAW=1,
+    SQUARE,
+    TRIANGLE};
 
   /** Function tables based on
       Fourier Series
@@ -41,7 +41,7 @@ namespace AuLib {
 	phase - phase offset \n
 	tsize - table size \n
     */
-    FourierTable(uint32_t harms,
+    FourierTable(uint32_t harms=0,
 		 double *amps=NULL,
 		 double phase=0.,
 		 uint32_t tsize = def_tsize);
