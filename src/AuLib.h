@@ -56,11 +56,12 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include <limits>
 
-#define NONCOPYABLE(A) \
-private: \
-A(const A&); \
-A& operator=(A) \
+#define NONCOPYABLE(A)				\
+  private:					\
+  A(const A&);					\
+  A& operator=(A)				\
 
 namespace AuLib {
   
@@ -99,6 +100,10 @@ namespace AuLib {
   /** the two pi definition. 
    */ 
   const double twopi = 8*atan(1.);
+
+  /** the two pi definition. 
+   */ 
+  const double db_min = std::numeric_limits<double>::min();
 
   /** General error xodes
    */

@@ -107,6 +107,7 @@ AuLib::SoundOut::write(const double *sig,
 	if(err == paNoError){
 	  m_framecnt += m_cnt/m_nchnls;
 	 }
+	memset(buffer,0,bsamples*sizeof(float));
 	m_cnt = 0;
       }
     }
@@ -128,6 +129,7 @@ AuLib::SoundOut::write(const double *sig,
 	m_framecnt +=
 	  sf_writef_double((SNDFILE*) m_handle,
 			   m_vector, m_vsize);
+	memset(m_vector,0,bsamples*sizeof(double));
 	m_cnt = 0;
       }
     }

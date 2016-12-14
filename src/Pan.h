@@ -26,12 +26,10 @@ namespace AuLib {
     /** Pan constructor \n\n
 	pos - pan position (0 - 1) \n
 	vsize - vector size \n
-        sr - sampling rate
     */  
   Pan(double pos = .5,
       uint32_t vsize = def_vsize) :
-    m_pos(pos),
-      AudioBase(2,vsize) { };
+    m_pos(pos), AudioBase(2,vsize) { };
 
     /** Pan a signal sig 
      */

@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <Oscili.h>
+#include <Expon.h>
 #include <iostream>
 
 using namespace AuLib;
@@ -16,16 +17,24 @@ using namespace std;
 
 int main(){
   
-  Oscil sig;
+  Oscil sig(0.,1000.);
+  Expon  env(.001,1.,.01);
   SoundOut output("dac");
-  
-  if(sig.error() == AULIB_NOERROR) {
+
+  if(env.error() == AULIB_NOERROR) {
+    if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
-	for(int i=0; i < def_sr*2; i+=def_vsize){
-	  sig.process(0.5, 440.);
+	for(int i=0; i < def_sr*.01; i+=def_vsize){
+	  sig.process(env.process());
+	  output.write(sig);
+	}
+	env.reset(1.,.001, 1.5);
+	for(int i=0; i < def_sr*1.5; i+=def_vsize){
+	  sig.process(env.process());
 	  output.write(sig);
 	}
       } else cout << output.error_message() << "\n";
     } else cout << sig.error_message() << "\n";
+  } else cout << env.error_message() << "\n";
   return 0;
 }

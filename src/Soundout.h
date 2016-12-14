@@ -52,7 +52,7 @@ namespace AuLib {
     const char *m_dest;
     uint32_t m_mode;
     uint32_t m_cnt;
-    uint32_t m_framecnt;
+    uint64_t m_framecnt;
     void *m_handle;
 
     NONCOPYABLE(SoundOut);
@@ -85,7 +85,7 @@ namespace AuLib {
 	destination, returning the vector current 
         framecount.
     */
-    uint32_t write(const AudioBase& obj){
+    uint64_t write(const AudioBase& obj){
       if(obj.nchnls() == m_nchnls)
 	return write(obj.vector(),obj.vsize());
       else m_error = AULIB_ERROR;

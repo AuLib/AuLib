@@ -51,23 +51,7 @@ namespace AuLib {
  
     /** AudioBase copy constructor 
      */
-    AudioBase(const AudioBase& obj) :
-      m_nchnls(obj.m_nchnls), m_sr(obj.m_sr),
-      m_vsize(obj.m_vsize), m_error(obj.m_error){
-      if(m_vsize != 0) {
-       	try {
-	  m_vector = new double[m_vsize*m_nchnls];
-	} catch (std::bad_alloc){
-	  m_error = AULIB_MEM_ERROR;
-	  m_vsize = 0;
-	  m_vector = NULL;
-	  return;
-	}
-	memcpy(m_vector,obj.m_vector,
-	       sizeof(double)*m_vsize);
-      }
-      else m_vector = NULL;
-    }
+    AudioBase(const AudioBase& obj);
     
     /** AudioBase constructor \n\n
 	nchnls - number of channels \n
@@ -76,21 +60,7 @@ namespace AuLib {
     */
     AudioBase(uint32_t nchnls = def_nchnls,
 	      double vsize = def_vsize,
-	      double sr = def_sr) :
-      m_nchnls(nchnls), m_sr(sr),
-      m_vsize(vsize), m_error(AULIB_NOERROR) {
-      if(m_vsize != 0) {
-	try {
-	  m_vector = new double[m_vsize*m_nchnls];
-	} catch (std::bad_alloc){
-	  m_error = AULIB_MEM_ERROR;
-	  m_vsize = 0;
-	  m_vector = NULL;
-	  return;
-	}
-	memset(m_vector, 0, m_vsize*sizeof(double));
-      } else m_vector = NULL; 
-    }
+	      double sr = def_sr);
   
     /** AudioBase destructor
      */
