@@ -21,7 +21,7 @@ int main(){
   Pan  panner;
   SoundOut output("dac", 2);
   const uint32_t end = def_sr*10;
-
+  cout << Info::version();
   if(sig.error() == AULIB_NOERROR) {
     if(panner.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {

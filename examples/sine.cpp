@@ -15,13 +15,12 @@ using namespace AuLib;
 using namespace std;
 
 int main(){
-  
   Oscil sig;
   SoundOut output("dac");
-  
+  cout << Info::version();
   if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
-	for(int i=0; i < def_sr*2; i+=def_vsize){
+	for(int i=0;i < def_sr*2;i+=def_vsize){
 	  sig.process(0.5, 440.);
 	  output.write(sig);
 	}

@@ -56,6 +56,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <limits>
 
 #define NONCOPYABLE(A)				\
@@ -64,6 +65,31 @@
   A& operator=(A)				\
 
 namespace AuLib {
+
+  namespace Info {
+    /** Aulib major version */
+    const uint32_t major_version = 0;
+
+    /** Aulib minor version */
+    const uint32_t minor_version = 0;
+
+    /** returns the version string */
+    static const std::string version() {
+      std::ostringstream stm;
+      stm << "Aulib version " << major_version << '.' << minor_version
+	  << '\n';
+      return stm.str();
+    }
+
+    /** returns the copyright string */
+    static const std::string copyright() {
+      std::ostringstream stm;
+      stm << "Aulib version " << major_version << '.' << minor_version;
+      stm << "\n(c) 2016-7 V.Lazzarini, licensed by the LGPL\n";
+      return stm.str();
+    }    
+    
+  }
   
   /** default signal vectorsize.
    */
@@ -101,9 +127,14 @@ namespace AuLib {
    */ 
   const double twopi = 8*atan(1.);
 
-  /** the two pi definition. 
+  /** the min. pos. double
    */ 
   const double db_min = std::numeric_limits<double>::min();
+
+  /** -120dBfs
+   */ 
+  const double m120dBfs = 0.000001;
+  
 
   /** General error xodes
    */

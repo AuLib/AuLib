@@ -22,7 +22,7 @@ int main(int argc, const char **argv){
     SampleTable wave(argv[1]);
     SamplePlayer sig(wave);
     SoundOut output("dac");
-  
+    cout << Info::version();
     if(wave.error() == AULIB_NOERROR) {
       if(sig.error() == AULIB_NOERROR) {
 	if(output.error() == AULIB_NOERROR) { 

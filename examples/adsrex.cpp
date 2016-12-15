@@ -9,24 +9,32 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <Oscili.h>
+#include <Adsr.h>
 #include <iostream>
 
 using namespace AuLib;
 using namespace std;
 
 int main(){
-  double fm = 230., fc = 410.;
-  Oscili mod,car;
+  Adsr  env(0.9,1,2.,0.4,0.5);
+  Oscil sig;
   SoundOut output("dac");
+  uint32_t end = env.frames() + (uint32_t) (def_sr),
+    rel = env.rframes();
+  bool release = false; 
   cout << Info::version();
-  if(mod.error() == AULIB_NOERROR &&
-     car.error() == AULIB_NOERROR &&
-     output.error() == AULIB_NOERROR) {
-    for(int i=0; i < def_sr*10; i+=def_vsize){
-      mod.process(1.,fm);
-      car.process(0.5,fc);
-      output.write(car *= mod);     
-    }
-  }
+  if(sig.error() == AULIB_NOERROR) {
+      if(output.error() == AULIB_NOERROR) {
+	for(int i=0;i < end+rel;i+=def_vsize){
+	  env.process();
+	  sig.process(env, 440.);
+	  output.write(sig);
+	  if(i >= end && !release){
+	    env.release();
+	    release = true;
+	  }
+	}
+      } else cout << output.error_message() << "\n";
+    } else cout << sig.error_message() << "\n";
   return 0;
 }

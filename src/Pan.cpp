@@ -19,4 +19,5 @@ AuLib::Pan::process(const double* sig){
     m_vector[j] = lg*sig[i];
     m_vector[j+1] = rg*sig[i];
   }
+  return m_vector;
 }

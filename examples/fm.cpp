@@ -9,14 +9,16 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <Oscili.h>
+#include <iostream>
 
 using namespace AuLib;
+using namespace std;
 
 int main(){
   double fm = 440., fc = 220., ndx = 5.;
   Oscili mod,car;
   SoundOut output("dac");
-
+  cout << Info::version();
   if(mod.error() == AULIB_NOERROR &&
      car.error() == AULIB_NOERROR &&
      output.error() == AULIB_NOERROR) {

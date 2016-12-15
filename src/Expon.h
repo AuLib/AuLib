@@ -22,12 +22,11 @@ namespace AuLib {
   protected:
     virtual void generate(){
       for(int i=0; i < m_vsize; i++){
+	m_vector[i] = m_y;
 	if(m_cnt < m_x1) {
 	  m_y *= m_incr;
 	  m_cnt++;
 	}
-        m_vector[i] = m_y;
-
       }
     }
   

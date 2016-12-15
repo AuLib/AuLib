@@ -19,15 +19,15 @@ int main(){
   TableSet saw(SAW);
   BlOsc sig(0.5, 440., saw);
   SoundOut output("dac");
-
-    if(sig.error() == AULIB_NOERROR) {
-      if(output.error() == AULIB_NOERROR) {
-	for(int i=0; i < def_sr*10; i+=def_vsize){
-	  sig.process();
-	  output.write(sig);
-	} 
-      } else cout << output.error_message() << "\n";
-    } else cout << sig.error_message() << "\n";
+  cout << Info::version();
+  if(sig.error() == AULIB_NOERROR) {
+    if(output.error() == AULIB_NOERROR) {
+      for(int i=0; i < def_sr*10; i+=def_vsize){
+	sig.process();
+	output.write(sig);
+      } 
+    } else cout << output.error_message() << "\n";
+  } else cout << sig.error_message() << "\n";
   
   return 0;
 }

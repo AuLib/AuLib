@@ -22,7 +22,7 @@ int main(){
   Phasor   phase(440.);
   TableRead sig(wave);
   SoundOut output("dac");
-
+  cout << Info::version();
   if(wave.error() == AULIB_NOERROR) {
     if(phase.error() == AULIB_NOERROR) {
       if(sig.error() == AULIB_NOERROR) {

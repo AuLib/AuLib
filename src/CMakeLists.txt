@@ -12,6 +12,7 @@ SoundOut.cpp
 FourierTable.cpp
 SampleTable.cpp
 Pan.cpp
+Envel.cpp
 )
 
 

@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <Oscili.h>
-#include <Expon.h>
+#include <Envel.h>
 #include <iostream>
 
 using namespace AuLib;
@@ -17,20 +17,26 @@ using namespace std;
 
 int main(){
   
-  Oscil sig(0.,1000.);
-  Expon  env(.001,1.,.01);
+  Oscil sig;
+  double amps[] = {1.,.5,.8};
+  double durs[] = {.5,1.,.5};
+  Segments segs(0.,amps,durs,3);
+  Envel env(segs,1.);
   SoundOut output("dac");
+  bool release = false;
+  uint32_t end = segs.frames(),
+    rel = env.rframes();
   cout << Info::version();
   if(env.error() == AULIB_NOERROR) {
     if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
-	for(int i=0; i < def_sr*.01; i+=def_vsize){
-	  sig.process(env.process());
-	  output.write(sig);
-	}
-	env.reset(1.,.001, 1.5);
-	for(int i=0; i < def_sr*1.5; i+=def_vsize){
-	  sig.process(env.process());
+	for(int i=0;i < end+rel;i+=def_vsize){
+	  env.process();
+	  sig.process(env, 440.);
+	  if(!release && i >= end){
+	    env.release();
+	    release = true;
+	  }
 	  output.write(sig);
 	}
       } else cout << output.error_message() << "\n";
