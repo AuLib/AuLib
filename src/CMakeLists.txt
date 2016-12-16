@@ -12,6 +12,7 @@ FourierTable.cpp
 SampleTable.cpp
 Pan.cpp
 Envel.cpp
+EnvelTable.cpp
 )
 
 

@@ -26,11 +26,11 @@ namespace AuLib {
     void normalise_table(){
       uint32_t n;
       double max = 0.;
-      for(n=0; n < m_tsize; n++)
+      for(n=0; n < vsamps(); n++)
 	max = m_vector[n] > max ?
 	  m_vector[n] : max;
       if(max)
-	for(n=0; n < m_tsize; n++)
+	for(n=0; n < vsamps(); n++)
 	  m_vector[n] /= max;
     }
 
@@ -38,6 +38,8 @@ namespace AuLib {
     
     /** FuncTable constructor \n\n
 	tsize - table size \n
+        nchnls - number of channels \n
+        sr - sampling rate \n
     */ 
     FuncTable(uint32_t tsize = def_tsize,
 	      uint32_t nchnls = def_nchnls,

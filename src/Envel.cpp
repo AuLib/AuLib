@@ -21,13 +21,15 @@ AuLib::Segments::Segments(double start,
   m_linear(linear),
   m_frames(0),
   m_incrs(nsegs),
-  m_durs(nsegs)
-{  
+  m_durs(nsegs),
+  m_endpts(nsegs)
+{
+  
   double y0 = linear ? start :
     start > 0 ? start : (m_start = db_min);
   double y1;
   for(int i=0; i < m_nsegs; i++) {
-    y1 = endpts[i];
+    y1 = m_endpts[i] = endpts[i];
     m_durs[i] = times[i]*sr;
     m_frames += m_durs[i];
     if(m_durs[i] <= 0)
@@ -63,11 +65,14 @@ AuLib::Envel::process() {
 	    && m_cseg != -1) {
       m_cseg++;
       if(m_cseg < nsegs) {
+	m_y = m_segs.endpts()[m_cseg-1];
 	m_incr = m_segs.incrs()[m_cseg];
 	m_time = m_segs.durs()[m_cseg];
 	m_cnt = 0;
       }
       else {
+	if(m_cseg == nsegs)
+	  m_y = m_segs.endpts()[m_cseg-1];
 	m_incr = linear ?  0. : 1.;
         m_cseg = -1;
       }

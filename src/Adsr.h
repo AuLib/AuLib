@@ -32,7 +32,10 @@ namespace AuLib {
       Envel(rel,vframes,sr) {
       double amps[2] = {amp, sus};
       double times[2] = {att, dec};
-      m_segs = Segments(0.,amps,times,2);     
+      m_segs = Segments(0.,amps,times,2);
+      m_time = m_segs.durs()[0];
+      m_incr = m_segs.incrs()[0];
+      m_y = m_segs.start();
     };
 
     /** reset the envelope parameters and

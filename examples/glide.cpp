@@ -9,29 +9,33 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <Oscili.h>
-#include <Envel.h>
+#include <Adsr.h>
+#include <EnvelTable.h>
 #include <iostream>
 
 using namespace AuLib;
 using namespace std;
 
 int main(){
-  double amps[] = {1.,.5,.0};
-  double durs[] = {.5,1.,.5};
-  Segments segs(0.,amps,durs,3);
-  Envel env(segs,2.);
+  double amps[] = {2.,1.5,1.};
+  double durs[] = {.25,1.25,.5};
+  Segments segs(1.,amps,durs,3,false);
+  Adsr amp(1.,0.01,1.,0.7,0.1);
+  EnvelTable etab(segs, false);
+  Oscili etab(440.,1.5,envtab);
   Oscili sig;
   SoundOut output("dac");
   bool release = false;
   uint32_t end = segs.frames(),
-    rel = env.rframes();
+    rel = env.rframes()*2;
   cout << Info::version();
   if(env.error() == AULIB_NOERROR) {
     if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
 	for(int i=0;i < end+rel;i+=def_vframes){
-	  env.process();
-	  sig.process(env, 440.);
+	  freq.process();
+	  amp.process();
+	  sig.process(amp,freq);
 	  if(!release && i >= end){
 	    env.release();
 	    release = true;

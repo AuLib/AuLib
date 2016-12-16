@@ -19,6 +19,7 @@ namespace AuLib {
    
     std::vector<double> m_incrs;
     std::vector<uint32_t> m_durs;
+    std::vector<double> m_endpts;
     double m_start;
     uint32_t m_nsegs;
     bool m_linear;
@@ -57,6 +58,13 @@ namespace AuLib {
     const uint32_t* durs() const {
       return m_durs.data();
     }
+
+    /** Get the endpts array
+     */
+    const double* endpts() const {
+      return m_endpts.data();
+    }
+    
     
     /** Get the number of segments
      */    
@@ -101,6 +109,7 @@ namespace AuLib {
     Segments m_segs;
     
   public:
+    
     /** Envel constructor \n\n
 	segs - envelope segments
 	rel - release time \n
