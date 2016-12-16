@@ -21,7 +21,7 @@ namespace AuLib {
 
   protected:
     virtual void generate(){
-      for(int i=0; i < m_vsize; i++){
+      for(int i=0; i < m_vframes; i++){
 	m_vector[i] = m_y;
 	if(m_cnt < m_x1) {
 	  m_y *= m_incr;
@@ -35,13 +35,13 @@ namespace AuLib {
         start - start value \n
         end - end value \n
         time - duration(s) \n
-	vsize - vector size \n
+	vframes - vector size \n
         sr - sampling rate
     */  
     Expon(double start = db_min, double end = 1. ,
-	  double time = 1., uint32_t vsize = def_vsize,
+	  double time = 1., uint32_t vframes = def_vframes,
 	  double sr = def_sr) :
-      Line(start,end,time,vsize,sr) {
+      Line(start,end,time,vframes,sr) {
       retrig();       
     };
 

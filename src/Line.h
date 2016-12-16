@@ -30,7 +30,7 @@ namespace AuLib {
     /** process the output vector
      */
     virtual void generate(){
-      for(int i=0; i < m_vsize; i++){
+      for(int i=0; i < m_vframes; i++){
         m_vector[i] = m_y;
 	if(m_cnt < m_x1) {
 	  m_y += m_incr;
@@ -44,15 +44,15 @@ namespace AuLib {
         start - start value \n
         end - end value \n
         time - duration(s) \n
-	vsize - vector size \n
+	vframes - vector size \n
         sr - sampling rate
     */  
     Line(double start = .0, double end = 1. ,
-	 double time = 1., uint32_t vsize = def_vsize,
+	 double time = 1., uint32_t vframes = def_vframes,
 	 double sr = def_sr) :
       m_y(start),m_y0(start), m_y1(end), m_cnt(0),
       m_x1(time*sr), m_incr((end-start)/(time*sr)),
-      AudioBase(1,vsize,sr) { };
+      AudioBase(1,vframes,sr) { };
 
     
 

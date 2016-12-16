@@ -93,7 +93,7 @@ namespace AuLib {
   
   /** default signal vectorsize.
    */
-  const uint32_t def_vsize = 64;
+  const uint32_t def_vframes = 64;
 
   /** default IO buffersize.
    */
@@ -105,7 +105,7 @@ namespace AuLib {
 
   /** default control rate
    */
-  const double def_kr = def_sr/def_vsize;
+  const double def_kr = def_sr/def_vframes;
 
   /** default audio channels.
    */
@@ -140,7 +140,6 @@ namespace AuLib {
    */
   enum error_codes {
     AULIB_NOERROR = 0,
-    AULIB_MEM_ERROR,
     AULIB_ERROR
   };
 
@@ -148,7 +147,6 @@ namespace AuLib {
    */
   static const char* aulib_error[] = {
     "Aulib: no error",
-    "Aulib: memory allocation error",
     "Aulib: general object error"
   };
   

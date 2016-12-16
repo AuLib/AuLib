@@ -15,7 +15,7 @@ AuLib::TableReadic::lookup(const double* phs){
   uint32_t posi;
   double   pos, frac, fracsq, fracb;
   double   tmp, a, b, c, d;
-  for(int i=0; i < m_vsize; i++){   
+  for(int i=0; i < m_vframes; i++){   
     pos = mod((m_norm ?
 	       phs[i]*m_tsize : phs[i])
 	      + m_phs);

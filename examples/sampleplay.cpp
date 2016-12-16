@@ -26,7 +26,7 @@ int main(int argc, const char **argv){
     if(wave.error() == AULIB_NOERROR) {
       if(sig.error() == AULIB_NOERROR) {
 	if(output.error() == AULIB_NOERROR) { 
-	  for(int i=0; i < def_sr*10; i+=def_vsize){
+	  for(int i=0; i < def_sr*10; i+=def_vframes){
 	    sig.process(0.5,1.);
 	    output.write(sig);
 	  }

@@ -29,29 +29,29 @@ namespace AuLib {
 	amp - amplitude   \n
 	freq - frequency in Hz \n
 	phase - init phase (0-1) \n 
-	vsize - vector size \n
+	vframes - vector size \n
 	sr - sampling rate \n\n
 	Uses internal sine wave table
     */
     Oscilic(double amp = 0., double freq = 0.,
-	    double phase = 0., uint32_t vsize = def_vsize,
+	    double phase = 0., uint32_t vframes = def_vframes,
 	    double sr = def_sr) :
-      Oscil(amp,freq,phase,vsize,sr) { };
+      Oscil(amp,freq,phase,vframes,sr) { };
       
     /** Oscilic constructor \n\n
 	amp - amplitude \n
 	freq - frequency in Hz \n
 	ftable - function table \n
 	phase - init phase (0-1) \n 
-	vsize - vector size \n
+	vframes - vector size \n
 	sr - sampling rate \n
     */
     Oscilic(double amp, double freq,
 	    const FuncTable& ftable,
 	    double phase = .0,
-	    uint32_t vsize = def_vsize,
+	    uint32_t vframes = def_vframes,
 	    double sr = def_sr) :
-      Oscil(amp,freq,ftable,phase,vsize,sr) { };
+      Oscil(amp,freq,ftable,phase,vframes,sr) { };
 
   };
   

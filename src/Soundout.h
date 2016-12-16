@@ -63,11 +63,11 @@ namespace AuLib {
 	("dac", "stdout", or file path) \n
 	nchnls - number of channels \n
 	sr - sampling rate \n
-	vsize - vector size \n
+	vframes - vector size \n
     */
     SoundOut(const char *dest,
 	     uint32_t nchnls = def_nchnls,
-	     uint32_t vsize = def_bsize,
+	     uint32_t vframes = def_bsize,
 	     double sr = def_sr);
   
     /** SoundOut destructor
@@ -79,7 +79,7 @@ namespace AuLib {
         framecount.
     */
     uint32_t write(const double *sig,
-		   uint32_t frames = def_vsize);
+		   uint32_t frames = def_vframes);
 
     /** Writes the audio vector in obj to the vector
 	destination, returning the vector current 
@@ -87,7 +87,7 @@ namespace AuLib {
     */
     uint64_t write(const AudioBase& obj){
       if(obj.nchnls() == m_nchnls)
-	return write(obj.vector(),obj.vsize());
+	return write(obj.vector(),obj.vframes());
       else m_error = AULIB_ERROR;
       return 0;
     }

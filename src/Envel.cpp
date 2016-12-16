@@ -19,16 +19,10 @@ AuLib::Segments::Segments(double start,
   m_start(start),
   m_nsegs(nsegs),
   m_linear(linear),
-  m_frames(0)
+  m_frames(0),
+  m_incrs(nsegs),
+  m_durs(nsegs)
 {  
-  try {
-    m_incrs = new double[m_nsegs];
-    m_durs = new uint32_t[m_nsegs];
-  }
-  catch(std::bad_alloc) {
-    m_nsegs = 0;
-    return;
-  }
   double y0 = linear ? start :
     start > 0 ? start : (m_start = db_min);
   double y1;
@@ -48,33 +42,33 @@ AuLib::Segments::Segments(double start,
   }
 }
 
-
-
 const AuLib::AudioBase&
 AuLib::Envel::process() {
-  for(int i=0; i < m_vsize; i++) {
+  bool linear = m_segs.isLinear();
+  uint32_t nsegs = m_segs.nsegs();
+  for(int i=0; i < m_vframes; i++) {
     m_vector[i] = m_y;
-    if(m_linear) m_y += m_incr;
+    if(linear) m_y += m_incr;
     else m_y *= m_incr;
     if(m_cseg >= 0) m_cnt++;
     if(m_trig && m_rt > 0) {
-      m_incr = m_linear ? -m_y/m_rt
+      m_incr = linear ? -m_y/m_rt
 	  : pow(m120dBfs/m_y,1./m_rt);
         m_time = m_rt;
 	m_cnt = 0;
 	m_trig = false;
-	m_cseg = m_nsegs;
+	m_cseg = nsegs;
     } else
     if(m_cnt == m_time
 	    && m_cseg != -1) {
       m_cseg++;
-      if(m_cseg < m_nsegs) {
-	m_incr = m_incrs[m_cseg];
-	m_time = m_times[m_cseg];
+      if(m_cseg < nsegs) {
+	m_incr = m_segs.incrs()[m_cseg];
+	m_time = m_segs.durs()[m_cseg];
 	m_cnt = 0;
       }
       else {
-	m_incr = m_linear ?  0. : 1.;
+	m_incr = linear ?  0. : 1.;
         m_cseg = -1;
       }
     }

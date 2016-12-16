@@ -13,7 +13,7 @@
 void
 AuLib::TableRead::lookup(const double *phs){
   uint32_t pos;
-  for(int i=0; i < m_vsize; i++){   
+  for(int i=0; i < m_vframes; i++){   
     pos = (uint32_t) mod((m_norm ?
 	       phs[i]*m_tsize : phs[i])
 	      + m_phs);

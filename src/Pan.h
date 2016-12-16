@@ -25,11 +25,11 @@ namespace AuLib {
   public:
     /** Pan constructor \n\n
 	pos - pan position (0 - 1) \n
-	vsize - vector size \n
+	vframes - vector size \n
     */  
   Pan(double pos = .5,
-      uint32_t vsize = def_vsize) :
-    m_pos(pos), AudioBase(2,vsize) { };
+      uint32_t vframes = def_vframes) :
+    m_pos(pos), AudioBase(2,vframes) { };
 
     /** Pan a signal sig 
      */
@@ -45,7 +45,7 @@ namespace AuLib {
     /** Pan a signal in obj
      */
     virtual const Pan& process(const AudioBase& obj) {
-      if(obj.vsize() == m_vsize &&
+      if(obj.vframes() == m_vframes &&
 	 obj.nchnls() == 1) {
 	process(obj.vector());
       } else m_error = AULIB_ERROR;

@@ -22,7 +22,7 @@ int main(){
   if(mod.error() == AULIB_NOERROR &&
      car.error() == AULIB_NOERROR &&
      output.error() == AULIB_NOERROR) {
-    for(int i=0; i < def_sr*10; i+=def_vsize){
+    for(int i=0; i < def_sr*10; i+=def_vframes){
       mod.process(1.,fm);
       car.process(0.5,fc);
       output.write(car *= mod);     

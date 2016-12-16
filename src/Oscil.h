@@ -59,12 +59,12 @@ namespace AuLib {
 	amp - amplitude   \n
 	freq - frequency in Hz \n
 	phase - init phase (0-1) \n 
-	vsize - vector size \n
+	vframes - vector size \n
 	sr - sampling rate \n\n
         Uses internal sine wave table
     */
     Oscil(double amp = 0., double freq = 0.,
-	  double phase = 0., uint32_t vsize = def_vsize,
+	  double phase = 0., uint32_t vframes = def_vframes,
 	  double sr = def_sr);
     
     /** Oscil constructor \n\n
@@ -72,12 +72,12 @@ namespace AuLib {
 	freq - frequency in Hz \n
 	ftable - function table \n
 	phase - init phase (0-1) \n 
-	vsize - vector size \n
+	vframes - vector size \n
 	sr - sampling rate \n
     */
     Oscil(double amp, double freq,
 	  const FuncTable& ftable, double phase = 0.,
-	  uint32_t vsize = def_vsize,
+	  uint32_t vframes = def_vframes,
 	  double sr = def_sr);
 
     /** Process one vector of audio
@@ -114,7 +114,7 @@ namespace AuLib {
       m_am = amp;
       m_fm = freq;
       process();
-      return m_vector;
+      return vector();
     }
 
     /** Process one vector of audio
@@ -125,7 +125,7 @@ namespace AuLib {
       m_amp = amp;
       m_fm = freq;
       process();
-      return m_vector;
+      return vector();
     }
 
     /** Process one vector of audio
@@ -137,14 +137,14 @@ namespace AuLib {
       m_freq = freq;
       m_incr = m_freq*m_tsize/m_sr;
       process();
-      return m_vector;
+      return vector();
     }
 
     /** Process one vector of audio
 	with amplitude modulation from obja
     */ 
     virtual const Oscil& process(const AudioBase& obja){
-      if(obja.vsize() == m_vsize) {
+      if(obja.vframes() == m_vframes) {
 	m_am = obja.vector();
         process();
       } else m_error = AULIB_ERROR;
@@ -167,7 +167,7 @@ namespace AuLib {
 	and freq modulation from objf
     */
     virtual Oscil& process(double amp, const AudioBase& objf){
-      if(objf.vsize() == m_vsize &&
+      if(objf.vframes() == m_vframes &&
 	 objf.nchnls() == 1) {
 	m_amp = amp;
 	m_fm = objf.vector();
@@ -180,8 +180,8 @@ namespace AuLib {
 	with amplitude from obja and freq modulation from objf
     */
     virtual Oscil& process(const AudioBase& obja, const AudioBase& objf){
-      if(obja.vsize() == m_vsize &&
-	 objf.vsize() == m_vsize &&
+      if(obja.vframes() == m_vframes &&
+	 objf.vframes() == m_vframes &&
 	 obja.nchnls() == 1 &&
 	 objf.nchnls() == 1) {
 	m_am = obja.vector();

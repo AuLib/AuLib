@@ -1,6 +1,5 @@
 # library sources
 add_library(AuLib
-AudioBase.cpp
 Oscil.cpp 
 Oscili.cpp
 Oscilic.cpp

@@ -22,10 +22,8 @@ AuLib::FourierTable::FourierTable(uint32_t harms,
 			   uint32_t type, uint32_t tsize) :
   FuncTable(tsize)
 {
-  double *amps = new double[harms];
-  if(amps != NULL) {
+  std::vector<double> amps(harms,0.0);
   double phase = -0.25;
-  memset(amps, 0, sizeof(double)*harms);
   switch(type) {
   case SAW:
     for(int i=0; i < harms; i++)
@@ -41,12 +39,10 @@ AuLib::FourierTable::FourierTable(uint32_t harms,
       amps[i] = 1.f/((i+1)*(i+1));
     break;
   default:
-    for(int i=0; i < harms; i+=2)
+    for(int i=0; i < harms; i+=1)
       amps[i] = 1.f;
   }
-  create(harms,amps,phase);
-  delete[] amps;
-  } else m_error = AULIB_MEM_ERROR;
+  create(harms,amps.data(),phase);
 }
 
 void
@@ -57,14 +53,15 @@ AuLib::FourierTable::create(uint32_t harms,
   double w,a;
   if(harms) {
   phase *= twopi;
-  for(int i=0; i < harms; i++)
+  for(int i=0; i < harms; i++) {
     for(int n=0; n < m_tsize; n++){
       a = amps != NULL ? amps[i] : 1.f;	   
       w = (i+1)*(n*twopi/m_tsize);
       m_vector[n] += (float) (a*cos(w+phase));
    }
+  }
+  normalise_table();
   m_vector[m_tsize] = m_vector[0];
   m_vector[m_tsize+1] = m_vector[1];
-  normalise_table();
   }
 }

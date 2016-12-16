@@ -36,11 +36,11 @@ namespace AuLib {
 	freq - frequency in Hz \n
 	phase - init phase (0-1) \n 
 	sr - sampling rate \n
-	vsize - vector size \n
+	vframes - vector size \n
     */
     Phasor(double freq = 0.,
 	   double phase = 0.,
-	   uint32_t vsize = def_vsize,
+	   uint32_t vframes = def_vframes,
 	   double sr = def_sr);
 
     /** Process one vector of audio

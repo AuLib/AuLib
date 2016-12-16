@@ -25,7 +25,7 @@ int main(){
   if(sig.error() == AULIB_NOERROR) {
     if(panner.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
-	for(int i=0; i < end; i+=def_vsize){
+	for(int i=0; i < end; i+=def_vframes){
 	  sig.process(0.5, 440.);
 	  panner.process(sig, double(i)/end);
 	  output.write(panner);

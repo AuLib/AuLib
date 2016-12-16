@@ -17,21 +17,6 @@ namespace AuLib {
   /** Adsr description
    */
   class Adsr : public Envel {
-
-    double m_aincrs[2];
-    uint32_t m_atimes[2];
-
-    void ads_set(double amp, double att,
-		 double dec, double sus) {    
-      m_atimes[0] = att*m_sr;
-      m_aincrs[0] = amp/m_atimes[0];
-      m_atimes[1] = dec*m_sr;
-      m_aincrs[1] = (sus - amp)/m_atimes[1];
-      m_incrs = m_aincrs;
-      m_times = m_atimes;
-      m_incr = m_aincrs[0];
-      m_time = m_atimes[0];
-    }
     
   public:
     /** Adsr constructor \n\n
@@ -39,13 +24,15 @@ namespace AuLib {
         att - attack time \n
         dec - decay time \n
         rel - release time \n
-	vsize - vector size \n
+	vframes - vector size \n
         sr - sampling rate
     */  
     Adsr(double amp, double att, double dec, double sus,
-	 double rel,uint32_t vsize = def_vsize, double sr = def_sr) :
-      Envel(0.,NULL,NULL,3,rel,true,vsize,sr) {
-      ads_set(amp,att,dec,sus);     
+	 double rel, uint32_t vframes = def_vframes, double sr = def_sr) :
+      Envel(rel,vframes,sr) {
+      double amps[2] = {amp, sus};
+      double times[2] = {att, dec};
+      m_segs = Segments(0.,amps,times,2);     
     };
 
     /** reset the envelope parameters and
@@ -53,14 +40,10 @@ namespace AuLib {
     */
     void reset(double amp, double att, double dec,
 	       double sus, double rel){
-      ads_set(amp,att,dec,sus); 
+      double amps[2] = {amp, sus};
+      double times[2] = {att, dec};
+      m_segs = Segments(0.,amps,times,2);  
       retrig();
-    }
-
-    /** Main envelope duration (att+dec) in frames
-     */
-    uint32_t frames() const {
-      return m_times[0] +  m_times[1];
     }
     
   };

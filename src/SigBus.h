@@ -30,14 +30,14 @@ namespace AuLib {
 	offs - amplitude offset \n
         overwrite - overwrite bus \n
 	nchnls - number of channels \n
-	vsize - vector size \n
+	vframes - vector size \n
     */  
     SigBus(double scal = 1., double offs = 0.,
 	   bool overwrite = false,
 	   int nchnls = def_nchnls,
-	   uint32_t vsize = def_vsize) :
+	   uint32_t vframes = def_vframes) :
       m_scal(scal), m_offs(offs), m_ovw(overwrite),
-      AudioBase(nchnls,vsize) { };
+      AudioBase(nchnls,vframes) { };
 
     /** Adds a signal vector to the bus.
 	Requires an explicit call to clear()
@@ -45,10 +45,10 @@ namespace AuLib {
 	once the bus data has been consumed
     */
     virtual const double* process(const double* sig){
-      for(int i=0; i < m_vsize*m_nchnls; i++)
+      for(int i=0; i < m_vframes*m_nchnls; i++)
 	m_vector[i] = m_ovw ? m_scal*sig[i] + m_offs :
 	  m_scal*sig[i] + m_offs + m_vector[i];
-      return m_vector;
+      return vector();
     }
 
     /** Applies a gain scaling and optional
@@ -73,7 +73,7 @@ namespace AuLib {
 	once the bus data has been consumed
     */
     virtual const SigBus& process(const AudioBase& obj) {
-      if(obj.vsize() == m_vsize &&
+      if(obj.vframes() == m_vframes &&
 	 obj.nchnls() == m_nchnls){
 	process(obj.vector());
       } else m_error = AULIB_ERROR;
@@ -99,8 +99,7 @@ namespace AuLib {
     /** Clears the vector vector
      */
     void clear(){
-      memset(m_vector,0,
-	     sizeof(double)*m_vsize*m_nchnls);
+      set(0.);
     }
 
   };

@@ -20,7 +20,7 @@ int main(){
   cout << Info::version();
   if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
-	for(int i=0;i < def_sr*2;i+=def_vsize){
+	for(int i=0;i < def_sr*2;i+=def_vframes){
 	  sig.process(0.5, 440.);
 	  output.write(sig);
 	}

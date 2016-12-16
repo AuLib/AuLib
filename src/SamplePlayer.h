@@ -26,16 +26,16 @@ namespace AuLib {
 	amp - amplitude \n
 	pitch - playback pitch \n
 	phase - init phase (0-1) \n 
-	vsize - vector size \n
+	vframes - vector size \n
 	sr - sampling rate \n
     */
     SamplePlayer(const FuncTable& ftable,
 		 double amp = 0., double pitch = 0.,
 		 double phase = 0.,
-		 uint32_t vsize = def_vsize, 
+		 uint32_t vframes = def_vframes, 
 		 double sr = def_sr) :
       Oscili(amp,0.,ftable,phase,
-	     vsize,sr)
+	     vframes,sr)
     {
       m_incr = pitch;
     }

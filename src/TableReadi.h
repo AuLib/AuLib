@@ -30,12 +30,12 @@ namespace AuLib {
 	phase - initial phase \n
 	norm - normalisation switch \n
 	wrap - wraparound switch \n
-	vsize - vector size \n
+	vframes - vector size \n
     */
     TableReadi(const FuncTable& ftable, double phase = 0.,
 	       bool norm = true, bool wrap = true,
-	       uint32_t vsize = def_vsize) :
-      TableRead(ftable,phase,norm,wrap,vsize) { };
+	       uint32_t vframes = def_vframes) :
+      TableRead(ftable,phase,norm,wrap,vframes) { };
 
   };
 

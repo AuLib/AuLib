@@ -14,6 +14,7 @@
 #include "AuLib.h"
 #include <algorithm>
 #include <utility>
+#include <vector>
 
 namespace AuLib {
   
@@ -24,55 +25,23 @@ namespace AuLib {
   protected:
     uint32_t m_nchnls;
     double m_sr;
-    uint32_t m_vsize;
-    double *m_vector;
+    double m_vframes;
+    std::vector<double> m_vector;
     uint32_t m_error;
 
   public:
-    /** swap function for copy assignment 
-     */
-    friend void swap(AudioBase& obja,
-		     AudioBase& objb) 
-    {
-      using std::swap;
-      swap(obja.m_nchnls,objb.m_nchnls);
-      swap(obja.m_vsize,objb.m_vsize);
-      swap(obja.m_sr,objb.m_sr);
-      swap(obja.m_error,objb.m_error);
-      swap(obja.m_vector,objb.m_vector);
-    }
-
-    /* Copy assignment operator
-     */
-    const AudioBase& operator=(AudioBase obj){ 
-      swap(*this, obj);
-      return *this;
-    }
- 
-    /** AudioBase copy constructor 
-     */
-    AudioBase(const AudioBase& obj);
-    
-    /** AudioBase constructor \n\n
-	nchnls - number of channels \n
-	sr - sampling rate \n
-	vsize - vector size (frames) \n
-    */
     AudioBase(uint32_t nchnls = def_nchnls,
-	      double vsize = def_vsize,
-	      double sr = def_sr);
-  
-    /** AudioBase destructor
-     */
-    virtual ~AudioBase(){
-      if(m_vector)
-	delete[] m_vector;
-    }
-
+	      double vframes = def_vframes,
+	      double sr = def_sr) :
+      m_nchnls(nchnls),
+      m_vframes(vframes),
+      m_vector(vframes*nchnls,0.0),
+      m_error(0), m_sr(sr) { };
+    
     /** Scale the data vector
      */
     const AudioBase& operator*=(double scal){
-      for(int i=0; i < m_vsize*m_nchnls;i++)
+      for(int i=0; i < m_vector.size();i++)
 	m_vector[i] *= scal;
       return *this;
     }
@@ -80,7 +49,7 @@ namespace AuLib {
     /** Multiply the data vector by a sig vector
      */
     const AudioBase& operator*=(const double *sig){
-      for(int i=0; i < m_vsize*m_nchnls;i++)
+      for(int i=0; i < m_vector.size();i++)
 	m_vector[i] *= sig[i];
       return *this;
     }
@@ -88,7 +57,7 @@ namespace AuLib {
     /** Multiply the data vector by the vector from obj
      */
     const AudioBase& operator*=(const AudioBase& obj){
-      if(m_vsize == obj.m_vsize &&
+      if(m_vframes == obj.m_vframes &&
 	 m_nchnls == obj.m_nchnls)
 	return *this *= obj.vector();
       else return *this;
@@ -97,7 +66,7 @@ namespace AuLib {
     /** DC offset the data vector
      */
     const AudioBase& operator+=(double offs){
-      for(int i=0; i < m_vsize*m_nchnls;i++)
+      for(int i=0; i < m_vector.size();i++)
 	m_vector[i] += offs;
       return *this;
     }
@@ -105,7 +74,7 @@ namespace AuLib {
     /** Add a vector sig to the data vector
      */
     const AudioBase& operator+=(const double *sig){
-      for(int i=0; i < m_vsize*m_nchnls;i++)
+      for(int i=0; i < m_vector.size();i++)
 	m_vector[i] += sig[i];
       return *this;
     }
@@ -113,7 +82,7 @@ namespace AuLib {
     /** Add a vector sig from obj to the data vector
      */
     const AudioBase& operator+=(const AudioBase& obj){
-      if(m_vsize == obj.m_vsize &&
+      if(m_vframes == obj.m_vframes &&
 	 m_nchnls == obj.m_nchnls)
 	return *this += obj.vector();
       else return *this;
@@ -122,21 +91,22 @@ namespace AuLib {
     /** set the data vector to a sig vector
      */
     const AudioBase& set(const double *sig){
-      memcpy(m_vector,sig,(m_vsize*m_nchnls)*sizeof(double));
+      const double *end = sig+m_vector.size();
+      std::copy(sig,end,m_vector.data());
       return *this;
     }
 
     /** set the data vector to a value v 
      */
     const AudioBase& set(double v){
-      std::fill(m_vector,m_vector+m_vsize*m_nchnls,v);
+      std::fill(m_vector.begin(),m_vector.end(),v);
       return *this;
     } 
     
     /** Get the audio vector vector
      */ 
     const double* vector() const {
-      return m_vector;
+      return m_vector.data();
     }
   
     /** Get a single sample at frame ndx
@@ -144,8 +114,8 @@ namespace AuLib {
     */  
     double vector(uint32_t frndx, uint32_t chn=0)
       const {
-      if(frndx < m_vsize)
-	return m_vector[frndx*m_nchnls+chn];
+      if(frndx < m_vframes)
+	return vector()[frndx*m_nchnls+chn];
       else return 0.;
     }
 
@@ -153,15 +123,21 @@ namespace AuLib {
 	off the data vector
     */  
     double vector(uint32_t ndx) const {
-      if(ndx < m_vsize*m_nchnls)
-	return m_vector[ndx];
+      if(ndx < m_vframes*m_nchnls)
+	return vector()[ndx];
       else return 0.;
     }
 
-    /** Get vector size
+    /** Get vector size in frames
      */
-    uint32_t vsize() const {
-      return m_vsize;
+    uint32_t vframes() const {
+      return m_vframes;
+    }
+
+   /** Get vector size in samples
+     */
+    uint32_t vsamps() const {
+      return m_vector.size();
     }
     
     /** Get number of channels

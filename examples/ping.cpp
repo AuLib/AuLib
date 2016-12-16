@@ -24,12 +24,12 @@ int main(){
   if(env.error() == AULIB_NOERROR) {
     if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
-	for(int i=0; i < def_sr*.01; i+=def_vsize){
+	for(int i=0; i < def_sr*.01; i+=def_vframes){
 	  sig.process(env.process());
 	  output.write(sig);
 	}
 	env.reset(1.,.001, 1.5);
-	for(int i=0; i < def_sr*1.5; i+=def_vsize){
+	for(int i=0; i < def_sr*1.5; i+=def_vframes){
 	  sig.process(env.process());
 	  output.write(sig);
 	}

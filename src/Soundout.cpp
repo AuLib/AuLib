@@ -16,9 +16,9 @@
 #include <iostream>
 
 AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
-			  uint32_t vsize, double sr) :
+			  uint32_t vframes, double sr) :
   m_dest(dest), m_handle(NULL), m_mode(0), m_cnt(0),
-  m_framecnt(0), AudioBase(nchnls,vsize,sr)
+  m_framecnt(0), AudioBase(nchnls,vframes,sr)
 {
   if(strcmp("dac",m_dest) == 0){
     // RT audio
@@ -34,10 +34,9 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
       outparam.channelCount = m_nchnls;
       outparam.sampleFormat = paFloat32;
       outparam.suggestedLatency = (PaTime)
-	(m_vsize/m_sr);
+	(m_vframes/m_sr);
       err = Pa_OpenStream(&stream,NULL,&outparam,
-      	  m_sr,m_vsize,paNoFlag, 
-      		  NULL, NULL);
+      	  m_sr,m_vframes,paNoFlag, NULL, NULL);
       if(err == paNoError){
 	err = Pa_StartStream(stream);
 	if(err == paNoError){
@@ -45,15 +44,15 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
 	  m_mode = SOUNDOUT_RT;
 	} else {
 	  m_error = AULIB_RTSTREAM_ERROR;
-	  m_vsize  = 0;
+	  m_vframes  = 0;
         }
       } else {
 	m_error = AULIB_RTOPEN_ERROR;
-	m_vsize  = 0;
+	m_vframes  = 0;
       }
     } else {
       m_error = AULIB_RTINIT_ERROR;
-      m_vsize  = 0;
+      m_vframes  = 0;
     }
   }
   else if(strcmp("stdout",m_dest) == 0){
@@ -72,7 +71,7 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
       m_mode = SOUNDOUT_SNDFILE;
     } else {
       m_error = AULIB_FOPEN_ERROR;
-      m_vsize = 0;
+      m_vframes = 0;
     }
   }
 }
@@ -97,17 +96,17 @@ AuLib::SoundOut::write(const double *sig,
   if(m_mode == SOUNDOUT_RT &&
      m_handle != NULL) {
     PaError err;
-    uint32_t bsamples = m_vsize*m_nchnls;
-    float *buffer = (float *) m_vector;
+    uint32_t bsamples = m_vframes*m_nchnls;
+    float *buffer = (float *) m_vector.data();
     for(int i = 0; i < samples; i++) {
       buffer[m_cnt++] = sig[i];
       if(m_cnt == bsamples){
 	err = Pa_WriteStream((PaStream*) m_handle,
-			     buffer,m_vsize);
+			     buffer,m_vframes);
 	if(err == paNoError){
 	  m_framecnt += m_cnt/m_nchnls;
 	 }
-	memset(buffer,0,bsamples*sizeof(float));
+	set(0.);
 	m_cnt = 0;
       }
     }
@@ -122,14 +121,14 @@ AuLib::SoundOut::write(const double *sig,
   }
   else if(m_mode == SOUNDOUT_SNDFILE &&
 	  m_handle != NULL) {
-    uint32_t bsamples = m_vsize*m_nchnls;
+    uint32_t bsamples = m_vframes*m_nchnls;
     for(int i = 0; i < samples; i++) {
       m_vector[m_cnt++] = sig[i];
       if(m_cnt == bsamples) {
 	m_framecnt +=
 	  sf_writef_double((SNDFILE*) m_handle,
-			   m_vector, m_vsize);
-	memset(m_vector,0,bsamples*sizeof(double));
+			   m_vector.data(), m_vframes);
+	set(0.);
 	m_cnt = 0;
       }
     }

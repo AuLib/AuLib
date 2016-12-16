@@ -51,7 +51,7 @@ namespace AuLib {
     }
 
     const double* table() const {
-      return m_vector;
+      return vector();
     }
       
   };

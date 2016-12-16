@@ -30,7 +30,7 @@ int main(){
   if(env.error() == AULIB_NOERROR) {
     if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
-	for(int i=0;i < end+rel;i+=def_vsize){
+	for(int i=0;i < end+rel;i+=def_vframes){
 	  env.process();
 	  sig.process(env, 440.);
 	  if(!release && i >= end){

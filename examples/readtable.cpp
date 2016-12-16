@@ -7,7 +7,8 @@
 // version 3.0 of the License, or (at your option) any later version.
 //
 /////////////////////////////////////////////////////////////////////
-#include <TableRead.h>
+#include <TableReadi.h>
+#include <Oscili.h>
 #include <SoundOut.h>
 #include <WaveTables.h>
 #include <Phasor.h>
@@ -18,19 +19,20 @@ using namespace std;
 
 int main(){
   
-  TriangleTable wave(50);
+  TriangleTable wave(10);
   Phasor   phase(440.);
-  TableRead sig(wave);
+  //Oscili  sig(0.5,440,wave);
+  TableReadi sig(wave);
   SoundOut output("dac");
   cout << Info::version();
   if(wave.error() == AULIB_NOERROR) {
     if(phase.error() == AULIB_NOERROR) {
       if(sig.error() == AULIB_NOERROR) {
 	if(output.error() == AULIB_NOERROR) {
-	  for(int i=0; i < def_sr*10; i+=def_vsize){
+	  for(int i=0; i < def_sr*10; i+=def_vframes){
 	    phase.process();
 	    sig.process(phase);
-	    output.write(sig);
+	    output.write(sig*=0.9);
 	  } 
 	} else cout << output.error_message() << "\n";
       } else cout << sig.error_message() << "\n";

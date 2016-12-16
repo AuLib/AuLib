@@ -49,17 +49,17 @@ namespace AuLib {
 	phase - initial phase \n
 	norm - normalisation switch \n
 	wrap - wraparound switch \n
-	vsize - vector size \n
+	vframes - vector size \n
     */
     TableRead(const FuncTable& ftable, double phase = 0.,
 	      bool norm = true, bool wrap = true,
-	      uint32_t vsize = def_vsize):
+	      uint32_t vframes = def_vframes):
       m_table(ftable.table()), m_phs(phase),
       m_norm(norm), m_wrap(wrap),
-      m_tsize(ftable.vsize()), AudioBase(1,vsize)
+      m_tsize(ftable.tsize()), AudioBase(1,vframes)
     {
       if(m_table == NULL) {
-	m_vsize = 0;
+	m_vframes = 0;
 	m_error = AULIB_ERROR;
       } 
     };
@@ -69,14 +69,14 @@ namespace AuLib {
     */
     virtual const double* process(const double* phs){
       lookup(phs);
-      return m_vector;
+      return vector();
     }
 
     /** takes in a frame of phase values
 	and lookups up the table values
     */
     virtual const TableRead& process(const AudioBase& obj){
-      if(obj.vsize() == m_vsize &&
+      if(obj.vframes() == m_vframes &&
 	 obj.nchnls() == 1)
 	lookup(obj.vector());
       else m_error = AULIB_ERROR;

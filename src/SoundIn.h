@@ -34,11 +34,11 @@ namespace AuLib {
   public:
     /** SoundIn constructor \n\n
 	src - input source ("adc", "stdin", or file path) \n
-	vsize - vector size \n
+	vframes - vector size \n
 	bsize - buffer size \n
     */
     SoundIn(const char *src, uint32_t nchnls = def_nchnls,
-	    uint32_t vsize = def_bsize, double sr = def_sr);
+	    uint32_t vframes = def_bsize, double sr = def_sr);
   
     /** SoundOut destructor
      */
