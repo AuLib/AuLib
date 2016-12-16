@@ -13,7 +13,7 @@
 
 AuLib::SampleTable::SampleTable(const char *name,
 				uint32_t chn) : 
-  FuncTable(0,0,0) {
+  FuncTable() {
   SF_INFO info;
   SNDFILE *sf = sf_open(name,SFM_READ,&info);
   if(sf != NULL) {

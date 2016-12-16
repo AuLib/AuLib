@@ -12,7 +12,7 @@
 
 AuLib::EnvelTable::EnvelTable(const Segments& segs,
 			      bool norm)
-  : FuncTable(0){
+  : FuncTable(){
 
   bool linear = segs.isLinear();
   uint32_t nsegs = segs.nsegs();

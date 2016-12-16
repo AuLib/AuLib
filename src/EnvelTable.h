@@ -15,6 +15,7 @@
 #include "Envel.h"
 
 namespace AuLib {
+  
   /** Multi-segment Envelope Tables 
    */
   class EnvelTable : public FuncTable {
@@ -23,8 +24,9 @@ namespace AuLib {
     
     /** EnvelTable constructor \n\n
         segs - envelope segments
+        norm - normalise table
     */ 
-    EnvelTable(const Segments& segs, bool norm = false);
+    EnvelTable(const Segments& segs, bool norm = true);
   
   };
   

@@ -22,14 +22,15 @@ int main(){
   Segments segs(1.,amps,durs,3,false);
   Adsr amp(1.,0.01,1.,0.7,0.1);
   EnvelTable etab(segs, false);
-  Oscili etab(440.,1.5,envtab);
+  Oscili freq(440.,1.,etab);
   Oscili sig;
   SoundOut output("dac");
   bool release = false;
-  uint32_t end = segs.frames(),
-    rel = env.rframes()*2;
+  uint32_t end = amp.frames() + 2*def_sr,
+    rel = amp.rframes()*2;
   cout << Info::version();
-  if(env.error() == AULIB_NOERROR) {
+  if(freq.error() == AULIB_NOERROR) {
+   if(amp.error() == AULIB_NOERROR) {
     if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
 	for(int i=0;i < end+rel;i+=def_vframes){
@@ -37,13 +38,14 @@ int main(){
 	  amp.process();
 	  sig.process(amp,freq);
 	  if(!release && i >= end){
-	    env.release();
+	    amp.release();
 	    release = true;
 	  }
 	  output.write(sig);
 	}
       } else cout << output.error_message() << "\n";
     } else cout << sig.error_message() << "\n";
-  } else cout << env.error_message() << "\n";
+  } else cout << amp.error_message() << "\n";
+ } else cout << freq.error_message() << "\n";
   return 0;
 }

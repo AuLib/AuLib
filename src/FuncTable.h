@@ -45,8 +45,27 @@ namespace AuLib {
 	      uint32_t nchnls = def_nchnls,
 	      uint32_t sr = def_sr)
       : m_tsize(tsize),
+	AudioBase(nchnls,tsize+2,sr) { };
+
+    /** FuncTable constructor from vector \n\n
+        src - source vector \n
+        norm - normalise table
+	tsize - table size \n
+        nchnls - number of channels \n
+        sr - sampling rate \n
+    */ 
+    FuncTable(const double* src,
+	      bool norm = false,
+	      uint32_t tsize = def_tsize,
+	      uint32_t nchnls = def_nchnls,
+	      uint32_t sr = def_sr)
+      : m_tsize(tsize),
 	AudioBase(nchnls,tsize+2,sr) {
+      set(src);
+      if(norm)
+	normalise_table();
     }
+    
 
     uint32_t tsize() const {
       return m_tsize;
@@ -58,8 +77,6 @@ namespace AuLib {
       
   };
 
-
-  
   /*! \class FuncTable FuncTable.h AuLib/FuncTable.h
    */
 
