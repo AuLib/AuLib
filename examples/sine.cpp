@@ -14,9 +14,10 @@
 using namespace AuLib;
 using namespace std;
 
-int main(){
+int main(int argc, const char **argv){
+  if(argc > 1){
   Oscil sig;
-  SoundOut output("dac");
+  SoundOut output(argv[1]);
   cout << Info::version();
   if(sig.error() == AULIB_NOERROR) {
       if(output.error() == AULIB_NOERROR) {
@@ -26,5 +27,7 @@ int main(){
 	}
       } else cout << output.error_message() << "\n";
     } else cout << sig.error_message() << "\n";
+  cout << "wrote " << argv[1] << "\n";
+  } else cout << "usage: " << argv[0] << " filename\n";
   return 0;
 }

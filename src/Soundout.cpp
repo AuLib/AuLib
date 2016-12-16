@@ -20,7 +20,7 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
   m_dest(dest), m_handle(NULL), m_mode(0), m_cnt(0),
   m_framecnt(0), AudioBase(nchnls,vframes,sr)
 {
-  if(strcmp("dac",m_dest) == 0){
+  if(m_dest == "dac"){
     // RT audio
     PaError err;
     err = Pa_Initialize();
@@ -55,17 +55,27 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
       m_vframes  = 0;
     }
   }
-  else if(strcmp("stdout",m_dest) == 0){
+  else if(m_dest == "stdout"){
     // stdout
     m_mode = SOUNDOUT_STDOUT;
   }
   else {
     // sndfile
     SF_INFO info;
+    uint32_t fformat = SF_FORMAT_RAW;
     info.samplerate = (int) m_sr;
     info.channels = m_nchnls;
-    info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
-    SNDFILE *sf = sf_open(m_dest,SFM_WRITE, &info);
+    if(m_dest.find(".wav")
+       != std::string::npos)
+      fformat = SF_FORMAT_WAV;
+    else if(m_dest.find(".aif")
+       != std::string::npos)
+       fformat = SF_FORMAT_AIFF;
+    else if(m_dest.find(".au")
+       != std::string::npos)
+       fformat = SF_FORMAT_AU;
+    info.format = fformat | SF_FORMAT_PCM_16;
+    SNDFILE *sf = sf_open(m_dest.c_str(),SFM_WRITE, &info);
     if(sf != NULL) {
       m_handle = (void *) sf;
       m_mode = SOUNDOUT_SNDFILE;

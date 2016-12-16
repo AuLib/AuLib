@@ -23,7 +23,7 @@ int main(){
   if(sig.error() == AULIB_NOERROR) {
     if(output.error() == AULIB_NOERROR) {
       for(int i=0; i < def_sr*10; i+=def_vframes){
-	sig.process();
+	sig.process(0.5, 100.+1000.*i/(def_sr*10));
 	output.write(sig);
       } 
     } else cout << output.error_message() << "\n";

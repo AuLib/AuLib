@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////
-// SoundOut class: audio vector
+// SoundOut class: audio output 
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
@@ -45,11 +45,11 @@ namespace AuLib {
   };
 
   
-  /** Generic audio vector class
+  /** Audio output class
    */
   class SoundOut : public AudioBase {
 
-    const char *m_dest;
+    std::string m_dest;
     uint32_t m_mode;
     uint32_t m_cnt;
     uint64_t m_framecnt;

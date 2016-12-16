@@ -16,9 +16,7 @@ using namespace AuLib;
 using namespace std;
 
 int main(int argc, const char **argv){
-
   if(argc > 1){
-    
     SampleTable wave(argv[1]);
     SamplePlayer sig(wave);
     SoundOut output("dac");
@@ -33,8 +31,6 @@ int main(int argc, const char **argv){
 	} else cout << output.error_message() << "\n";
       } else cout << sig.error_message() << "\n";
     } else cout << wave.error_message() << "\n";
-  } else cout << "missing argument: input soundfile\n";
-	   
+  } else cout << "usage: " << argv[0] << " filename\n";
   return 0;
-  
 }
