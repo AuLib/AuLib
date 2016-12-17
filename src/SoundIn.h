@@ -21,7 +21,7 @@ namespace AuLib {
 
   /** Audio input class
    */
-  class SoundIn : AudioBase {
+  class SoundIn final : AudioBase {
 
     const char *m_src;
     uint32_t m_mode;

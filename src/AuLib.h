@@ -13,7 +13,8 @@
 
 /*! \mainpage
  *
- *  AuLib is a simple lightweight C++ class library for audio DSP.
+ *  AuLib is a simple lightweight C++ (ISO C++11) class library 
+ *  for audio DSP.
  *
  * \section build_the_package Building
  *
@@ -54,7 +55,6 @@
 
 #include <cmath>
 #include <cstdint>
-#include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include <limits>
@@ -114,10 +114,6 @@ namespace AuLib {
   /** default function table length
    */
   const uint32_t def_tsize = 8192;
-
-  /** filter modes 
-   */
-  enum filter_types {BP=0,BR,LP,HP};
 
   /** the pi definition. 
    */ 

@@ -27,7 +27,7 @@ int main(int argc, const char **argv){
 	}
       } else cout << output.error_message() << "\n";
     } else cout << sig.error_message() << "\n";
-  cout << "wrote " << argv[1] << "\n";
+  cout << "wrote samples to " << output.dest() << "\n";
   } else cout << "usage: " << argv[0] << " filename\n";
   return 0;
 }

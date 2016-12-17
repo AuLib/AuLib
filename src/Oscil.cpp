@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////
-// Implementation of the Oscil class
+// Implementation of the Oscil and derived classes
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
@@ -9,6 +9,8 @@
 //
 /////////////////////////////////////////////////////////////////////
 #include "Oscil.h"
+#include "Oscili.h"
+#include "Oscilic.h"
 
 AuLib::Oscil::Oscil(double amp, double freq,
 		    double phase, uint32_t vframes,
@@ -53,4 +55,47 @@ AuLib::Oscil::oscillator(){
     mod();
   }
 }
+
+void
+AuLib::Oscili::oscillator(){
+  uint32_t phi;
+  double frac,a,b;
+  for(int i=0; i < m_vframes; i++){
+    am_fm(i);
+    phi = (uint32_t) m_phs;
+    frac = m_phs - phi;
+    a = m_table[phi];
+    b = m_table[phi+1];
+    m_vector[i] = 
+      m_amp*(a + frac*(b - a));
+    m_phs += m_incr;
+    mod();
+  }
+}
+
+void
+AuLib::Oscilic::oscillator(){
+  uint32_t phi;
+  double frac,a,b,c,d;
+  double tmp, fracsq, fracb;
+  for(int i=0; i < m_vframes; i++){
+    am_fm(i);
+    phi = (uint32_t) m_phs;
+    frac = m_phs - phi;
+    a = phi == 0 ?  m_table[0] : m_table[phi-1];
+    b = m_table[phi];
+    c = m_table[phi+1];
+    d =  m_table[phi+2];    
+    tmp = d + 3.f*b;
+    fracsq = frac*frac;
+    fracb = frac*fracsq;
+    m_vector[i] = m_amp*
+      (fracb*(- a - 3.f*c + tmp)/6.f +
+       fracsq*((a+c)/2.f - b) +
+       frac*(c + (-2.f*a - tmp)/6.f) + b);
+    m_phs += m_incr;
+    mod();
+  }
+}
+
 

@@ -25,10 +25,8 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
     PaError err;
     err = Pa_Initialize();
     if(err == paNoError){
-      PaStreamParameters outparam;
+      PaStreamParameters outparam{0};
       PaStream *stream;
-      memset(&outparam, 0,
-	     sizeof(PaStreamParameters));
       outparam.device = (PaDeviceIndex)
 	Pa_GetDefaultOutputDevice();
       outparam.channelCount = m_nchnls;

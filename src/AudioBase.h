@@ -12,8 +12,6 @@
 #define _AUDIOBASE_H
 
 #include "AuLib.h"
-#include <algorithm>
-#include <utility>
 #include <vector>
 
 namespace AuLib {

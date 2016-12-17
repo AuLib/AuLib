@@ -47,7 +47,7 @@ namespace AuLib {
   
   /** Audio output class
    */
-  class SoundOut : public AudioBase {
+  class SoundOut final : public AudioBase {
 
     std::string m_dest;
     uint32_t m_mode;
@@ -96,6 +96,12 @@ namespace AuLib {
      */
     double time() const {
       return m_framecnt/m_sr;
+    }
+
+    /** Get the destination name
+     */
+    const char* dest() const {
+      return m_dest.c_str();
     }
     
     /** Get error message
