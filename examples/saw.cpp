@@ -9,7 +9,8 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <BlOsc.h>
-#include <ResonZ.h>
+#include <Reson.h>
+#include <Balance.h>
 #include <iostream>
 
 using namespace AuLib;
@@ -19,7 +20,8 @@ int main(){
 
   TableSet saw(SAW);
   BlOsc sig(0.5, 440., saw);
-  ResonZ fil(1000,100.);
+  ResonR fil(1000,1.);
+  Balance bal;
   SoundOut output("dac");
   
   cout << Info::version();
@@ -27,8 +29,9 @@ int main(){
     if(output.error() == AULIB_NOERROR) {
       for(int i=0; i < def_sr*10; i+=def_vframes){
 	sig.process(0.5, 440.);	
-	fil.process(sig);
-	output.write(fil);
+	fil.process(sig, 1000.+400.*i/def_sr);
+	bal.process(fil,sig);
+	  output.write(bal);
       } 
     } else cout << output.error_message() << "\n";
   } else cout << sig.error_message() << "\n";

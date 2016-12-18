@@ -10,6 +10,7 @@ Pan.cpp
 Envel.cpp
 EnvelTable.cpp
 Filter.cpp
+Balance.cpp
 )
 
 
