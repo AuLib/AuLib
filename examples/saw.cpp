@@ -31,7 +31,7 @@ int main(){
 	sig.process(0.5, 440.);	
 	fil.process(sig, 1000.+400.*i/def_sr);
 	bal.process(fil,sig);
-	  output.write(bal);
+	output.write(bal);
       } 
     } else cout << output.error_message() << "\n";
   } else cout << sig.error_message() << "\n";

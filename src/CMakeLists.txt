@@ -10,7 +10,9 @@ Pan.cpp
 Envel.cpp
 EnvelTable.cpp
 Filter.cpp
+Tone.cpp
 Balance.cpp
+Delay.cpp
 )
 
 

@@ -87,6 +87,7 @@ namespace AuLib {
     }
     
     /** set the data vector to a sig vector
+        return the AudioBase obj reference
      */
     const AudioBase& set(const double *sig){
       const double *end = sig+m_vector.size();
@@ -95,11 +96,26 @@ namespace AuLib {
     }
 
     /** set the data vector to a value v 
+        return a pointer to the vector
      */
-    const AudioBase& set(double v){
+    const double* set(double v){
       std::fill(m_vector.begin(),m_vector.end(),v);
-      return *this;
+      return m_vector.data();
     } 
+
+    /** set the data vector to a value v at pos p
+        return the old (replaced) sample
+     */
+    double set(double v, uint32_t p){
+      if(p < m_vector.size()){
+	double ret = m_vector[p];
+	m_vector[p] = v;
+	return ret;
+      } else {
+	std::cout << p << "\n";
+	return 0.;
+      }
+    }
     
     /** Get the audio vector vector
      */ 
@@ -110,7 +126,7 @@ namespace AuLib {
     /** Get a single sample at frame ndx
         and channel chn off the data vector
     */  
-    double vector(uint32_t frndx, uint32_t chn=0)
+    double vector(uint32_t frndx, uint32_t chn)
       const {
       if(frndx < m_vframes)
 	return vector()[frndx*m_nchnls+chn];
