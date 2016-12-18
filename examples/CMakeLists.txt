@@ -31,6 +31,10 @@ add_executable(adsr adsrex.cpp)
 target_link_libraries(adsr AuLib ${LIBSNDFILE} ${PORTAUDIO})
 add_executable(glide glide.cpp)
 target_link_libraries(glide AuLib ${LIBSNDFILE} ${PORTAUDIO})
+add_executable(echo echo.cpp)
+target_link_libraries(echo AuLib ${LIBSNDFILE} ${PORTAUDIO})
+add_executable(filterex filterex.cpp)
+target_link_libraries(filterex AuLib ${LIBSNDFILE} ${PORTAUDIO})
 
 # installation targets
 INSTALL(TARGETS sampleplay saw readtable sine fm
