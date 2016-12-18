@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////
 #include <SoundOut.h>
 #include <BlOsc.h>
+#include <ResonZ.h>
 #include <iostream>
 
 using namespace AuLib;
@@ -18,13 +19,16 @@ int main(){
 
   TableSet saw(SAW);
   BlOsc sig(0.5, 440., saw);
+  ResonZ fil(1000,100.);
   SoundOut output("dac");
+  
   cout << Info::version();
   if(sig.error() == AULIB_NOERROR) {
     if(output.error() == AULIB_NOERROR) {
       for(int i=0; i < def_sr*10; i+=def_vframes){
-	sig.process(0.5, 100.+1000.*i/(def_sr*10));
-	output.write(sig);
+	sig.process(0.5, 440.);	
+	fil.process(sig);
+	output.write(fil);
       } 
     } else cout << output.error_message() << "\n";
   } else cout << sig.error_message() << "\n";

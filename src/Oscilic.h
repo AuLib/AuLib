@@ -48,7 +48,7 @@ namespace AuLib {
     */
     Oscilic(double amp, double freq,
 	    const FuncTable& ftable,
-	    double phase = .0,
+	    double phase = 0.,
 	    uint32_t vframes = def_vframes,
 	    double sr = def_sr) :
       Oscil(amp,freq,ftable,phase,vframes,sr) { };
