@@ -16,14 +16,8 @@ namespace AuLib {
 
   /** All-pass filter
    */
-  class AllPass : public Comb {
+  class AllPass : public Delay {
 
-  protected:
-    
-    /** filter kernel
-     */
-    virtual const double* filter(const double* sig, double fdb);
-    
   public:
     /** AllPass constructor \n\n
 	dtime - delay time \n
@@ -34,10 +28,32 @@ namespace AuLib {
   AllPass(double dtime, double fdb,
 	  uint32_t vframes = def_vframes,
 	  double sr = def_sr) :
-    Comb(dtime,fdb,vframes,sr) { };
+    Delay(dtime,fdb,vframes,sr) { };
     
-  };
 
+
+  virtual const double* process(const double* sig);
+
+  virtual const double* process(const double* sig, double fdb){
+    m_fdb = fdb;
+    return process(sig);
+  }
+
+    virtual const Delay& process(const AudioBase& obj) {
+      if(obj.vframes() == m_vframes &&
+	 obj.nchnls() == m_nchnls) {
+	  process(obj.vector());
+      } else m_error = AULIB_ERROR;
+      return *this;
+    }
+
+  virtual const Delay& process(const AudioBase& obj, double fdb) {
+      m_fdb = fdb;
+      return process(obj);
+    }
+
+  };
+  
   /*! \class AllPass AllPass.h AuLib/AllPass.h
    */
 

@@ -10,7 +10,7 @@
 #include <SoundOut.h>
 #include <SampleTable.h>
 #include <SamplePlayer.h>
-#include <Comb.h>
+#include <Delay.h>
 #include <iostream>
 
 using namespace AuLib;
@@ -20,7 +20,7 @@ int main(int argc, const char **argv){
   if(argc > 1){
     SampleTable wave(argv[1]);
     SamplePlayer sig(wave);
-    Comb del(.5, 0.5);
+    Delay del(.5, .9);
     SoundOut output("dac");
     cout << Info::version();
     if(wave.error() == AULIB_NOERROR) {
