@@ -9,7 +9,7 @@
 //
 /////////////////////////////////////////////////////////////////////
 #include "Delay.h"
-#include "Comb.h"
+#include "Fir.h"
 #include "AllPass.h"
 
 const double*
@@ -66,6 +66,23 @@ AuLib::AllPass::process(const double* sig){
     y = sig[i] + m_fdb*m_delay.vector(m_pos);
     m_vector[i] = m_delay.set(y, m_pos) - m_fdb*y;
     m_pos = m_pos == m_delay.vframes()-1 ? 0. : m_pos+1;
+  }
+  return vector();
+}
+
+const double*
+AuLib::Fir::process(const double *sig){ 
+  double out=0; int32_t rp;
+  for(int i=0; i < m_vframes; i++){
+    for(int j=0; j < m_irsize; j++){
+      rp = m_pos+j;
+      rp = (rp >= 0 ? (rp < m_irsize ? rp : rp - m_irsize) : rp + m_irsize);  
+      out += (m_delay.vector(rp)*m_ir[m_irsize-1-j]);
+    }
+    m_delay.set(sig[i], m_pos);
+    m_vector[i] = out;
+    out = 0.;
+    m_pos = (m_pos != m_irsize-1 ? m_pos+1 : 0);
   }
   return vector();
 }

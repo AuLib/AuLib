@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #ifndef _ALLPASS_H_
 #define _ALLPASS_H_
-#include "Comb.h"
+#include "Delay.h"
 
 namespace AuLib {
 
