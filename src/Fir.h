@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////
-// Fir class: 
+// Fir class: convolution engine
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
@@ -15,7 +15,8 @@
 
 namespace AuLib {
 
-  /** Fir description
+  /** This class implements a direct convolution engine
+      using an impulse response defined in a function table.
   */
   class Fir : public Delay {
 
@@ -25,19 +26,20 @@ namespace AuLib {
 
   public:
     /** Fir constructor \n\n
-        ir - impulse respnse
+        ir - impulse response
 	vframes - vector size \n
         sr - sampling rate
     */  
-  Fir(const FuncTable& ir, uint32_t vframes = def_vframes, double sr = def_sr) :
+  Fir(const FuncTable& ir, uint32_t vframes = def_vframes,
+      double sr = def_sr) :
     m_ir(ir.table()), m_irsize(ir.tsize()),
       Delay(ir.tsize()*sr,0.,vframes,sr) { };
 
-    /** process a signal sig 
+    /** apply convolution to a signal sig 
      */
     virtual const double* process(const double* sig);
 
-    /** process a signal in obj
+    /** apply convolution to a signal in obj
      */
     virtual const Fir& process(const AudioBase& obj) {
       if(obj.vframes() == m_vframes &&
