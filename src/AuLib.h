@@ -16,6 +16,9 @@
  *  AuLib is a simple lightweight C++ (ISO C++11) class library 
  *  for audio DSP.
  *
+ *  <a href="https://github.com/vlazzarini/AuLib">
+ *          github.com/vlazzarini/AuLib</a> 
+ *
  * \section build_the_package Building
  *
  * The library and example programs are built with CMake. The only
@@ -38,11 +41,13 @@
  *
  * A number of minimal examples are supplied to demonstrate how the
  * library can be used. However, these are only very simple programs
- * which only hint at the possible applications. Generally speaking
+ * that only hint at the possible applications. Generally speaking,
  * objects of the different processing classes are instantiated and 
- * then used to generate or process vectors of audio data, which. It 
- * is possible to access the output samples of each object directly,
- * and processing functions take both objects (const AudioObj&) and 
+ * then used to generate or process vectors of audio data, which are 
+ * kept the library objects.
+ * 
+ * It is possible to access the output samples of each object directly,
+ * and processing functions can take both objects (const AudioObj&) and 
  * audio vectors (const double*) as inputs (as well as other 
  * parameters, depending on the object type). A number of operations
  * can be applied to objects (such as scaling, offsetting, mixing to,
