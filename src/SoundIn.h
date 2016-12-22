@@ -18,26 +18,25 @@ namespace AuLib {
   enum {SOUNDIN_RT=1,
 	SOUNDIN_STDIN,
 	SOUNDIN_SNDFILE};
-  
-   /** Error codes
-   */
-  enum soundout_error_codes {
-    AULIB_FOPEN_ERROR
-    = AULIB_ERROR + 1,
-    AULIB_RTINIT_ERROR,
-    AULIB_RTOPEN_ERROR,
-    AULIB_RTSTREAM_ERROR,
-    AULIB_SOUNDOUT_ERROR
-  };
 
+    /** Standard Error messages
+   */
+  static const char* soundin_error[] = {
+    "SoundIn: file open error",
+    "SoundIn: RT initialisation error",
+    "SoundIn: RT open error",
+    "SoundIn: RT stream start error",
+    "SoundIn: general error"
+  };
 
   /** Audio input class
    */
-  class SoundIn final : AudioBase {
+  class SoundIn final : public AudioBase {
 
     std::string m_src;
     uint32_t m_mode;
     uint32_t m_cnt;
+    uint64_t m_dur;
     uint64_t m_framecnt;
     std::vector<double> m_inbuf;
     void *m_handle;
@@ -48,11 +47,11 @@ namespace AuLib {
     /** SoundIn constructor \n\n
 	src - input source ("adc", "stdin", or file path) \n
 	vframes - vector size \n
-	bsize - buffer size \n
+	bframes - buffer size in frames \n
     */
     SoundIn(const char *src, uint32_t nchnls = def_nchnls,
 	    uint32_t vframes = def_vframes,
-	    uint64_t bsize = def_bsize,
+	    uint64_t bframes = def_bframes,
 	    double sr = def_sr);
   
     /** SoundOut destructor
@@ -61,7 +60,35 @@ namespace AuLib {
 
     /** Reads frames of audio to output 
      */
-    const double* read(uint32_t frames);
+    const double* read(uint32_t frames = def_vframes);
+
+
+    /** Get the current vector stream time
+     */
+    double time() const {
+      return m_framecnt/m_sr;
+    }
+
+    /** Get the source name
+     */
+    const char* src() const {
+      return m_src.c_str();
+    }
+
+    /** Get the file duration in frames
+     */
+    uint64_t dur() const {
+      return m_dur;
+    }
+    
+    /** Get error message
+     */
+    virtual const char* error_message() const {
+      if(m_error > AULIB_ERROR)
+	return soundin_error[m_error -
+			      AULIB_ERROR - 1];
+      else return aulib_error[m_error];
+    }
 
   
   };

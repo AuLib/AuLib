@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////
-// SoundOut class implementation
+// SoundIn class implementation
 // dependencies: libsndfile, portaudio
 // Copyright (C) 2016-7 V Lazzarini
 //
@@ -9,38 +9,41 @@
 // version 3.0 of the License, or (at your option) any later version.
 //
 //////////////////////////////////////////////////////////////////////
+#include "SoundIn.h"
 #include "SoundOut.h"
 #include <sndfile.h>
 #include <portaudio.h>
 #include <cstring>
 #include <iostream>
 
-AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
-			  uint32_t vframes, double sr) :
+AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls,
+			uint32_t vframes, uint64_t bframes,
+			double sr) :
   AudioBase(nchnls,vframes,sr),
-  m_dest(dest), m_mode(0), m_cnt(0),
-  m_framecnt(0), m_handle(NULL)
+  m_src(src), m_mode(0), m_cnt(bframes*nchnls),
+  m_dur(std::numeric_limits<uint64_t>::max()),
+  m_framecnt(0), m_inbuf(bframes*nchnls), m_handle(NULL)
 {
-  if(m_dest == "dac"){
+  if(m_src == "adc"){
     // RT audio
     PaError err;
     err = Pa_Initialize();
     if(err == paNoError){
-      PaStreamParameters outparam{0};
+      PaStreamParameters inparam{0};
       PaStream *stream;
-      outparam.device = (PaDeviceIndex)
-	Pa_GetDefaultOutputDevice();
-      outparam.channelCount = m_nchnls;
-      outparam.sampleFormat = paFloat32;
-      outparam.suggestedLatency = (PaTime)
-	(m_vframes/m_sr);
-      err = Pa_OpenStream(&stream,NULL,&outparam,
-      	  m_sr,m_vframes,paNoFlag, NULL, NULL);
+      inparam.device = (PaDeviceIndex)
+	Pa_GetDefaultInputDevice();
+      inparam.channelCount = m_nchnls;
+      inparam.sampleFormat = paFloat32;
+      inparam.suggestedLatency = (PaTime)
+	(bframes/m_sr);
+      err = Pa_OpenStream(&stream,&inparam, NULL,
+			  m_sr,bframes,paNoFlag, NULL, NULL);
       if(err == paNoError){
 	err = Pa_StartStream(stream);
 	if(err == paNoError){
 	  m_handle = (void *) stream;
-	  m_mode = SOUNDOUT_RT;
+	  m_mode = SOUNDIN_RT;
 	} else {
 	  m_error = AULIB_RTSTREAM_ERROR;
 	  m_vframes  = 0;
@@ -54,94 +57,85 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
       m_vframes  = 0;
     }
   }
-  else if(m_dest == "stdout"){
+  else if(m_src == "stdin"){
     // stdout
-    m_mode = SOUNDOUT_STDOUT;
+    m_mode = SOUNDIN_STDIN;
   }
   else {
     // sndfile
     SF_INFO info{0};
-    uint32_t fformat = SF_FORMAT_RAW;
-    info.samplerate = (int) m_sr;
-    info.channels = m_nchnls;
-    if(m_dest.find(".wav")
-       != std::string::npos)
-      fformat = SF_FORMAT_WAV;
-    else if(m_dest.find(".aif")
-       != std::string::npos)
-       fformat = SF_FORMAT_AIFF;
-    else if(m_dest.find(".au")
-       != std::string::npos)
-       fformat = SF_FORMAT_AU;
-    info.format = fformat | SF_FORMAT_PCM_16;
-    SNDFILE *sf = sf_open(m_dest.c_str(),SFM_WRITE, &info);
+    SNDFILE *sf = sf_open(m_src.c_str(),SFM_READ, &info);
     if(sf != NULL) {
       m_handle = (void *) sf;
-      m_mode = SOUNDOUT_SNDFILE;
+      m_mode = SOUNDIN_SNDFILE;
+      m_sr = info.samplerate;
+      if(m_nchnls !=  info.channels) {
+	m_nchnls = info.channels;
+	m_vector.resize(m_nchnls*m_vframes);
+      }
+      m_dur = (uint64_t) info.frames;
     } else {
       m_error = AULIB_FOPEN_ERROR;
       m_vframes = 0;
     }
+    
   }
 }
 
-AuLib::SoundOut::~SoundOut(){
-  if(m_mode == SOUNDOUT_RT &&
+AuLib::SoundIn::~SoundIn(){
+  if(m_mode == SOUNDIN_RT &&
      m_handle != NULL) {
     Pa_StopStream((PaStream*) m_handle);
     Pa_CloseStream((PaStream*) m_handle);
     Pa_Terminate();
   }
-  else if(m_mode == SOUNDOUT_SNDFILE &&
+  else if(m_mode == SOUNDIN_SNDFILE &&
 	  m_handle != NULL){
     sf_close((SNDFILE *) m_handle);
   }
 }
 
-uint64_t
-AuLib::SoundOut::write(const double *sig,
-		       uint32_t frames){
+const double*
+AuLib::SoundIn::read(uint32_t frames){
   uint32_t samples = frames*m_nchnls;
-  if(m_mode == SOUNDOUT_RT &&
+  if(m_mode == SOUNDIN_RT &&
      m_handle != NULL) {
     PaError err;
-    uint32_t bsamples = m_vframes*m_nchnls;
-    float *buffer = (float *) m_vector.data();
+    uint32_t bsamples = m_inbuf.size();
+    float *buffer = (float *) m_inbuf.data();
     for(uint32_t i = 0; i < samples; i++) {
-      buffer[m_cnt++] = sig[i];
       if(m_cnt == bsamples){
-	err = Pa_WriteStream((PaStream*) m_handle,
-			     buffer,m_vframes);
+	err = Pa_ReadStream((PaStream*) m_handle,
+			    buffer,bsamples/m_nchnls);
 	if(err == paNoError){
 	  m_framecnt += m_cnt/m_nchnls;
-	 }
-	set(0.);
+	}
 	m_cnt = 0;
       }
+      m_vector[i] = (double) buffer[m_cnt++];
     }
   }
-  else if(m_mode == SOUNDOUT_STDOUT){
+  else if(m_mode == SOUNDIN_STDIN){
     uint32_t sample_cnt = 0;
     for(uint32_t i = 0; i < samples; i++){
-      std::cout << sig[i] << "\n";
+      std::cin >> m_vector[i];
       sample_cnt++;
     }
     m_framecnt += sample_cnt/m_nchnls;
   }
-  else if(m_mode == SOUNDOUT_SNDFILE &&
+  else if(m_mode == SOUNDIN_SNDFILE &&
 	  m_handle != NULL) {
-    uint32_t bsamples = m_vframes*m_nchnls;
+    uint32_t bsamples = m_inbuf.size();
     for(uint32_t i = 0; i < samples; i++) {
-      m_vector[m_cnt++] = sig[i];
       if(m_cnt == bsamples) {
 	m_framecnt +=
-	  sf_writef_double((SNDFILE*) m_handle,
-			   m_vector.data(), m_vframes);
-	set(0.);
+	  sf_readf_double((SNDFILE*) m_handle,
+			  m_inbuf.data(), bsamples/m_nchnls);
 	m_cnt = 0;
       }
+      m_vector[i] = m_inbuf[m_cnt++];
     }
   }
-  else return 0;
-  return m_framecnt;
+  else return NULL;
+  return vector();
 }

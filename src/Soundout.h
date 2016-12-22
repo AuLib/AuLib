@@ -67,7 +67,7 @@ namespace AuLib {
     */
     SoundOut(const char *dest,
 	     uint32_t nchnls = def_nchnls,
-	     uint32_t vframes = def_bsize,
+	     uint32_t vframes = def_bframes,
 	     double sr = def_sr);
   
     /** SoundOut destructor

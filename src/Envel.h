@@ -15,6 +15,9 @@
 
 namespace AuLib {
 
+  /** Curve segments for envelope generators and
+      tables
+  */
   class Segments {
     
     double m_start;
@@ -27,13 +30,13 @@ namespace AuLib {
 
   public:
     
-    /* Segments constructor
-       start - start value
-       endpts - array of segment endpoints
-       times - array of segment time durations
-       nsegs - number of segments
-       linear - true if linear envelope, false is exponential
-       sr - sampling rate
+    /* Segments constructor \n\n
+       start - start value \n 
+       endpts - array of segment endpoints \n
+       times - array of segment time durations \n
+       nsegs - number of segments \n
+       linear - true if linear envelope, false is exponential \n
+       sr - sampling rate \n
     */
     Segments(double start,
 	     const double *endpts,
@@ -45,7 +48,7 @@ namespace AuLib {
     Segments() : m_start(0), m_nsegs(0),
 		 m_linear(true), m_frames(0),
                  m_incrs(0), m_durs(0), m_endpts(0)
-		 { };
+    { };
     
 
     /** Get the increments array
@@ -95,7 +98,7 @@ namespace AuLib {
   };
   
 
-  /** Envel description
+  /** Multi-segment envelope generator
    */
   class Envel : public AudioBase {
 
@@ -112,10 +115,10 @@ namespace AuLib {
   public:
     
     /** Envel constructor \n\n
-	segs - envelope segments
+	segs - envelope segments \n
 	rel - release time \n
 	vframes - vector size \n
-	sr - sampling rate
+	sr - sampling rate \n
     */  
     Envel(const Segments& segs, double rel = 0.f,
 	  uint32_t vframes = def_vframes,
@@ -131,7 +134,7 @@ namespace AuLib {
     /** Envel constructor \n\n
 	rel - release time \n
 	vframes - vector size \n
-	sr - sampling rate
+	sr - sampling rate \n
     */ 
     Envel(double rel = 0.f,
 	  uint32_t vframes = def_vframes,
@@ -139,7 +142,7 @@ namespace AuLib {
       AudioBase(1,vframes,sr), m_y(0.), 
       m_cseg(0), m_rt(rel*sr), m_cnt(0), 
       m_time(0), m_incr(0), m_trig(false)
-      { };
+    { };
     
     /** process envelope
      */
@@ -178,7 +181,7 @@ namespace AuLib {
     
     /** return the env duration in frames
         (excluding release)
-     */
+    */
     uint32_t frames() const {
       return m_segs.frames();
     }

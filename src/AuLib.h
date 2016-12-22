@@ -97,7 +97,7 @@ namespace AuLib {
 
   /** default IO buffersize.
    */
-  const uint32_t def_bsize = 1024;
+  const uint32_t def_bframes = 1024;
 
   /** default sampling rate
    */

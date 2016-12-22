@@ -38,7 +38,7 @@ namespace AuLib {
     /** Rms constructor \n\n
 	cf - cutoff frequency \n
 	vframes - vector size \n
-        sr - sampling rate
+        sr - sampling rate \n
     */  
     Rms(double cf=10., uint32_t vframes = def_vframes,
 	   double sr = def_sr) :
