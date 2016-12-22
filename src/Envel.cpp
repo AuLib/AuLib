@@ -28,7 +28,7 @@ AuLib::Segments::Segments(double start,
   double y0 = linear ? start :
     start > 0 ? start : (m_start = db_min);
   double y1;
-  for(int i=0; i < m_nsegs; i++) {
+  for(uint32_t i=0; i < m_nsegs; i++) {
     y1 = m_endpts[i] = endpts[i];
     m_durs[i] = times[i]*sr;
     m_frames += m_durs[i];
@@ -48,7 +48,7 @@ const AuLib::AudioBase&
 AuLib::Envel::process() {
   bool linear = m_segs.isLinear();
   uint32_t nsegs = m_segs.nsegs();
-  for(int i=0; i < m_vframes; i++) {
+  for(uint32_t i=0; i < m_vframes; i++) {
     m_vector[i] = m_y;
     if(linear) m_y += m_incr;
     else m_y *= m_incr;

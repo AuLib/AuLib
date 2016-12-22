@@ -16,40 +16,40 @@
 AuLib::Oscil::Oscil(double amp, double freq,
 		    double phase, uint32_t vframes,
 		    double sr) :
+  AudioBase(1,vframes,sr),
   m_amp(amp), m_freq(freq), m_sine(1),
-  m_phs(phase), m_tsize(def_tsize),
+  m_phs(phase), m_tframes(def_tframes),
   m_table(NULL), m_am(NULL),
-  m_fm(NULL), AudioBase(1,vframes,sr)
+  m_fm(NULL)
 {
   m_table = m_sine.table();
-  m_incr = m_freq*m_tsize/m_sr;
-  m_phs *= m_tsize;
+  m_incr = m_freq*m_tframes/m_sr;
+  m_phs *= m_tframes;
   mod();
 }
 
 AuLib::Oscil::Oscil(double amp, double freq,
 		    const FuncTable& ftable, double phase,
 		    uint32_t vframes, double sr) :
-  m_amp(amp), m_freq(freq),
-  m_phs(phase), m_tsize(ftable.tsize()),
+  AudioBase(1,vframes,sr),
+  m_amp(amp), m_freq(freq), m_sine(0,NULL,0.,0),
+  m_phs(phase), m_tframes(ftable.tframes()),
   m_table(ftable.table()),
-  m_am(NULL), m_fm(NULL),
-  m_sine(0,NULL,0.,0),
-  AudioBase(1,vframes,sr)
+  m_am(NULL), m_fm(NULL)
 {
   if(m_table == NULL){
     m_vframes = 0;
     m_error = AULIB_ERROR;
     return;
   }
-  m_incr = m_freq*m_tsize/m_sr;
-  m_phs *= m_tsize;
+  m_incr = m_freq*m_tframes/m_sr;
+  m_phs *= m_tframes;
   mod();
 }
 
 void
 AuLib::Oscil::oscillator(){
-  for(int i=0; i < m_vframes; i++){
+  for(uint32_t i=0; i < m_vframes; i++){
     am_fm(i);
     m_vector[i] = m_amp*m_table[(uint32_t)m_phs];
     m_phs += m_incr;
@@ -61,7 +61,7 @@ void
 AuLib::Oscili::oscillator(){
   uint32_t phi;
   double frac,a,b;
-  for(int i=0; i < m_vframes; i++){
+  for(uint32_t i=0; i < m_vframes; i++){
     am_fm(i);
     phi = (uint32_t) m_phs;
     frac = m_phs - phi;
@@ -79,7 +79,7 @@ AuLib::Oscilic::oscillator(){
   uint32_t phi;
   double frac,a,b,c,d;
   double tmp, fracsq, fracb;
-  for(int i=0; i < m_vframes; i++){
+  for(uint32_t i=0; i < m_vframes; i++){
     am_fm(i);
     phi = (uint32_t) m_phs;
     frac = m_phs - phi;
@@ -103,12 +103,12 @@ void
 AuLib::SamplePlayer::oscillator(){
   uint32_t phi;
   double frac,a,b;
-  for(int i=0; i < m_vframes; i++){
+  for(uint32_t i=0; i < m_vframes; i++){
     //am_fm(i);
     phi = (uint32_t) m_phs;
     frac = m_phs - phi;
     phi *= m_nchnls;
-    for(int j = 0; j < m_nchnls; j++){
+    for(uint32_t j = 0; j < m_nchnls; j++){
       a = m_table[phi+j];
       b = m_table[phi+j+m_nchnls];
       m_vector[i*m_nchnls+j] = 

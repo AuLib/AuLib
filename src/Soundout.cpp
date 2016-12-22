@@ -17,8 +17,9 @@
 
 AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls,
 			  uint32_t vframes, double sr) :
-  m_dest(dest), m_handle(NULL), m_mode(0), m_cnt(0),
-  m_framecnt(0), AudioBase(nchnls,vframes,sr)
+  AudioBase(nchnls,vframes,sr),
+  m_dest(dest), m_mode(0), m_cnt(0),
+  m_framecnt(0), m_handle(NULL)
 {
   if(m_dest == "dac"){
     // RT audio
@@ -97,7 +98,7 @@ AuLib::SoundOut::~SoundOut(){
   }
 }
 
-uint32_t
+uint64_t
 AuLib::SoundOut::write(const double *sig,
 		       uint32_t frames){
   uint32_t samples = frames*m_nchnls;
@@ -106,7 +107,7 @@ AuLib::SoundOut::write(const double *sig,
     PaError err;
     uint32_t bsamples = m_vframes*m_nchnls;
     float *buffer = (float *) m_vector.data();
-    for(int i = 0; i < samples; i++) {
+    for(uint32_t i = 0; i < samples; i++) {
       buffer[m_cnt++] = sig[i];
       if(m_cnt == bsamples){
 	err = Pa_WriteStream((PaStream*) m_handle,
@@ -121,7 +122,7 @@ AuLib::SoundOut::write(const double *sig,
   }
   else if(m_mode == SOUNDOUT_STDOUT){
     uint32_t sample_cnt = 0;
-    for(int i = 0; i < samples; i++){
+    for(uint32_t i = 0; i < samples; i++){
       std::cout << sig[i] << "\n";
       sample_cnt++;
     }
@@ -130,7 +131,7 @@ AuLib::SoundOut::write(const double *sig,
   else if(m_mode == SOUNDOUT_SNDFILE &&
 	  m_handle != NULL) {
     uint32_t bsamples = m_vframes*m_nchnls;
-    for(int i = 0; i < samples; i++) {
+    for(uint32_t i = 0; i < samples; i++) {
       m_vector[m_cnt++] = sig[i];
       if(m_cnt == bsamples) {
 	m_framecnt +=

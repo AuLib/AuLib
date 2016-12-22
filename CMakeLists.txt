@@ -1,15 +1,25 @@
 # CMake build script
 # for the AuLib project
-
 cmake_minimum_required(VERSION 3.0.1)
 
+# set CMAKE_BUILD_TYPE (DEBUG or RELEASE)
+set(CMAKE_BUILD_TYPE "DEBUG")
+
+# Project target and version 
 project(AuLibProject)
-set(AuLib_VERSION_MAJOR 0)
-set(AuLib_VERSION_MINOR 0)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11")
+set(AuLib_MAJOR_V 0)
+set(AuLib_MINOR_V 0)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
+-std=c++11 -DAULIB_MAJOR_V=${AuLib_MAJOR_V} \
+-DAULIB_MINOR_V=${AuLib_MINOR_V}")
+
+if(CMAKE_BUILD_TYPE MATCHES DEBUG)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
+  -Wall -Werror -Wno-unused-function -Wno-overloaded-virtual")
+ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
 
 include_directories("${PROJECT_SOURCE_DIR}/src")
-
 
 # AuLib sources
 add_subdirectory(src)

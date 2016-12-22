@@ -29,11 +29,11 @@ namespace AuLib {
     /** TableSet constructor
         type - SAW, SQUARE or TRIANGLE
         sr - sampling rate
-     */
+    */
     TableSet(uint32_t type, double sr=def_sr) :
       m_waves(octs) {
       double nyq = sr/2.;
-      for(int i=0; i < octs; i++) {
+      for(uint32_t i=0; i < octs; i++) {
 	double fr = base*pow(2,i);
 	m_waves[i] = FourierTable(nyq/fr,type);
       }
@@ -53,7 +53,7 @@ namespace AuLib {
 
   protected:
     
-   const FuncTable* m_waves;
+    const FuncTable* m_waves;
 
     /** table selection
      */
@@ -61,7 +61,7 @@ namespace AuLib {
       int32_t num = (int32_t) log2(m_freq/base);
       num = num < 0 ? 0 :
 	(num > octs-1 ? octs-1 : num);
-       m_table = m_waves[num].table();
+      m_table = m_waves[num].table();
     }
     
   public:  
@@ -69,7 +69,7 @@ namespace AuLib {
 	amp - amplitude   \n
 	freq - frequency in Hz \n
 	waveset - TableSet reference with the set of
-         bandlimited tables \n
+	bandlimited tables \n
 	phase - init phase (0-1) \n 
 	vframes - vector size \n
 	sr - sampling rate \n\n
@@ -79,9 +79,9 @@ namespace AuLib {
 	  double phase = 0., 
 	  uint32_t vframes = def_vframes, 
 	  double sr = def_sr) :
-      m_waves(waveset.tables()),
       Oscili(amp,freq,waveset.tables()[0],
-	     phase,vframes,sr)
+	     phase,vframes,sr),
+      m_waves(waveset.tables())
     {
       if(m_waves == NULL) {
 	m_vframes = 0;
@@ -92,12 +92,12 @@ namespace AuLib {
     }
 
 
-    /** Process one vector of audio
-     */
-    virtual const BlOsc& process() {
-      Oscili::oscillator();
-      return *this;
-    }
+      /** Process one vector of audio
+       */
+      virtual const BlOsc& process() {
+	Oscili::oscillator();
+	return *this;
+      }
 
     /** Process one vector of audio
 	with amplitude amp
@@ -116,7 +116,7 @@ namespace AuLib {
     virtual const BlOsc& process(double amp, double freq){
       m_amp = amp;
       m_freq = freq;
-      m_incr = m_freq*m_tsize/m_sr;
+      m_incr = m_freq*m_tframes/m_sr;
       tselect();
       Oscili::oscillator();
       return *this;

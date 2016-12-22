@@ -33,9 +33,9 @@ namespace AuLib {
     */  
   Balance(double cf = 10., uint32_t vframes = def_vframes,
 	  double sr = def_sr) :
+    AudioBase(1,vframes,sr),
     m_cmp(cf,vframes,sr),
-    m_sig(cf,vframes,sr),
-    AudioBase(1,vframes,sr) { };
+    m_sig(cf,vframes,sr) { };
 
     /** process a sig with a comparator cmp
      */

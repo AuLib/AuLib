@@ -20,8 +20,8 @@ namespace AuLib {
   class Phasor : public AudioBase {
 
   protected:
-    double m_phs;  
     double m_freq;
+    double m_phs;  
     double m_incr;
   
     /** phase modulo

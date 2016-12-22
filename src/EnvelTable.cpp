@@ -22,10 +22,10 @@ AuLib::EnvelTable::EnvelTable(const Segments& segs,
   int32_t cseg = 0;
   uint32_t cnt = 0;
   
-  m_tsize = segs.frames();
-  m_vector.resize(m_tsize+2);
+  m_tframes = segs.frames();
+  m_vector.resize(m_tframes+2);
   m_vframes = m_vector.size();
-  for(int i=0; i < m_vframes; i++) {
+  for(uint32_t i=0; i < m_vframes; i++) {
     m_vector[i] = y;
     if(linear) y += incr;
     else y *= incr;

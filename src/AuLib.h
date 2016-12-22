@@ -68,10 +68,10 @@ namespace AuLib {
 
   namespace Info {
     /** Aulib major version */
-    const uint32_t major_version = 0;
+    const uint32_t major_version = AULIB_MAJOR_V;
 
     /** Aulib minor version */
-    const uint32_t minor_version = 0;
+    const uint32_t minor_version = AULIB_MINOR_V;
 
     /** returns the version string */
     static const std::string version() {
@@ -113,7 +113,7 @@ namespace AuLib {
 
   /** default function table length
    */
-  const uint32_t def_tsize = 8192;
+  const uint32_t def_tframes = 8192;
 
   /** the pi definition. 
    */ 

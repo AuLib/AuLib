@@ -39,21 +39,21 @@ namespace AuLib {
 	harms - number of harmonics \n
 	amps - array of harmonic amplitudes \n
 	phase - phase offset \n
-	tsize - table size \n
+	tframes - table size \n
     */
     FourierTable(uint32_t harms=0,
 		 double *amps=NULL,
 		 double phase=0.,
-		 uint32_t tsize = def_tsize);
+		 uint64_t tframes = def_tframes);
   
     /** FourierTable constructor \n\n
 	harms - number of harmonics \n
 	type - wave type \n
-	tsize - table size \n
+	tframes - table size \n
     */
     FourierTable(uint32_t harms,
 		 uint32_t type,
-		 uint32_t tsize = def_tsize);
+		 uint64_t tframes = def_tframes);
 
   };
 

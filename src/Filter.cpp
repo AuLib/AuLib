@@ -20,7 +20,7 @@ const double*
 AuLib::Filter::filter(const double* sig){
   double w, y;
 
-  for(int i=0; i < m_vframes; i++){ 
+  for(uint32_t i=0; i < m_vframes; i++){ 
     w = m_scal*sig[i] - m_b[0]*m_del[0] - m_b[1]*m_del[1];
     y = w*m_a[0] + m_a[1]*m_del[0] + m_a[2]*m_del[1];
     m_del[1] = m_del[0];
@@ -95,7 +95,7 @@ AuLib::ResonR::update(){
 const double*
 AuLib::Reson::filter(const double* sig){
   double y;
-  for(int i=0; i < m_vframes; i++){ 
+  for(uint32_t i=0; i < m_vframes; i++){ 
     y = sig[i]*m_scal - m_b[0]*m_del[0] - m_b[1]*m_del[1];
     m_del[1] = m_del[0];
     m_vector[i] = m_del[0] = y;

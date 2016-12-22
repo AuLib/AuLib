@@ -30,14 +30,14 @@ namespace AuLib {
     */  
   Chn(uint32_t channel = 1., uint32_t vframes = def_vframes,
       double sr = def_sr) :
-    m_chn(channel),
-    AudioBase(1,vframes,sr) { };
+    AudioBase(1,vframes,sr), 
+    m_chn(channel) { };
 
     /** extracts a channel from sig holding nchnls channels
      */
     virtual const double* process(const double* sig, uint32_t nchnls){
       if(m_chn && m_chn <= nchnls)
-	for(int i = 0, j = m_chn-1;
+	for(uint32_t i = 0, j = m_chn-1;
 	    i < m_vframes; i++, j += nchnls)
 	  m_vector[i] = sig[j];
       else set(0.);

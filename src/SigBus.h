@@ -34,10 +34,10 @@ namespace AuLib {
     */  
     SigBus(double scal = 1., double offs = 0.,
 	   bool overwrite = false,
-	   int nchnls = def_nchnls,
+	   uint32_t nchnls = def_nchnls,
 	   uint32_t vframes = def_vframes) :
-      m_scal(scal), m_offs(offs), m_ovw(overwrite),
-      AudioBase(nchnls,vframes) { };
+      AudioBase(nchnls,vframes),
+      m_scal(scal), m_offs(offs), m_ovw(overwrite) { };
 
     /** Adds a signal vector to the bus.
 	Requires an explicit call to clear()
@@ -45,7 +45,7 @@ namespace AuLib {
 	once the bus data has been consumed
     */
     virtual const double* process(const double* sig){
-      for(int i=0; i < m_vframes*m_nchnls; i++)
+      for(uint32_t i=0; i < m_vframes*m_nchnls; i++)
 	m_vector[i] = m_ovw ? m_scal*sig[i] + m_offs :
 	  m_scal*sig[i] + m_offs + m_vector[i];
       return vector();

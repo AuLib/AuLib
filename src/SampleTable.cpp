@@ -18,21 +18,21 @@ AuLib::SampleTable::SampleTable(const char *name,
   SNDFILE *sf = sf_open(name,SFM_READ,&info);
   if(sf != NULL) {
     if(chn == 0) {
-      m_tsize = info.frames;
+      m_tframes = info.frames;
       m_vframes = info.frames+2;
       m_nchnls = info.channels;
       m_sr = (double) info.samplerate;
     }
     else {
-      m_tsize = info.frames;
-      m_vframes = m_tsize+2;
+      m_tframes = info.frames;
+      m_vframes = m_tframes+2;
       m_nchnls = 1;
       m_sr = (double) info.samplerate;
     }
     m_vector.resize(m_vframes*m_nchnls);
     sf_count_t read = 0, frms;
     std::vector<double> tmp(def_vframes*info.channels);
-    while(read != m_tsize) {
+    while(read != m_tframes) {
       frms = sf_readf_double(sf,tmp.data(),def_vframes);
       if(frms == 0 ||
 	 sf_error(sf) != SF_ERR_NO_ERROR){
@@ -40,7 +40,7 @@ AuLib::SampleTable::SampleTable(const char *name,
 	break;
       }
       if(chn && info.channels != m_nchnls)
-	for(int i = 0,
+	for(uint32_t i = 0,
 	      j = chn <= info.channels ?
 	      chn-1 : info.channels - 1;
 	      i < frms; i++, j += info.channels){
@@ -51,9 +51,9 @@ AuLib::SampleTable::SampleTable(const char *name,
 		  m_vector.data()+read*m_nchnls);
       read += frms;
     }
-    for(int i = 0; i < m_nchnls; i++) {
-    m_vector[m_tsize*m_nchnls+i] = m_vector[i];
-    m_vector[(m_tsize+1)*m_nchnls+i] = m_vector[m_nchnls+i];
+    for(uint32_t i = 0; i < m_nchnls; i++) {
+    m_vector[m_tframes*m_nchnls+i] = m_vector[i];
+    m_vector[(m_tframes+1)*m_nchnls+i] = m_vector[m_nchnls+i];
     }
     sf_close(sf);
   } else

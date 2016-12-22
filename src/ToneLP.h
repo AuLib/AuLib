@@ -31,7 +31,7 @@ namespace AuLib {
     /** filter kernel
      */
     virtual const double* filter(const double* sig){
-      for(int i = 0; i < m_vframes; i++)
+      for(uint32_t i = 0; i < m_vframes; i++)
 	m_vector[i] = m_del = m_a*sig[i] - m_b*m_del;
       return vector();
     }
@@ -45,8 +45,8 @@ namespace AuLib {
     */  
     ToneLP(double cf, uint32_t vframes = def_vframes,
 	 double sr = def_sr) :
-      m_freq(cf), m_del(0.0), m_a(0.0), m_b(0.0),
-      AudioBase(1,vframes,sr) {
+      AudioBase(1,vframes,sr), 
+      m_freq(cf), m_del(0.0), m_a(0.0), m_b(0.0) {
       update();
     };
 

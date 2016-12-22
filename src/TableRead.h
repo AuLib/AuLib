@@ -20,11 +20,12 @@ namespace AuLib {
   class TableRead : public AudioBase {
 
   protected:
-    double m_phs;
-    bool  m_wrap;
-    bool  m_norm;
-    uint32_t m_tsize;
     const double *m_table;
+    double m_phs;
+    bool  m_norm;
+    bool  m_wrap;
+    uint64_t m_tframes;
+
 
     /** truncated table lookup
      */
@@ -34,11 +35,11 @@ namespace AuLib {
      */
     double mod(double pos){
       if(m_wrap) {
-	while(pos >= m_tsize) pos -= m_tsize;
-	while(pos < 0) pos += m_tsize;
+	while(pos >= m_tframes) pos -= m_tframes;
+	while(pos < 0) pos += m_tframes;
       } else {
 	pos = pos < 0 ? 0. :
-	  (pos >= m_tsize ? m_tsize : pos); 
+	  (pos >= m_tframes ? m_tframes : pos); 
       }
       return pos;
     }
@@ -54,9 +55,10 @@ namespace AuLib {
     TableRead(const FuncTable& ftable, double phase = 0.,
 	      bool norm = true, bool wrap = true,
 	      uint32_t vframes = def_vframes):
+      AudioBase(1,vframes),
       m_table(ftable.table()), m_phs(phase),
       m_norm(norm), m_wrap(wrap),
-      m_tsize(ftable.tsize()), AudioBase(1,vframes)
+      m_tframes(ftable.tframes()) 
     {
       if(m_table == NULL) {
 	m_vframes = 0;

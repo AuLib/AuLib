@@ -34,7 +34,7 @@ namespace AuLib {
     */
     TableReadic(const FuncTable& ftable, double phase = 0.,
 		bool norm = true, bool wrap = true,
-		uint32_t tsize = def_tsize,
+		uint64_t tframes = def_tframes,
 		uint32_t vframes = def_vframes) :
       TableRead(ftable,phase,norm,wrap,vframes) { };    
   };

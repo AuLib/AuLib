@@ -18,15 +18,28 @@ namespace AuLib {
   enum {SOUNDIN_RT=1,
 	SOUNDIN_STDIN,
 	SOUNDIN_SNDFILE};
+  
+   /** Error codes
+   */
+  enum soundout_error_codes {
+    AULIB_FOPEN_ERROR
+    = AULIB_ERROR + 1,
+    AULIB_RTINIT_ERROR,
+    AULIB_RTOPEN_ERROR,
+    AULIB_RTSTREAM_ERROR,
+    AULIB_SOUNDOUT_ERROR
+  };
+
 
   /** Audio input class
    */
   class SoundIn final : AudioBase {
 
-    const char *m_src;
+    std::string m_src;
     uint32_t m_mode;
     uint32_t m_cnt;
-    uint32_t m_framecnt;
+    uint64_t m_framecnt;
+    std::vector<double> m_inbuf;
     void *m_handle;
 
     NONCOPYABLE(SoundIn);   
@@ -38,7 +51,9 @@ namespace AuLib {
 	bsize - buffer size \n
     */
     SoundIn(const char *src, uint32_t nchnls = def_nchnls,
-	    uint32_t vframes = def_bsize, double sr = def_sr);
+	    uint32_t vframes = def_vframes,
+	    uint64_t bsize = def_bsize,
+	    double sr = def_sr);
   
     /** SoundOut destructor
      */

@@ -16,15 +16,15 @@
 namespace AuLib {
 
   class Segments {
-   
-    std::vector<double> m_incrs;
-    std::vector<uint32_t> m_durs;
-    std::vector<double> m_endpts;
+    
     double m_start;
     uint32_t m_nsegs;
     bool m_linear;
-    uint32_t m_frames;
-    
+    uint32_t m_frames;  
+    std::vector<double> m_incrs;
+    std::vector<uint32_t> m_durs;
+    std::vector<double> m_endpts;
+
   public:
     
     /* Segments constructor
@@ -42,9 +42,10 @@ namespace AuLib {
 	     bool linear = true,
 	     double sr = def_sr);
 
-    Segments() : m_start(0),m_incrs(0),
-		 m_durs(0), m_nsegs(0),
-		 m_linear(true), m_frames(0) { };
+    Segments() : m_start(0), m_nsegs(0),
+		 m_linear(true), m_frames(0),
+                 m_incrs(0), m_durs(0), m_endpts(0)
+		 { };
     
 
     /** Get the increments array
@@ -119,11 +120,13 @@ namespace AuLib {
     Envel(const Segments& segs, double rel = 0.f,
 	  uint32_t vframes = def_vframes,
 	  double sr = def_sr) :
-      m_segs(segs),
-      m_rt(rel*sr), m_cnt(0), m_cseg(0),
+      AudioBase(1,vframes,sr),
+      m_y(0.), m_cseg(0),
+      m_rt(rel*sr), m_cnt(0),
+      m_time(segs.durs()[0]),
       m_incr(segs.incrs()[0]),
-      m_time(segs.durs()[0]), m_trig(false),
-      AudioBase(1,vframes,sr){ };
+      m_trig(false),
+      m_segs(segs) { };
 
     /** Envel constructor \n\n
 	rel - release time \n
@@ -133,9 +136,10 @@ namespace AuLib {
     Envel(double rel = 0.f,
 	  uint32_t vframes = def_vframes,
 	  double sr = def_sr) :
-      m_rt(rel*sr), m_cnt(0), m_cseg(0),
-      m_incr(0), m_time(0), m_trig(false),
-      AudioBase(1,vframes,sr){ };
+      AudioBase(1,vframes,sr), m_y(0.), 
+      m_cseg(0), m_rt(rel*sr), m_cnt(0), 
+      m_time(0), m_incr(0), m_trig(false)
+      { };
     
     /** process envelope
      */

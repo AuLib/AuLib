@@ -14,7 +14,7 @@
 
 const double*
 AuLib::Delay::process(const double* sig){
-  for(int i = 0; i < m_vframes; i++) {
+  for(uint32_t i = 0; i < m_vframes; i++) {
     m_vector[i] = m_delay.set(sig[i] + m_delay.vector(m_pos)*m_fdb, m_pos);
     m_pos = m_pos == m_delay.vframes()-1 ? 0. : m_pos+1;
   }
@@ -27,7 +27,7 @@ AuLib::Delay::process(const double* sig, double dt, double fdb){
   int32_t  rp;
   m_fdb = fdb;
   if(ds > m_delay.vframes()) ds = m_delay.vframes();
-  for(int i = 0; i < m_vframes; i++) {
+  for(uint32_t i = 0; i < m_vframes; i++) {
       rp = m_pos - ds;
       if(rp < 0) rp += m_delay.vframes();
       m_vector[i] = m_delay.vector(rp);
@@ -42,7 +42,7 @@ AuLib::Delay::process(const double* sig, const double *dt, double fdb){
   double  rp,ds,a,b,frac;
   uint32_t irp;
   m_fdb = fdb;
-  for(int i = 0; i < m_vframes; i++) {
+  for(uint32_t i = 0; i < m_vframes; i++) {
         ds = dt[i] < 0. ? 0 : dt[i]*m_sr; 
         if(ds > m_delay.vframes()) ds = m_delay.vframes();
         rp = m_pos - ds;
@@ -62,7 +62,7 @@ AuLib::Delay::process(const double* sig, const double *dt, double fdb){
 const double*
 AuLib::AllPass::process(const double* sig){
   double y;
-  for(int i = 0; i < m_vframes; i++) {
+  for(uint32_t i = 0; i < m_vframes; i++) {
     y = sig[i] + m_fdb*m_delay.vector(m_pos);
     m_vector[i] = m_delay.set(y, m_pos) - m_fdb*y;
     m_pos = m_pos == m_delay.vframes()-1 ? 0. : m_pos+1;
@@ -73,8 +73,8 @@ AuLib::AllPass::process(const double* sig){
 const double*
 AuLib::Fir::process(const double *sig){ 
   double out=0; int32_t rp;
-  for(int i=0; i < m_vframes; i++){
-    for(int j=0; j < m_irsize; j++){
+  for(uint32_t i=0; i < m_vframes; i++){
+    for(uint32_t j=0; j < m_irsize; j++){
       rp = m_pos+j;
       rp = (rp >= 0 ? (rp < m_irsize ? rp : rp - m_irsize) : rp + m_irsize);  
       out += (m_delay.vector(rp)*m_ir[m_irsize-1-j]);

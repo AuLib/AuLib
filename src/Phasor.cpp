@@ -12,8 +12,8 @@
 
 AuLib::Phasor::Phasor(double freq, double phase,
 	       uint32_t vframes, double sr) :
-  m_freq(freq),m_phs(phase),
-  AudioBase(1,vframes,sr)
+  AudioBase(1,vframes,sr),
+  m_freq(freq),m_phs(phase)
 {
   m_incr = m_freq/m_sr;
   mod();
@@ -21,7 +21,7 @@ AuLib::Phasor::Phasor(double freq, double phase,
 
 const AuLib::Phasor&
 AuLib::Phasor::process(){
-  for(int i=0; i < m_vframes; i++){
+  for(uint32_t i=0; i < m_vframes; i++){
     m_vector[i] = m_phs;
     m_phs += m_incr;
     mod();

@@ -22,7 +22,7 @@ namespace AuLib {
 
   protected:
     const double *m_ir;
-    uint32_t m_irsize;
+    uint64_t m_irsize;
 
   public:
     /** Fir constructor \n\n
@@ -32,8 +32,8 @@ namespace AuLib {
     */  
   Fir(const FuncTable& ir, uint32_t vframes = def_vframes,
       double sr = def_sr) :
-    m_ir(ir.table()), m_irsize(ir.tsize()),
-      Delay(ir.tsize()*sr,0.,vframes,sr) { };
+    Delay(ir.tframes()*sr,0.,vframes,sr),
+    m_ir(ir.table()), m_irsize(ir.tframes()) { };
 
     /** apply convolution to a signal sig 
      */

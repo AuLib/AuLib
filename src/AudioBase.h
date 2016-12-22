@@ -22,24 +22,29 @@ namespace AuLib {
 
   protected:
     uint32_t m_nchnls;
-    double m_sr;
-    double m_vframes;
+    uint32_t m_vframes;
     std::vector<double> m_vector;
+    double m_sr;
     uint32_t m_error;
 
   public:
+    /** AudioBase constructor
+       nchnls - number of channels
+       vframes - number of frames in vector
+       sr - sampling rate
+    */
     AudioBase(uint32_t nchnls = def_nchnls,
-	      double vframes = def_vframes,
+	      uint32_t vframes = def_vframes,
 	      double sr = def_sr) :
       m_nchnls(nchnls),
       m_vframes(vframes),
       m_vector(vframes*nchnls,0.0),
-      m_error(0), m_sr(sr) { };
+      m_sr(sr), m_error(0) { };
     
     /** Scale the data vector
      */
     const AudioBase& operator*=(double scal){
-      for(int i=0; i < m_vector.size();i++)
+      for(uint32_t i=0; i < m_vector.size();i++)
 	m_vector[i] *= scal;
       return *this;
     }
@@ -47,7 +52,7 @@ namespace AuLib {
     /** Multiply the data vector by a sig vector
      */
     const AudioBase& operator*=(const double *sig){
-      for(int i=0; i < m_vector.size();i++)
+      for(uint32_t i=0; i < m_vector.size();i++)
 	m_vector[i] *= sig[i];
       return *this;
     }
@@ -64,7 +69,7 @@ namespace AuLib {
     /** DC offset the data vector
      */
     const AudioBase& operator+=(double offs){
-      for(int i=0; i < m_vector.size();i++)
+      for(uint32_t i=0; i < m_vector.size();i++)
 	m_vector[i] += offs;
       return *this;
     }
@@ -72,7 +77,7 @@ namespace AuLib {
     /** Add a vector sig to the data vector
      */
     const AudioBase& operator+=(const double *sig){
-      for(int i=0; i < m_vector.size();i++)
+      for(uint32_t i=0; i < m_vector.size();i++)
 	m_vector[i] += sig[i];
       return *this;
     }
@@ -129,7 +134,7 @@ namespace AuLib {
     double vector(uint32_t frndx, uint32_t chn)
       const {
       if(frndx < m_vframes)
-	return vector()[frndx*m_nchnls+chn];
+	return m_vector[frndx*m_nchnls+chn];
       else return 0.;
     }
 
@@ -138,7 +143,7 @@ namespace AuLib {
     */  
     double vector(uint32_t ndx) const {
       if(ndx < m_vframes*m_nchnls)
-	return vector()[ndx];
+	return m_vector[ndx];
       else return 0.;
     }
 

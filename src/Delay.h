@@ -16,14 +16,14 @@ namespace AuLib {
 
   /** Fixed or variable delay line with optional feedback 
       (Delay, Comb filter, Flanger)
-   */
+  */
   class Delay : public AudioBase {
 
   protected:
+    double m_fdb; 
+    uint64_t m_pos;
+ 
     AudioBase m_delay;
-    uint32_t m_pos;
-    double m_fdb;
-
   public:
     /** Delay constructor \n\n
 	dtime - delay time \n
@@ -31,9 +31,10 @@ namespace AuLib {
         sr - sampling rate
     */  
     Delay(double dtime, double fdb, uint32_t vframes = def_vframes,
-	  double sr = def_sr) : m_fdb(fdb),
-				m_pos(0), m_delay(1, dtime*sr, sr),
-				AudioBase(1,vframes,sr) { };
+	  double sr = def_sr) :
+      AudioBase(1,vframes,sr), 
+      m_fdb(fdb), m_pos(0),
+      m_delay(1,(uint64_t)(dtime*sr),sr){ };
 
     /** delay a signal sig for a fixed time
      */
@@ -54,14 +55,14 @@ namespace AuLib {
     virtual const Delay& process(const AudioBase& obj) {
       if(obj.vframes() == m_vframes &&
 	 obj.nchnls() == m_nchnls) {
-	  process(obj.vector());
+	process(obj.vector());
       } else m_error = AULIB_ERROR;
       return *this;
     }
     
     /** delay a signal in obj, optionally for dt seconds 
         and with optional feedback fdb.
-     */
+    */
     virtual const Delay& process(const AudioBase& obj, double dt, double fdb=0.) {
       m_fdb = fdb;
       if(obj.vframes() == m_vframes &&
@@ -76,7 +77,7 @@ namespace AuLib {
     
     /** delay a signal in obj for dt sec with variable delaytime sig
 	and with optional feedback fdb.
-     */
+    */
     virtual const Delay& process(const AudioBase& obj, const AudioBase& dt,
 				 double fdb=0.) {
       m_fdb = fdb;

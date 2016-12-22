@@ -34,8 +34,8 @@ namespace AuLib {
     */  
     LowP(double cf, uint32_t vframes = def_vframes,
 	 double sr = def_sr) :
-      m_freq(cf),
-      Filter(vframes,sr) {
+      Filter(vframes,sr),
+      m_freq(cf) {
       update();
     };
 

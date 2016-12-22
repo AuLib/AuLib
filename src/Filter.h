@@ -19,11 +19,11 @@ namespace AuLib {
   class Filter : public AudioBase {
 
   protected:
-    double m_scal;
+    double m_del[2];
     double m_a[3];
     double m_b[2];
-    double m_del[2];
-    
+    double m_scal;
+ 
     /** Filter kernel
      */
     virtual const double* filter(const double* sig);
@@ -41,11 +41,12 @@ namespace AuLib {
     */  
     Filter(const double* a, const double* b,
 	   uint32_t vframes = def_vframes, double sr = def_sr) :
-      m_del{0.,0.}, m_a{0.,0.,0.}, m_b{0.,0.}, m_scal(1.),
-      AudioBase(1,vframes,sr) {
-	std::copy(a,a+3,m_a);
-	std::copy(b,b+3,m_a);
-      };
+      AudioBase(1,vframes,sr),
+      m_del{0.,0.}, m_a{0.,0.,0.}, m_b{0.,0.}, m_scal(1.)
+    {
+      std::copy(a,a+3,m_a);
+      std::copy(b,b+3,m_a);
+    };
 
     /** Filter constructor \n\n
 	vframes - vector size \n
@@ -53,8 +54,9 @@ namespace AuLib {
     */  
     
     Filter(uint32_t vframes = def_vframes, double sr = def_sr) :
-      m_del{0.,0.}, m_a{0.,0.,0.}, m_b{0.,0.}, m_scal(1.),
-      AudioBase(1,vframes,sr) { };
+      AudioBase(1,vframes,sr),
+      m_del{0.,0.}, m_a{0.,0.,0.}, m_b{0.,0.}, m_scal(1.)
+    { };
 
     /** process a signal sig 
      */
@@ -65,9 +67,8 @@ namespace AuLib {
 
     /** process a signal sig with coefficients lists a and b
      */
-    virtual const double* process(const double* sig,
-				  const double* a,
-				  const double* b) {
+    const double* process(const double* sig,
+			  const double* a, const double* b) {
       std::copy(a,a+3,m_a);
       std::copy(b,b+3,m_a);
       return process(sig);
@@ -85,9 +86,8 @@ namespace AuLib {
 
     /** process a signal in obj with coefficients lists a and b
      */
-    virtual const Filter& process(const AudioBase& obj,
-				  const double* a,
-				  const double* b) {
+    const Filter& process(const AudioBase& obj,
+			  const double* a, const double* b) {
       std::copy(a,a+3,m_a);
       std::copy(b,b+3,m_a);
       return process(obj);

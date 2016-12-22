@@ -29,7 +29,7 @@ namespace AuLib {
      /** RMS processing
      */
     virtual const double* filter(const double* sig){
-      for(int i = 0; i < m_vframes; i++)
+      for(uint32_t i = 0; i < m_vframes; i++)
 	m_vector[i] = m_del = m_a*rect(sig[i]) - m_b*m_del;
       return vector();
     }

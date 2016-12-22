@@ -14,7 +14,7 @@ const double*
 AuLib::Balance::process(const double* sig, const double *cmp){
   const double *rms_cmp = m_cmp.process(cmp);
   const double *rms_sig = m_sig.process(sig);
-  for(int i=0; i < m_vframes; i++){
+  for(uint32_t i=0; i < m_vframes; i++){
     m_vector[i] = sig[i]*(rms_sig[i] > 0.0 ?
 			  rms_cmp[i]/rms_sig[i] : 1.);
   }

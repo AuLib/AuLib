@@ -19,56 +19,55 @@ namespace AuLib {
   class FuncTable : public AudioBase {
 
   protected:
-    uint32_t m_tsize;
+    uint64_t m_tframes;
     
     /** Normalise the table
      */ 
     void normalise_table(){
-      uint32_t n;
       double max = 0.;
-      for(n=0; n < vsamps(); n++)
+      for(uint64_t n=0; n < tframes()+2; n++)
 	max = m_vector[n] > max ?
 	  m_vector[n] : max;
       if(max)
-	for(n=0; n < vsamps(); n++)
+	for(uint64_t n=0; n < vsamps(); n++)
 	  m_vector[n] /= max;
     }
 
   public:
     
     /** FuncTable constructor \n\n
-	tsize - table size \n
+	tframes - table size \n
         nchnls - number of channels \n
         sr - sampling rate \n
     */ 
-    FuncTable(uint32_t tsize = def_tsize,
+    FuncTable(uint32_t tframes = def_tframes,
 	      uint32_t nchnls = def_nchnls,
 	      uint32_t sr = def_sr)
-      : m_tsize(tsize),
-	AudioBase(nchnls,tsize+2,sr) { };
+      : AudioBase(nchnls,tframes+2,sr),
+	m_tframes(tframes) { };
 
     /** FuncTable constructor from vector \n\n
         src - source vector \n
         norm - normalise table
-	tsize - table size \n
+	tframes - table size \n
         nchnls - number of channels \n
         sr - sampling rate \n
     */ 
     FuncTable(const double* src,
 	      bool norm = false,
-	      uint32_t tsize = def_tsize,
+	      uint32_t tframes = def_tframes,
 	      uint32_t nchnls = def_nchnls,
 	      uint32_t sr = def_sr)
-      : m_tsize(tsize),
-	AudioBase(nchnls,tsize+2,sr) {
+      : AudioBase(nchnls,tframes+2,sr),
+        m_tframes(tframes) {
       set(src);
       if(norm)
 	normalise_table();
     }
     
 
-    uint32_t tsize() const {
-      return m_tsize;
+    uint64_t tframes() const {
+      return m_tframes;
     }
 
     const double* table() const {

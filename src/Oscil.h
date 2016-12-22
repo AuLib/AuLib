@@ -21,16 +21,17 @@ namespace AuLib {
   class Oscil : public AudioBase {
 
   protected:
-  
-    double m_phs;  
-    double m_freq;
+
     double m_amp;
+    double m_freq;
+    FourierTable m_sine;
+    double m_phs;  
     double m_incr;
-    uint32_t m_tsize;
+    uint64_t m_tframes;
     const double *m_table;
     const double *m_am;
     const double *m_fm;
-    FourierTable m_sine;
+
 
     /** truncating oscillator process
      */
@@ -42,15 +43,15 @@ namespace AuLib {
       if(m_am != NULL) m_amp = m_am[ndx];
       if(m_fm != NULL) {
 	m_freq = m_fm[ndx];
-	m_incr = m_freq * m_tsize/m_sr;
+	m_incr = m_freq * m_tframes/m_sr;
       }
     }
   
     /** phase modulo
      */
     void mod(){
-      while(m_phs >= m_tsize) m_phs -= m_tsize;
-      while(m_phs < 0) m_phs += m_tsize;
+      while(m_phs >= m_tframes) m_phs -= m_tframes;
+      while(m_phs < 0) m_phs += m_tframes;
     }
 
   public:
@@ -102,7 +103,7 @@ namespace AuLib {
     virtual const Oscil& process(double amp, double freq){
       m_amp = amp;
       m_freq = freq;
-      m_incr = m_freq*m_tsize/m_sr;
+      m_incr = m_freq*m_tframes/m_sr;
       return process();
     }
 
@@ -135,7 +136,7 @@ namespace AuLib {
     virtual const double* process(const double* amp, double freq){
       m_am = amp;
       m_freq = freq;
-      m_incr = m_freq*m_tsize/m_sr;
+      m_incr = m_freq*m_tframes/m_sr;
       process();
       return vector();
     }
@@ -157,7 +158,7 @@ namespace AuLib {
     */ 
     virtual Oscil& process(const AudioBase& obja, double freq){
       m_freq = freq;
-      m_incr = m_freq*m_tsize/m_sr;
+      m_incr = m_freq*m_tframes/m_sr;
       process(obja);
       return *this;
     }
@@ -188,7 +189,7 @@ namespace AuLib {
 	m_fm = objf.vector();
         process();
       } else m_error = AULIB_ERROR;
-     return *this;
+      return *this;
     }
  
   };

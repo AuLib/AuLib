@@ -78,7 +78,7 @@ namespace AuLib {
 	destination, returning the vector current 
         framecount.
     */
-    uint32_t write(const double *sig,
+    uint64_t write(const double *sig,
 		   uint32_t frames = def_vframes);
 
     /** Writes the audio vector in obj to the vector
@@ -87,7 +87,8 @@ namespace AuLib {
     */
     uint64_t write(const AudioBase& obj){
       if(obj.nchnls() == m_nchnls)
-	return write(obj.vector(),obj.vframes());
+	return write(obj.vector(),
+		     (uint32_t) obj.vframes());
       else m_error = AULIB_ERROR;
       return 0;
     }

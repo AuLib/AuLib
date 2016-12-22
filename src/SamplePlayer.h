@@ -73,7 +73,7 @@ namespace AuLib {
     */
     virtual const SamplePlayer& process(double amp, double pitch){
       m_amp = amp;
-      m_freq = pitch*m_sr/m_tsize;
+      m_freq = pitch*m_sr/m_tframes;
       m_incr = pitch;
       process();
       return *this;

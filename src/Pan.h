@@ -29,7 +29,7 @@ namespace AuLib {
     */  
   Pan(double pos = .5,
       uint32_t vframes = def_vframes) :
-    m_pos(pos), AudioBase(2,vframes) { };
+    AudioBase(2,vframes), m_pos(pos) { };
 
     /** Pan a signal sig 
      */

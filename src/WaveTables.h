@@ -21,11 +21,11 @@ namespace AuLib {
   struct SawTable : public FourierTable {
     /** SawTable constructor \n\n
 	harms - number of harmonics \n
-	tsize - table size \n
+	tframes - table size \n
     */
     SawTable(uint32_t harms,
-	     uint32_t tsize=def_tsize) :
-      FourierTable(harms,SAW,tsize){};
+	     uint64_t tframes=def_tframes) :
+      FourierTable(harms,SAW,tframes){};
   };
 
   /** Square wave table
@@ -33,11 +33,11 @@ namespace AuLib {
   struct SquareTable : public FourierTable {
     /** SquareTable constructor \n\n
 	harms - number of harmonics \n
-	tsize - table size \n
+	tframes - table size \n
     */ 
     SquareTable(uint32_t harms,
-		uint32_t tsize=def_tsize) :
-      FourierTable(harms, SQUARE, tsize){};
+		uint64_t tframes=def_tframes) :
+      FourierTable(harms, SQUARE, tframes){};
   };
 
   /** Triangle wave table
@@ -45,11 +45,11 @@ namespace AuLib {
   struct TriangleTable : public FourierTable {
     /** TriangleTable constructor \n\n
 	harms - number of harmonics \n
-	tsize - table size \n
+	tframes - table size \n
     */
     TriangleTable(uint32_t harms,
-		  uint32_t tsize=def_tsize) :
-      FourierTable(harms, TRIANGLE, tsize){};
+		  uint64_t tframes=def_tframes) :
+      FourierTable(harms, TRIANGLE, tframes){};
   };
 
   

@@ -34,8 +34,7 @@ namespace AuLib {
     */  
     BandP(double cf, double bw, uint32_t vframes = def_vframes,
 	  double sr = def_sr) :
-      m_bw(bw),
-      LowP(cf,vframes,sr) {
+      LowP(cf,vframes,sr), m_bw(bw) {
         update();
     };
 
@@ -64,6 +63,7 @@ namespace AuLib {
       filter(sig);
       return vector();
     }
+    
     /** process a signal in obj with cutoff freq cf and 
 	bandwidth bw
     */
