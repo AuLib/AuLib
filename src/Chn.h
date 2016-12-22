@@ -28,9 +28,8 @@ namespace AuLib {
 	vframes - vector size \n
         sr - sampling rate
     */  
-  Chn(uint32_t channel = 1., uint32_t vframes = def_vframes,
-      double sr = def_sr) :
-    AudioBase(1,vframes,sr), 
+  Chn(uint32_t channel = 1, uint32_t vframes = def_vframes) :
+    AudioBase(1,vframes), 
     m_chn(channel) { };
 
     /** extracts a channel from sig holding nchnls channels
@@ -41,6 +40,7 @@ namespace AuLib {
 	    i < m_vframes; i++, j += nchnls)
 	  m_vector[i] = sig[j];
       else set(0.);
+      return vector();
     }
 
     /** extracts channel chn from sig holding nchnls channels

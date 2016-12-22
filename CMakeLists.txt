@@ -7,7 +7,7 @@ set(CMAKE_BUILD_TYPE "DEBUG")
 
 # Project target and version 
 project(AuLibProject)
-set(AuLib_MAJOR_V 0)
+set(AuLib_MAJOR_V 1)
 set(AuLib_MINOR_V 0)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
@@ -15,8 +15,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
 -DAULIB_MINOR_V=${AuLib_MINOR_V}")
 
 if(CMAKE_BUILD_TYPE MATCHES DEBUG)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBETA=1 \
   -Wall -Werror -Wno-unused-function -Wno-overloaded-virtual")
+else()
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBETA=0")
 ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
 
 include_directories("${PROJECT_SOURCE_DIR}/src")

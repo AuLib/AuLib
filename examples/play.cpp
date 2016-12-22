@@ -23,7 +23,7 @@ int main(int argc, const char **argv){
       if(output.error() == AULIB_NOERROR) {
 	for(uint64_t i=0;i < input.dur();i+=def_vframes){
 	  input.read();
-	  output.write(input.vector());
+	  output.write(input);
 	}
       } else cout << output.error_message() << "\n";
     } else cout << input.error_message() << " \n";
