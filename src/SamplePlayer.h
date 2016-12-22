@@ -19,6 +19,12 @@ namespace AuLib {
       with linear interpolation
   */
   class SamplePlayer : public Oscili {
+    
+  protected:
+    
+    /** Oscillator for multichannel tables
+     */
+    virtual void oscillator();
 
   public:
     /** SamplePlayer constructor \n\n
@@ -38,13 +44,16 @@ namespace AuLib {
 	     vframes,sr)
     {
       m_incr = pitch;
+      m_nchnls = ftable.nchnls();
+      if(m_nchnls > 1)
+	m_vector.resize(m_vframes*m_nchnls);
     }
 
 
     /** Process one vector of audio
      */
     virtual const SamplePlayer& process() {
-      Oscili::oscillator();
+      m_nchnls > 1 ? oscillator() : Oscili::oscillator();
       return *this;
     }
 
@@ -53,7 +62,7 @@ namespace AuLib {
     */
     virtual const SamplePlayer& process(double amp) {
       m_amp = amp;
-      Oscili::oscillator();
+      process();
       return *this;
     }
 
@@ -66,7 +75,7 @@ namespace AuLib {
       m_amp = amp;
       m_freq = pitch*m_sr/m_tsize;
       m_incr = pitch;
-      Oscili::oscillator();
+      process();
       return *this;
     }
   

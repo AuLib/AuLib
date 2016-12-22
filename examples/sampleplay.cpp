@@ -17,9 +17,9 @@ using namespace std;
 
 int main(int argc, const char **argv){
   if(argc > 1){
-    SampleTable wave(argv[1]);
+    SampleTable wave(argv[1], 0);
     SamplePlayer sig(wave);
-    SoundOut output("dac");
+    SoundOut output("dac", sig.nchnls());
     cout << Info::version();
     if(wave.error() == AULIB_NOERROR) {
       if(sig.error() == AULIB_NOERROR) {
