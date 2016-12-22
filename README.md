@@ -35,7 +35,7 @@ $ make doc
 will build the documentation and place it under ./docs. You will
 need doxygen to be installed in your system.
 
-The latest built documentation is available at
+The latest build of the documentation is available at
 
 [http://vlazzarini.github.io/aulib](http://vlazzarini.github.io/aulib)
 
