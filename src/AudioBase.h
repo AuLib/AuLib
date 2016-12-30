@@ -159,6 +159,18 @@ namespace AuLib {
       else return 0.;
     }
 
+    /** Set the current vector size in frames. Clears
+        the vector and returns the updated vector 
+        frame size. Vector is resized if the requested
+        frame size cannot be accommodated.
+     */
+    uint32_t vframes(uint32_t frames) {
+      m_vframes = frames;
+      if(m_vframes*m_nchnls > vsamps())
+	m_vector.resize(m_vframes*m_nchnls);
+      set(0.);
+      return m_vframes;
+    }
 
     /** Get current vector size in frames
      */
