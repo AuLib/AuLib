@@ -90,6 +90,27 @@ namespace AuLib {
 	return *this += obj.vector();
       else return *this;
     }
+
+    /** Get a reference of 
+        a single sample at sample pos ndx 
+	off the data vector
+    */  
+    double &operator[](uint32_t ndx) {
+      if(ndx < vsamps())
+	return m_vector[ndx];
+      else return m_vector[vsamps()];
+    }
+
+     /** Get a constant reference of 
+         a single sample at sample pos ndx 
+	  off the data vector
+    */  
+    const double &operator[](uint32_t ndx) const {
+      if(ndx < vsamps())
+	return m_vector[ndx];
+      else return m_vector[vsamps()];
+    }
+
     
     /** set the data vector to a sig vector
         return the AudioBase obj reference
@@ -138,22 +159,14 @@ namespace AuLib {
       else return 0.;
     }
 
-    /** Get a single sample at sample pos ndx 
-	off the data vector
-    */  
-    double vector(uint32_t ndx) const {
-      if(ndx < m_vframes*m_nchnls)
-	return m_vector[ndx];
-      else return 0.;
-    }
 
-    /** Get vector size in frames
+    /** Get current vector size in frames
      */
     uint32_t vframes() const {
       return m_vframes;
     }
 
-   /** Get vector size in samples
+   /** Get (max/allocated) vector size in samples
      */
     uint32_t vsamps() const {
       return m_vector.size();

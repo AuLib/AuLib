@@ -15,7 +15,7 @@
 const double*
 AuLib::Delay::process(const double* sig){
   for(uint32_t i = 0; i < m_vframes; i++) {
-    m_vector[i] = m_delay.set(sig[i] + m_delay.vector(m_pos)*m_fdb, m_pos);
+    m_vector[i] = m_delay.set(sig[i] + m_delay[m_pos]*m_fdb, m_pos);
     m_pos = m_pos == m_delay.vframes()-1 ? 0. : m_pos+1;
   }
   return vector();
@@ -30,8 +30,8 @@ AuLib::Delay::process(const double* sig, double dt, double fdb){
   for(uint32_t i = 0; i < m_vframes; i++) {
       rp = m_pos - ds;
       if(rp < 0) rp += m_delay.vframes();
-      m_vector[i] = m_delay.vector(rp);
-      m_delay.set(sig[i] + m_vector[i]*m_fdb, m_pos);
+      m_vector[i] = m_delay[rp];
+      m_delay[m_pos] = sig[i] + m_vector[i]*m_fdb;
       m_pos = m_pos == m_delay.vframes()-1 ? 0. : m_pos+1;
   }
   return vector();
@@ -49,11 +49,11 @@ AuLib::Delay::process(const double* sig, const double *dt, double fdb){
         if(rp < 0) rp += m_delay.vframes();
         irp = (uint32_t) rp;
 	frac = rp - irp;
-	a = m_delay.vector(irp);
+	a = m_delay[irp];
 	if(++irp == m_delay.vframes()-1) irp = 0;
-	b = m_delay.vector(irp);
+	b = m_delay[irp];
         m_vector[i] =  a + frac*(b-a);
-        m_delay.set(sig[i] + m_vector[i]*m_fdb, m_pos);
+        m_delay[m_pos] = sig[i] + m_vector[i]*m_fdb;
         m_pos = m_pos == m_delay.vframes()-1 ? 0. : m_pos+1;
   }
   return vector();
@@ -63,7 +63,7 @@ const double*
 AuLib::AllPass::process(const double* sig){
   double y;
   for(uint32_t i = 0; i < m_vframes; i++) {
-    y = sig[i] + m_fdb*m_delay.vector(m_pos);
+    y = sig[i] + m_fdb*m_delay[m_pos];
     m_vector[i] = m_delay.set(y, m_pos) - m_fdb*y;
     m_pos = m_pos == m_delay.vframes()-1 ? 0. : m_pos+1;
   }
@@ -72,17 +72,16 @@ AuLib::AllPass::process(const double* sig){
 
 const double*
 AuLib::Fir::process(const double *sig){ 
-  double out=0; int32_t rp;
+  double out=0;
   for(uint32_t i=0; i < m_vframes; i++){
-    for(uint32_t j=0; j < m_irsize; j++){
-      rp = m_pos+j;
-      rp = (rp >= 0 ? (rp < m_irsize ? rp : rp - m_irsize) : rp + m_irsize);  
-      out += (m_delay.vector(rp)*m_ir[m_irsize-1-j]);
+    m_delay[m_pos] = sig[i];
+    m_pos = m_pos != m_irsize-1 ? m_pos+1 : 0;
+    for(uint32_t j=0, rp=m_pos; j < m_irsize; j++){
+      out += m_delay[rp]*m_ir[m_irsize-1-j];
+      rp = rp != m_irsize ? rp+1 : 0;  
     }
-    m_delay.set(sig[i], m_pos);
     m_vector[i] = out;
     out = 0.;
-    m_pos = (m_pos != m_irsize-1 ? m_pos+1 : 0);
   }
   return vector();
 }

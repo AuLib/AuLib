@@ -47,7 +47,7 @@ namespace AuLib {
       }
     }
   
-    /** phase modulo
+    /** phase incr & modulo 
      */
     void mod(){
       while(m_phs >= m_tframes) m_phs -= m_tframes;
