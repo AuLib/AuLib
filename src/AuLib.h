@@ -192,10 +192,10 @@
 #include <sstream>
 #include <limits>
 
-#define NONCOPYABLE(A)				\
-  private:					\
-  A(const A&);					\
-  A& operator=(A)				\
+#define NONCOPYABLE(A)\
+  public:\
+  A(const A&) = delete;	\
+  A& operator=(A) = delete \
 
 namespace AuLib {
 

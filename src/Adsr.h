@@ -30,9 +30,7 @@ namespace AuLib {
     Adsr(double amp, double att, double dec, double sus,
 	 double rel, uint32_t vframes = def_vframes, double sr = def_sr) :
       Envel(rel,vframes,sr) {
-      double amps[2] = {amp, sus};
-      double times[2] = {att, dec};
-      m_segs = Segments(0.,amps,times,2);
+      m_segs = Segments(0.,{amp,sus},{att,dec});
       m_time = m_segs.durs()[0];
       m_incr = m_segs.incrs()[0];
       m_y = m_segs.start();
@@ -43,9 +41,7 @@ namespace AuLib {
     */
     void reset(double amp, double att, double dec,
 	       double sus, double rel){
-      double amps[2] = {amp, sus};
-      double times[2] = {att, dec};
-      m_segs = Segments(0.,amps,times,2);  
+      m_segs = Segments(0.,{amp,sus},{att,dec});
       retrig();
     }
     

@@ -17,9 +17,7 @@ using namespace AuLib;
 using namespace std;
 
 int main(){
-  double amps[] = {2.,1.5,1.};
-  double durs[] = {.25,1.25,.5};
-  Segments segs(1.,amps,durs,3,false);
+  Segments segs(1.,{2.,1.5,1.},{.25,1.25,.5},false);
   Adsr amp(1.,0.01,1.,0.7,0.1);
   EnvelTable etab(segs, false);
   Oscili freq(440.,1.,etab);

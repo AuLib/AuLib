@@ -39,9 +39,8 @@ namespace AuLib {
        sr - sampling rate \n
     */
     Segments(double start,
-	     const double *endpts,
-	     const double *times,
-	     uint32_t nsegs,
+	     const std::vector<double> endpts,
+	     const std::vector<double> times,
 	     bool linear = true,
 	     double sr = def_sr);
 

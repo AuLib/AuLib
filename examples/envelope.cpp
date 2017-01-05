@@ -16,9 +16,7 @@ using namespace AuLib;
 using namespace std;
 
 int main(){
-  double amps[] = {1.,.5,.0};
-  double durs[] = {.5,1.,.5};
-  Segments segs(0.,amps,durs,3);
+  Segments segs(0.,{1.,.5,.0},{.5,1.,.5});
   Envel env(segs,2.);
   Oscili sig;
   SoundOut output("dac");

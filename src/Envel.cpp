@@ -11,26 +11,26 @@
 #include "Envel.h"
 
 AuLib::Segments::Segments(double start,
-			  const double *endpts,
-			  const double *times,
-			  uint32_t nsegs,
+			  const std::vector<double> endpts,
+			  const std::vector<double> times,
 			  bool linear,
 			  double sr) :
   m_start(start),
-  m_nsegs(nsegs),
+  m_nsegs(endpts.size()),
   m_linear(linear),
   m_frames(0),
-  m_incrs(nsegs),
-  m_durs(nsegs),
-  m_endpts(nsegs)
+  m_incrs(endpts.size()),
+  m_durs(endpts.size()),
+  m_endpts(endpts.size())
 {
-  
   double y0 = linear ? start :
     start > 0 ? start : (m_start = db_min);
   double y1;
   for(uint32_t i=0; i < m_nsegs; i++) {
     y1 = m_endpts[i] = endpts[i];
-    m_durs[i] = times[i]*sr;
+    if(times.size() > i)
+     m_durs[i] = times[i]*sr;
+    else m_durs[i] = 1;
     m_frames += m_durs[i];
     if(m_durs[i] <= 0)
       m_durs[i] = 1;
