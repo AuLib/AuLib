@@ -41,8 +41,8 @@ namespace AuLib {
 	phase - phase offset \n
 	tframes - table size \n
     */
-    FourierTable(uint32_t harms=0,
-		 double *amps=NULL,
+    FourierTable(uint32_t harms=1,
+		 double *amps=nullptr,
 		 double phase=0.,
 		 uint64_t tframes = def_tframes);
   

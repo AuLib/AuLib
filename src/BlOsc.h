@@ -83,7 +83,7 @@ namespace AuLib {
 	     phase,vframes,sr),
       m_waves(waveset.tables())
     {
-      if(m_waves == NULL) {
+      if(m_waves == nullptr) {
 	m_vframes = 0;
 	m_error = AULIB_ERROR;
 	return;
@@ -91,20 +91,19 @@ namespace AuLib {
       tselect();
     }
 
-
-      /** Process one vector of audio
-       */
-      virtual const BlOsc& process() {
-	Oscili::oscillator();
-	return *this;
-      }
+    /** Process one vector of audio
+     */
+    virtual const BlOsc& process() {
+      Oscili::lookup();
+      return *this;
+    }
 
     /** Process one vector of audio
 	with amplitude amp
     */
     virtual const BlOsc& process(double amp) {
       m_amp = amp;
-      Oscili::oscillator();
+      Oscili::lookup();
       return *this;
     }
 
@@ -118,7 +117,7 @@ namespace AuLib {
       m_freq = freq;
       m_incr = m_freq*m_tframes/m_sr;
       tselect();
-      Oscili::oscillator();
+      Oscili::lookup();
       return *this;
     }
   

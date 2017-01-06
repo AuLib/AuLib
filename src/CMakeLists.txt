@@ -13,6 +13,7 @@ Filter.cpp
 Tone.cpp
 Balance.cpp
 Delay.cpp
+Tap.cpp
 SoundIn.cpp
 )
 

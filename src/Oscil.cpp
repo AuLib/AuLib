@@ -16,49 +16,40 @@
 AuLib::Oscil::Oscil(double amp, double freq,
 		    double phase, uint32_t vframes,
 		    double sr) :
-  AudioBase(1,vframes,sr),
-  m_amp(amp), m_freq(freq), m_sine(1),
-  m_phs(phase), m_tframes(def_tframes),
-  m_table(NULL), m_am(NULL),
-  m_fm(NULL)
+  TableRead(phase,false,true,vframes,sr),
+  m_amp(amp), m_freq(freq), 
+  m_am(NULL), m_fm(NULL)
 {
-  m_table = m_sine.table();
   m_incr = m_freq*m_tframes/m_sr;
-  m_phs *= m_tframes;
-  mod();
+  m_phs = mod(m_phs*m_tframes);
 }
 
 AuLib::Oscil::Oscil(double amp, double freq,
 		    const FuncTable& ftable, double phase,
 		    uint32_t vframes, double sr) :
-  AudioBase(1,vframes,sr),
-  m_amp(amp), m_freq(freq), m_sine(0,NULL,0.,0),
-  m_phs(phase), m_tframes(ftable.tframes()),
-  m_table(ftable.table()),
-  m_am(NULL), m_fm(NULL)
+  TableRead(ftable,phase,false,true,vframes,sr),
+  m_amp(amp), m_freq(freq), 
+  m_am(nullptr), m_fm(nullptr)
 {
-  if(m_table == NULL){
+  if(m_table == nullptr) {
     m_vframes = 0;
     m_error = AULIB_ERROR;
-    return;
-  }
+  } 
   m_incr = m_freq*m_tframes/m_sr;
-  m_phs *= m_tframes;
-  mod();
+  m_phs = mod(m_phs*m_tframes);
 }
 
 void
-AuLib::Oscil::oscillator(){
+AuLib::Oscil::lookup(){
   for(uint32_t i=0; i < m_vframes; i++){
     am_fm(i);
     m_vector[i] = m_amp*m_table[(uint32_t)m_phs];
-    m_phs += m_incr;
-    mod();
+    m_phs = mod(m_phs+m_incr);
   }
 }
 
 void
-AuLib::Oscili::oscillator(){
+AuLib::Oscili::lookup(){
   uint32_t phi;
   double frac,a,b;
   for(uint32_t i=0; i < m_vframes; i++){
@@ -69,13 +60,12 @@ AuLib::Oscili::oscillator(){
     b = m_table[phi+1];
     m_vector[i] = 
       m_amp*(a + frac*(b - a));
-    m_phs += m_incr;
-    mod();
+    m_phs = mod(m_phs+m_incr);
   }
 }
 
 void
-AuLib::Oscilic::oscillator(){
+AuLib::Oscilic::lookup(){
   uint32_t phi;
   double frac,a,b,c,d;
   double tmp, fracsq, fracb;
@@ -94,13 +84,12 @@ AuLib::Oscilic::oscillator(){
       (fracb*(- a - 3.f*c + tmp)/6.f +
        fracsq*((a+c)/2.f - b) +
        frac*(c + (-2.f*a - tmp)/6.f) + b);
-    m_phs += m_incr;
-    mod();
+    m_phs = mod(m_phs+m_incr);
   }
 }
 
 void
-AuLib::SamplePlayer::oscillator(){
+AuLib::SamplePlayer::lookup(){
   uint32_t phi;
   double frac,a,b;
   for(uint32_t i=0; i < m_vframes; i++){
@@ -114,7 +103,6 @@ AuLib::SamplePlayer::oscillator(){
       m_vector[i*m_nchnls+j] = 
 	m_amp*(a + frac*(b - a));
     }
-    m_phs += m_incr;
-    mod();
+    m_phs = mod(m_phs+m_incr);
   }
 }

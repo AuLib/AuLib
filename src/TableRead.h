@@ -12,6 +12,7 @@
 #define _TABLEREAD_H
 #include "AudioBase.h"
 #include "FuncTable.h"
+#include "FourierTable.h"
 
 namespace AuLib {
 
@@ -20,6 +21,7 @@ namespace AuLib {
   class TableRead : public AudioBase {
 
   protected:
+    std::unique_ptr<FourierTable> m_sine;
     const double *m_table;
     double m_phs;
     bool  m_norm;
@@ -51,20 +53,41 @@ namespace AuLib {
 	norm - normalisation switch \n
 	wrap - wraparound switch \n
 	vframes - vector size \n
+        sr - sampling rate
     */
     TableRead(const FuncTable& ftable, double phase = 0.,
 	      bool norm = true, bool wrap = true,
-	      uint32_t vframes = def_vframes):
-      AudioBase(1,vframes),
+	      uint32_t vframes = def_vframes,
+	      double sr = def_sr):
+      AudioBase(1,vframes,sr),
+      m_sine(nullptr),
       m_table(ftable.table()), m_phs(phase),
-      m_norm(norm), m_wrap(wrap),
+      m_norm(norm), m_wrap(wrap), 
       m_tframes(ftable.tframes()) 
     {
-      if(m_table == NULL) {
+      if(m_table == nullptr) {
 	m_vframes = 0;
 	m_error = AULIB_ERROR;
       } 
     };
+
+    /** TableRead constructor \n\n
+	phase - initial phase \n
+	norm - normalisation switch \n
+	wrap - wraparound switch \n
+	vframes - vector size \n
+        sr - sampling rate \n
+    */
+    TableRead(double phase = 0.,
+	      bool norm = true, bool wrap = true,
+	      uint32_t vframes = def_vframes,
+	      double sr = def_sr):
+      AudioBase(1,vframes),
+      m_sine(new FourierTable),
+      m_table(m_sine->table()), m_phs(phase),
+      m_norm(norm), m_wrap(wrap),
+      m_tframes(m_sine->tframes()) 
+    { };
   
     /** takes in a frame of phase values
 	and lookups up the table values

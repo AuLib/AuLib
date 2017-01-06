@@ -22,8 +22,8 @@ namespace AuLib {
   protected:
     double m_fdb; 
     uint64_t m_pos;
- 
     AudioBase m_delay;
+    
   public:
     /** Delay constructor \n\n
 	dtime - delay time \n
@@ -34,7 +34,7 @@ namespace AuLib {
 	  double sr = def_sr) :
       AudioBase(1,vframes,sr), 
       m_fdb(fdb), m_pos(0),
-      m_delay(1,(uint64_t)(dtime*sr),sr){ };
+      m_delay(1,(uint64_t)(dtime >= 0. ? dtime*sr : 1),sr){ };
 
     /** delay a signal sig for a fixed time
      */
@@ -88,6 +88,19 @@ namespace AuLib {
 	process(obj.vector(), dt.vector());
       } else m_error = AULIB_ERROR;
       return *this;
+    }
+
+    /** get the current write position
+     */
+    uint32_t pos() const {
+      return m_pos;
+    }
+
+    /** get a reference to the delay 
+        line.
+    */
+    const AudioBase& delayline() const {
+      return m_delay;
     }
 
   };

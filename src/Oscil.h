@@ -11,49 +11,36 @@
 #ifndef _OSCIL_H
 #define _OSCIL_H
 
-#include "AudioBase.h"
-#include "FourierTable.h"
+#include "TableRead.h"
 
 namespace AuLib {
   
   /** Truncating oscillator
    */
-  class Oscil : public AudioBase {
+  class Oscil : public TableRead {
 
   protected:
 
     double m_amp;
-    double m_freq;
-    FourierTable m_sine;
-    double m_phs;  
+    double m_freq; 
     double m_incr;
-    uint64_t m_tframes;
-    const double *m_table;
     const double *m_am;
     const double *m_fm;
 
-
     /** truncating oscillator process
      */
-    virtual void oscillator();
+    virtual void lookup();
 
     /** AM/FM processing
      */
     void am_fm(uint32_t ndx){
-      if(m_am != NULL) m_amp = m_am[ndx];
-      if(m_fm != NULL) {
+      if(m_am != nullptr) m_amp = m_am[ndx];
+      if(m_fm != nullptr) {
 	m_freq = m_fm[ndx];
 	m_incr = m_freq * m_tframes/m_sr;
       }
     }
   
-    /** phase incr & modulo 
-     */
-    void mod(){
-      while(m_phs >= m_tframes) m_phs -= m_tframes;
-      while(m_phs < 0) m_phs += m_tframes;
-    }
-
   public:
     
     /** Sinusoidal Oscil constructor \n\n
@@ -84,7 +71,7 @@ namespace AuLib {
     /** Process one vector of audio
      */
     virtual const Oscil& process() {
-      oscillator();
+      lookup();
       return *this;
     }
   
@@ -111,7 +98,7 @@ namespace AuLib {
 	with amplitude and (optional) freq modulation
     */
     virtual const double*
-    process(const double* amp, const double* freq = NULL){
+    process(const double* amp, const double* freq = nullptr){
       m_am = amp;
       m_fm = freq;
       process();
@@ -156,7 +143,7 @@ namespace AuLib {
 	with amplitude modulation from obja
 	and frequency freq
     */ 
-    virtual Oscil& process(const AudioBase& obja, double freq){
+    virtual const Oscil& process(const AudioBase& obja, double freq){
       m_freq = freq;
       m_incr = m_freq*m_tframes/m_sr;
       process(obja);
@@ -167,7 +154,7 @@ namespace AuLib {
 	with amplitude amp 
 	and freq modulation from objf
     */
-    virtual Oscil& process(double amp, const AudioBase& objf){
+    virtual const Oscil& process(double amp, const AudioBase& objf){
       if(objf.vframes() == m_vframes &&
 	 objf.nchnls() == 1) {
 	m_amp = amp;
@@ -180,7 +167,7 @@ namespace AuLib {
     /** Process one vector of audio
 	with amplitude from obja and freq modulation from objf
     */
-    virtual Oscil& process(const AudioBase& obja, const AudioBase& objf){
+    virtual const Oscil& process(const AudioBase& obja, const AudioBase& objf){
       if(obja.vframes() == m_vframes &&
 	 objf.vframes() == m_vframes &&
 	 obja.nchnls() == 1 &&

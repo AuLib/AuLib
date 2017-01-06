@@ -23,7 +23,7 @@ namespace AuLib {
 
     /** interpolating oscillator process
      */
-    virtual void oscillator();
+    virtual void lookup();
     
   public:
     /** Sinusoidal Oscili constructor \n\n

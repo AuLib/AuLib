@@ -23,7 +23,7 @@ AuLib::Delay::process(const double* sig){
 
 const double*
 AuLib::Delay::process(const double* sig, double dt, double fdb){
-  uint32_t ds = dt < 0. ? 0 : dt*m_sr;
+  uint32_t ds = dt*m_sr;
   int32_t  rp;
   m_fdb = fdb;
   if(ds > m_delay.vframes()) ds = m_delay.vframes();

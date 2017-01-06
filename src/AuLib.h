@@ -149,7 +149,7 @@
  *     virtual const NewClass& process(const AudioBase& obj){
  *       if(obj.vframes() == m_vframes &&
  * 	 obj.nchnls() == m_nchnls) {
- * 	process(obj.vector());
+ * 	   process(obj.vector());
  *       } else m_error = AULIB_ERROR;
  *       return *this;
  *     }

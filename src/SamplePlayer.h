@@ -24,7 +24,7 @@ namespace AuLib {
     
     /** Oscillator for multichannel tables
      */
-    virtual void oscillator();
+    virtual void lookup();
 
   public:
     /** SamplePlayer constructor \n\n
@@ -53,7 +53,7 @@ namespace AuLib {
     /** Process one vector of audio
      */
     virtual const SamplePlayer& process() {
-      m_nchnls > 1 ? oscillator() : Oscili::oscillator();
+      m_nchnls > 1 ? lookup() : Oscili::lookup();
       return *this;
     }
 
@@ -81,8 +81,8 @@ namespace AuLib {
   
   };
 
- /*! \class SamplePlayer SamplePlayer.h AuLib/SamplePlayer.h
- */
+  /*! \class SamplePlayer SamplePlayer.h AuLib/SamplePlayer.h
+   */
   
 }
 #endif

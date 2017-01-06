@@ -22,7 +22,7 @@ namespace AuLib {
   protected:
     /** cubic oscillator process
      */
-    virtual void oscillator();
+    virtual void lookup();
     
   public:
     /** Sinusoidal Oscilic constructor \n\n
