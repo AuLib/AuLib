@@ -14,56 +14,53 @@
 
 namespace AuLib {
 
-  /** Pan a mono input signal using 
-      an equal-power algorithm
+/** Pan a mono input signal using
+    an equal-power algorithm
+*/
+class Pan : public AudioBase {
+
+protected:
+  double m_pos;
+
+public:
+  /** Pan constructor \n\n
+      pos - pan position (0 - 1) \n
+      vframes - vector size \n
   */
-  class Pan : public AudioBase {
+  Pan(double pos = .5, uint32_t vframes = def_vframes)
+      : AudioBase(2, vframes), m_pos(pos){};
 
-  protected:
-    double m_pos;
-  
-  public:
-    /** Pan constructor \n\n
-	pos - pan position (0 - 1) \n
-	vframes - vector size \n
-    */  
-  Pan(double pos = .5,
-      uint32_t vframes = def_vframes) :
-    AudioBase(2,vframes), m_pos(pos) { };
-
-    /** Pan a signal sig 
-     */
-    virtual const double* process(const double* sig);
-
-    /** Pan a signal sig according to position pos (0-1)
-     */
-    virtual const double* process(const double* sig, double pos) {
-      m_pos = pos;
-      return process(sig);
-    }
-
-    /** Pan a signal in obj
-     */
-    virtual const Pan& process(const AudioBase& obj) {
-      if(obj.vframes() == m_vframes &&
-	 obj.nchnls() == 1) {
-	process(obj.vector());
-      } else m_error = AULIB_ERROR;
-      return *this;
-    }
-
-    /** Pan a signal in obj according to position pos (0-1)
-     */
-    virtual const Pan& process(const AudioBase& obj, double pos) {
-      m_pos = pos;
-      process(obj);
-      return *this;
-    }    
-
-  };
-
-  /*! \class Pan Pan.h AuLib/Pan.h
+  /** Pan a signal sig
    */
+  virtual const double *process(const double *sig);
 
+  /** Pan a signal sig according to position pos (0-1)
+   */
+  virtual const double *process(const double *sig, double pos) {
+    m_pos = pos;
+    return process(sig);
+  }
+
+  /** Pan a signal in obj
+   */
+  virtual const Pan &process(const AudioBase &obj) {
+    if (obj.vframes() == m_vframes && obj.nchnls() == 1) {
+      process(obj.vector());
+    } else
+      m_error = AULIB_ERROR;
+    return *this;
+  }
+
+  /** Pan a signal in obj according to position pos (0-1)
+   */
+  virtual const Pan &process(const AudioBase &obj, double pos) {
+    m_pos = pos;
+    process(obj);
+    return *this;
+  }
+};
+
+/*! \class Pan Pan.h AuLib/Pan.h
+ */
 }
 #endif

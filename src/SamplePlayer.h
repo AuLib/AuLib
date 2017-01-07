@@ -15,74 +15,65 @@
 
 namespace AuLib {
 
-  /** Sample playback oscillator 
-      with linear interpolation
-  */
-  class SamplePlayer : public Oscili {
-    
-  protected:
-    
-    /** Oscillator for multichannel tables
-     */
-    virtual void lookup();
+/** Sample playback oscillator
+    with linear interpolation
+*/
+class SamplePlayer : public Oscili {
 
-  public:
-    /** SamplePlayer constructor \n\n
-	table - function table \n
-	amp - amplitude \n
-	pitch - playback pitch \n
-	phase - init phase (0-1) \n 
-	vframes - vector size \n
-	sr - sampling rate \n
-    */
-    SamplePlayer(const FuncTable& ftable,
-		 double amp = 0., double pitch = 0.,
-		 double phase = 0.,
-		 uint32_t vframes = def_vframes, 
-		 double sr = def_sr) :
-      Oscili(amp,0.,ftable,phase,
-	     vframes,sr)
-    {
-      m_incr = pitch;
-      m_nchnls = ftable.nchnls();
-      if(m_nchnls > 1)
-	m_vector.resize(m_vframes*m_nchnls);
-    }
-
-
-    /** Process one vector of audio
-     */
-    virtual const SamplePlayer& process() {
-      m_nchnls > 1 ? lookup() : Oscili::lookup();
-      return *this;
-    }
-
-    /** Process one vector of audio
-	with amplitude amp
-    */
-    virtual const SamplePlayer& process(double amp) {
-      m_amp = amp;
-      process();
-      return *this;
-    }
-
-
-    /** Process one vector of audio
-	with amplitude amp and
-	pitch transposition
-    */
-    virtual const SamplePlayer& process(double amp, double pitch){
-      m_amp = amp;
-      m_freq = pitch*m_sr/m_tframes;
-      m_incr = pitch;
-      process();
-      return *this;
-    }
-  
-  };
-
-  /*! \class SamplePlayer SamplePlayer.h AuLib/SamplePlayer.h
+protected:
+  /** Oscillator for multichannel tables
    */
-  
+  virtual void lookup();
+
+public:
+  /** SamplePlayer constructor \n\n
+      table - function table \n
+      amp - amplitude \n
+      pitch - playback pitch \n
+      phase - init phase (0-1) \n
+      vframes - vector size \n
+      sr - sampling rate \n
+  */
+  SamplePlayer(const FuncTable &ftable, double amp = 0., double pitch = 0.,
+               double phase = 0., uint32_t vframes = def_vframes,
+               double sr = def_sr)
+      : Oscili(amp, 0., ftable, phase, vframes, sr) {
+    m_incr = pitch;
+    m_nchnls = ftable.nchnls();
+    if (m_nchnls > 1)
+      m_vector.resize(m_vframes * m_nchnls);
+  }
+
+  /** Process one vector of audio
+   */
+  virtual const SamplePlayer &process() {
+    m_nchnls > 1 ? lookup() : Oscili::lookup();
+    return *this;
+  }
+
+  /** Process one vector of audio
+      with amplitude amp
+  */
+  virtual const SamplePlayer &process(double amp) {
+    m_amp = amp;
+    process();
+    return *this;
+  }
+
+  /** Process one vector of audio
+      with amplitude amp and
+      pitch transposition
+  */
+  virtual const SamplePlayer &process(double amp, double pitch) {
+    m_amp = amp;
+    m_freq = pitch * m_sr / m_tframes;
+    m_incr = pitch;
+    process();
+    return *this;
+  }
+};
+
+/*! \class SamplePlayer SamplePlayer.h AuLib/SamplePlayer.h
+ */
 }
 #endif

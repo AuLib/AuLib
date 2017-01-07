@@ -14,31 +14,28 @@
 
 namespace AuLib {
 
-  /** Original band-pass resonator design
+/** Original band-pass resonator design
+ */
+class Reson : public ResonR {
+
+protected:
+  /** Filter kernel
    */
-  class Reson : public ResonR {
+  virtual const double *filter(const double *sig);
 
-  protected:
+public:
+  /** Reson constructor \n\n
+      cf  - centre frequency \n
+      bw  - bandwidth  \n
+      vframes - vector size \n
+      sr - sampling rate
+  */
+  Reson(double cf, double bw, uint32_t vframes = def_vframes,
+        double sr = def_sr)
+      : ResonR(cf, bw, vframes, sr){};
+};
 
-    /** Filter kernel
-     */
-    virtual const double* filter(const double* sig);
-  
-  public:
-    /** Reson constructor \n\n
-	cf  - centre frequency \n
-        bw  - bandwidth  \n
-	vframes - vector size \n
-        sr - sampling rate
-    */   
-    Reson(double cf, double bw, uint32_t vframes = def_vframes,
-	  double sr = def_sr) :
-      ResonR(cf,bw,vframes,sr) { };
-    
-  };
-
-  /*! \class Reson Reson.h AuLib/Reson.h
-   */
-
+/*! \class Reson Reson.h AuLib/Reson.h
+ */
 }
 #endif

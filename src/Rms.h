@@ -14,41 +14,34 @@
 
 namespace AuLib {
 
-  /** Estimates the root-means-square of a signal
+/** Estimates the root-means-square of a signal
+ */
+class Rms : public ToneLP {
+
+protected:
+  /** rectification
    */
-  class Rms : public ToneLP {
+  double rect(double x) { return x < 0.0 ? -x : x; }
 
-  protected:
+  /** RMS processing
+  */
+  virtual const double *filter(const double *sig) {
+    for (uint32_t i = 0; i < m_vframes; i++)
+      m_vector[i] = m_del = m_a * rect(sig[i]) - m_b * m_del;
+    return vector();
+  }
 
-    /** rectification
-     */
-    double rect(double x) {
-      return x < 0.0 ? -x : x;
-    }
+public:
+  /** Rms constructor \n\n
+      cf - cutoff frequency \n
+      vframes - vector size \n
+      sr - sampling rate \n
+  */
+  Rms(double cf = 10., uint32_t vframes = def_vframes, double sr = def_sr)
+      : ToneLP(cf, vframes, sr) {}
+};
 
-     /** RMS processing
-     */
-    virtual const double* filter(const double* sig){
-      for(uint32_t i = 0; i < m_vframes; i++)
-	m_vector[i] = m_del = m_a*rect(sig[i]) - m_b*m_del;
-      return vector();
-    }
-    
-  public:
-    /** Rms constructor \n\n
-	cf - cutoff frequency \n
-	vframes - vector size \n
-        sr - sampling rate \n
-    */  
-    Rms(double cf=10., uint32_t vframes = def_vframes,
-	   double sr = def_sr) :
-      ToneLP(cf,vframes,sr) {
-    }
-
-   
-  };
-
-  /*! \class Rms Rms.h AuLib/Rms.h
-   */
+/*! \class Rms Rms.h AuLib/Rms.h
+ */
 }
 #endif

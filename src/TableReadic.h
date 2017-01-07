@@ -14,33 +14,30 @@
 
 namespace AuLib {
 
-  /** Table reader with cubic interpolation
-   */
-  class TableReadic : public TableRead {
-    
-  protected:
-    
-    /** truncated table lookup
-     */
-    virtual void lookup(const double *phs);
-    
-  public:
-    /** TableReadic constructor \n\n
-	ftable - function table \n
-	phase - initial phase \n
-	norm - normalisation switch \n
-	wrap - wraparound switch \n
-	vframes - vector size \n
-    */
-    TableReadic(const FuncTable& ftable, double phase = 0.,
-		bool norm = true, bool wrap = true,
-		uint64_t tframes = def_tframes,
-		uint32_t vframes = def_vframes) :
-      TableRead(ftable,phase,norm,wrap,vframes) { };    
-  };
+/** Table reader with cubic interpolation
+ */
+class TableReadic : public TableRead {
 
-  /*! \class TableReadic TableReadic.h AuLib/TableReadic.h
+protected:
+  /** truncated table lookup
    */
+  virtual void lookup(const double *phs);
 
+public:
+  /** TableReadic constructor \n\n
+      ftable - function table \n
+      phase - initial phase \n
+      norm - normalisation switch \n
+      wrap - wraparound switch \n
+      vframes - vector size \n
+  */
+  TableReadic(const FuncTable &ftable, double phase = 0., bool norm = true,
+              bool wrap = true, uint64_t tframes = def_tframes,
+              uint32_t vframes = def_vframes)
+      : TableRead(ftable, phase, norm, wrap, vframes){};
+};
+
+/*! \class TableReadic TableReadic.h AuLib/TableReadic.h
+ */
 }
 #endif

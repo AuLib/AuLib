@@ -14,41 +14,38 @@
 
 namespace AuLib {
 
-  /** Adsr description
-   */
-  class Adsr : public Envel {
-    
-  public:
-    /** Adsr constructor \n\n
-	amp - amplitude after attack \n
-        att - attack time \n
-        dec - decay time \n
-        rel - release time \n
-	vframes - vector size \n
-        sr - sampling rate
-    */  
-    Adsr(double amp, double att, double dec, double sus,
-	 double rel, uint32_t vframes = def_vframes, double sr = def_sr) :
-      Envel(rel,vframes,sr) {
-      m_segs = Segments(0.,{amp,sus},{att,dec});
-      m_time = m_segs.durs()[0];
-      m_incr = m_segs.incrs()[0];
-      m_y = m_segs.start();
-    };
+/** Adsr description
+ */
+class Adsr : public Envel {
 
-    /** reset the envelope parameters and
-	retrigger 
-    */
-    void reset(double amp, double att, double dec,
-	       double sus, double rel){
-      m_segs = Segments(0.,{amp,sus},{att,dec});
-      retrig();
-    }
-    
+public:
+  /** Adsr constructor \n\n
+      amp - amplitude after attack \n
+      att - attack time \n
+      dec - decay time \n
+      rel - release time \n
+      vframes - vector size \n
+      sr - sampling rate
+  */
+  Adsr(double amp, double att, double dec, double sus, double rel,
+       uint32_t vframes = def_vframes, double sr = def_sr)
+      : Envel(rel, vframes, sr) {
+    m_segs = Segments(0., {amp, sus}, {att, dec});
+    m_time = m_segs.durs()[0];
+    m_incr = m_segs.incrs()[0];
+    m_y = m_segs.start();
   };
 
-  /*! \class Adsr Adsr.h AuLib/Adsr.h
-   */
+  /** reset the envelope parameters and
+      retrigger
+  */
+  void reset(double amp, double att, double dec, double sus, double rel) {
+    m_segs = Segments(0., {amp, sus}, {att, dec});
+    retrig();
+  }
+};
 
+/*! \class Adsr Adsr.h AuLib/Adsr.h
+ */
 }
 #endif

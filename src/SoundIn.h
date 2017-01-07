@@ -14,88 +14,72 @@
 #include "AudioBase.h"
 
 namespace AuLib {
-  
-  enum {SOUNDIN_RT=1,
-	SOUNDIN_STDIN,
-	SOUNDIN_SNDFILE};
 
-    /** Standard Error messages
+enum { SOUNDIN_RT = 1, SOUNDIN_STDIN, SOUNDIN_SNDFILE };
+
+/** Standard Error messages
+*/
+static const char *soundin_error[] = {
+    "SoundIn: file open error", "SoundIn: RT initialisation error",
+    "SoundIn: RT open error", "SoundIn: RT stream start error",
+    "SoundIn: general error"};
+
+/** Audio input class
+ */
+class SoundIn final : public AudioBase {
+
+  std::string m_src;
+  uint32_t m_mode;
+  uint32_t m_cnt;
+  uint64_t m_dur;
+  uint64_t m_framecnt;
+  std::vector<double> m_inbuf;
+  void *m_handle;
+
+  NONCOPYABLE(SoundIn);
+
+public:
+  /** SoundIn constructor \n\n
+      src - input source ("adc", "stdin", or file path) \n
+      vframes - vector size \n
+      bframes - buffer size in frames \n
+  */
+  SoundIn(const char *src, uint32_t nchnls = def_nchnls,
+          uint32_t vframes = def_vframes, uint64_t bframes = def_bframes,
+          double sr = def_sr);
+
+  /** SoundOut destructor
    */
-  static const char* soundin_error[] = {
-    "SoundIn: file open error",
-    "SoundIn: RT initialisation error",
-    "SoundIn: RT open error",
-    "SoundIn: RT stream start error",
-    "SoundIn: general error"
-  };
+  ~SoundIn();
 
-  /** Audio input class
+  /** Reads frames of audio to output
    */
-  class SoundIn final : public AudioBase {
+  const double *read(uint32_t frames = def_vframes);
 
-    std::string m_src;
-    uint32_t m_mode;
-    uint32_t m_cnt;
-    uint64_t m_dur;
-    uint64_t m_framecnt;
-    std::vector<double> m_inbuf;
-    void *m_handle;
-
-    NONCOPYABLE(SoundIn);   
-
-  public:
-    /** SoundIn constructor \n\n
-	src - input source ("adc", "stdin", or file path) \n
-	vframes - vector size \n
-	bframes - buffer size in frames \n
-    */
-    SoundIn(const char *src, uint32_t nchnls = def_nchnls,
-	    uint32_t vframes = def_vframes,
-	    uint64_t bframes = def_bframes,
-	    double sr = def_sr);
-  
-    /** SoundOut destructor
-     */
-    ~SoundIn();
-
-    /** Reads frames of audio to output 
-     */
-    const double* read(uint32_t frames = def_vframes);
-
-
-    /** Get the current vector stream time
-     */
-    double time() const {
-      return m_framecnt/m_sr;
-    }
-
-    /** Get the source name
-     */
-    const char* src() const {
-      return m_src.c_str();
-    }
-
-    /** Get the file duration in frames
-     */
-    uint64_t dur() const {
-      return m_dur;
-    }
-    
-    /** Get error message
-     */
-    virtual const char* error_message() const {
-      if(m_error > AULIB_ERROR)
-	return soundin_error[m_error -
-			      AULIB_ERROR - 1];
-      else return aulib_error[m_error];
-    }
-
-  
-  };
-
-  /*! \class SoundIn SoundIn.h AuLib/SoundIn.h
+  /** Get the current vector stream time
    */
+  double time() const { return m_framecnt / m_sr; }
 
+  /** Get the source name
+   */
+  const char *src() const { return m_src.c_str(); }
+
+  /** Get the file duration in frames
+   */
+  uint64_t dur() const { return m_dur; }
+
+  /** Get error message
+   */
+  virtual const char *error_message() const {
+    if (m_error > AULIB_ERROR)
+      return soundin_error[m_error - AULIB_ERROR - 1];
+    else
+      return aulib_error[m_error];
+  }
+};
+
+/*! \class SoundIn SoundIn.h AuLib/SoundIn.h
+ */
 }
 
 #endif

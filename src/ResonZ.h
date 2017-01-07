@@ -14,37 +14,34 @@
 
 namespace AuLib {
 
-  /** Band-pass resonator with better amplitude response at 
-      low frequencies (alternative design).
-  */
-  class ResonZ : public ResonR {
+/** Band-pass resonator with better amplitude response at
+    low frequencies (alternative design).
+*/
+class ResonZ : public ResonR {
 
-  protected:
-
-    /** Coefficients update
-     */
-    virtual void update(){
-      ResonR::update();
-      m_a[2] = -1.;
-    };
-    
-  
-  public:
-    /** ResonZ constructor \n\n
-	cf  - centre frequency \n
-        bw  - bandwidth  \n
-	vframes - vector size \n
-        sr - sampling rate
-    */   
-    ResonZ(double cf, double bw, uint32_t vframes = def_vframes,
-	   double sr = def_sr) :
-      ResonR(cf,bw,vframes,sr) {
-      update();
-    };
+protected:
+  /** Coefficients update
+   */
+  virtual void update() {
+    ResonR::update();
+    m_a[2] = -1.;
   };
 
-  /*! \class ResonZ ResonZ.h AuLib/ResonZ.h
-   */
+public:
+  /** ResonZ constructor \n\n
+      cf  - centre frequency \n
+      bw  - bandwidth  \n
+      vframes - vector size \n
+      sr - sampling rate
+  */
+  ResonZ(double cf, double bw, uint32_t vframes = def_vframes,
+         double sr = def_sr)
+      : ResonR(cf, bw, vframes, sr) {
+    update();
+  };
+};
 
+/*! \class ResonZ ResonZ.h AuLib/ResonZ.h
+ */
 }
 #endif

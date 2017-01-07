@@ -14,49 +14,43 @@
 #include "Oscil.h"
 
 namespace AuLib {
-  
-  /** Linear interpolation oscillator
-   */
-  class Oscili : public Oscil {
 
-  protected:
+/** Linear interpolation oscillator
+ */
+class Oscili : public Oscil {
 
-    /** interpolating oscillator process
-     */
-    virtual void lookup();
-    
-  public:
-    /** Sinusoidal Oscili constructor \n\n
-	amp - amplitude   \n
-	freq - frequency in Hz \n
-	phase - init phase (0-1) \n 
-	vframes - vector size \n
-	sr - sampling rate \n\n
-        Uses internal sine wave table
-    */
-    Oscili(double amp = 0., double freq = 0.,
-	   double phase = 0., uint32_t vframes = def_vframes,
-	   double sr = def_sr) :
-      Oscil(amp,freq,phase,vframes,sr) { };
-      
-    /** Oscili constructor \n\n
-	amp - amplitude \n
-	freq - frequency in Hz \n
-	ftable - function table \n
-	phase - init phase (0-1) \n 
-	vframes - vector size \n
-	sr - sampling rate \n
-    */
-    Oscili(double amp, double freq,
-	   const FuncTable& ftable,
-	   double phase = .0,
-	   uint32_t vframes = def_vframes,
-	   double sr = def_sr) :
-      Oscil(amp,freq,ftable,phase,vframes,sr) { };
-  };
- 
-  
-  /*! \class Oscili Oscili.h AuLib/Oscili.h
+protected:
+  /** interpolating oscillator process
    */
+  virtual void lookup();
+
+public:
+  /** Sinusoidal Oscili constructor \n\n
+      amp - amplitude   \n
+      freq - frequency in Hz \n
+      phase - init phase (0-1) \n
+      vframes - vector size \n
+      sr - sampling rate \n\n
+      Uses internal sine wave table
+  */
+  Oscili(double amp = 0., double freq = 0., double phase = 0.,
+         uint32_t vframes = def_vframes, double sr = def_sr)
+      : Oscil(amp, freq, phase, vframes, sr){};
+
+  /** Oscili constructor \n\n
+      amp - amplitude \n
+      freq - frequency in Hz \n
+      ftable - function table \n
+      phase - init phase (0-1) \n
+      vframes - vector size \n
+      sr - sampling rate \n
+  */
+  Oscili(double amp, double freq, const FuncTable &ftable, double phase = .0,
+         uint32_t vframes = def_vframes, double sr = def_sr)
+      : Oscil(amp, freq, ftable, phase, vframes, sr){};
+};
+
+/*! \class Oscili Oscili.h AuLib/Oscili.h
+ */
 }
 #endif

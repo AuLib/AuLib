@@ -15,50 +15,45 @@
 #include "FourierTable.h"
 
 namespace AuLib {
-  
-  /** Sawtooth wave table
-   */
-  struct SawTable : public FourierTable {
-    /** SawTable constructor \n\n
-	harms - number of harmonics \n
-	tframes - table size \n
-    */
-    SawTable(uint32_t harms,
-	     uint64_t tframes=def_tframes) :
-      FourierTable(harms,SAW,tframes){};
-  };
 
-  /** Square wave table
-   */
-  struct SquareTable : public FourierTable {
-    /** SquareTable constructor \n\n
-	harms - number of harmonics \n
-	tframes - table size \n
-    */ 
-    SquareTable(uint32_t harms,
-		uint64_t tframes=def_tframes) :
-      FourierTable(harms, SQUARE, tframes){};
-  };
+/** Sawtooth wave table
+ */
+struct SawTable : public FourierTable {
+  /** SawTable constructor \n\n
+      harms - number of harmonics \n
+      tframes - table size \n
+  */
+  SawTable(uint32_t harms, uint64_t tframes = def_tframes)
+      : FourierTable(harms, SAW, tframes){};
+};
 
-  /** Triangle wave table
-   */
-  struct TriangleTable : public FourierTable {
-    /** TriangleTable constructor \n\n
-	harms - number of harmonics \n
-	tframes - table size \n
-    */
-    TriangleTable(uint32_t harms,
-		  uint64_t tframes=def_tframes) :
-      FourierTable(harms, TRIANGLE, tframes){};
-  };
+/** Square wave table
+ */
+struct SquareTable : public FourierTable {
+  /** SquareTable constructor \n\n
+      harms - number of harmonics \n
+      tframes - table size \n
+  */
+  SquareTable(uint32_t harms, uint64_t tframes = def_tframes)
+      : FourierTable(harms, SQUARE, tframes){};
+};
 
-  
-  /*! \class SawTable WaveTables.h AuLib/WaveTables.h
-   */
-  /*! \class SquareTable WaveTables.h AuLib/WaveTables.h
-   */
-  /*! \class TriangleTable WaveTables.h AuLib/WaveTables.h
-   */
+/** Triangle wave table
+ */
+struct TriangleTable : public FourierTable {
+  /** TriangleTable constructor \n\n
+      harms - number of harmonics \n
+      tframes - table size \n
+  */
+  TriangleTable(uint32_t harms, uint64_t tframes = def_tframes)
+      : FourierTable(harms, TRIANGLE, tframes){};
+};
 
+/*! \class SawTable WaveTables.h AuLib/WaveTables.h
+ */
+/*! \class SquareTable WaveTables.h AuLib/WaveTables.h
+ */
+/*! \class TriangleTable WaveTables.h AuLib/WaveTables.h
+ */
 }
 #endif

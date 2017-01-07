@@ -15,43 +15,41 @@
 
 namespace AuLib {
 
-  /** This class implements a direct convolution engine
-      using an impulse response defined in a function table.
+/** This class implements a direct convolution engine
+    using an impulse response defined in a function table.
+*/
+class Fir : public Delay {
+
+protected:
+  const double *m_ir;
+  uint64_t m_irsize;
+
+public:
+  /** Fir constructor \n\n
+      ir - impulse response
+      vframes - vector size \n
+      sr - sampling rate
   */
-  class Fir : public Delay {
+  Fir(const FuncTable &ir, uint32_t vframes = def_vframes, double sr = def_sr)
+      : Delay(ir.tframes() * sr, 0., vframes, sr), m_ir(ir.table()),
+        m_irsize(ir.tframes()){};
 
-  protected:
-    const double *m_ir;
-    uint64_t m_irsize;
-
-  public:
-    /** Fir constructor \n\n
-        ir - impulse response
-	vframes - vector size \n
-        sr - sampling rate
-    */  
-  Fir(const FuncTable& ir, uint32_t vframes = def_vframes,
-      double sr = def_sr) :
-    Delay(ir.tframes()*sr,0.,vframes,sr),
-    m_ir(ir.table()), m_irsize(ir.tframes()) { };
-
-    /** apply convolution to a signal sig 
-     */
-    virtual const double* process(const double* sig);
-
-    /** apply convolution to a signal in obj
-     */
-    virtual const Fir& process(const AudioBase& obj) {
-      if(obj.vframes() == m_vframes &&
-	 obj.nchnls() == m_nchnls) {
-	process(obj.vector());
-      } else m_error = AULIB_ERROR;
-      return *this;
-    }
-
-  };
-
-  /*! \class Fir Fir.h AuLib/Fir.h
+  /** apply convolution to a signal sig
    */
+  virtual const double *process(const double *sig);
+
+  /** apply convolution to a signal in obj
+   */
+  virtual const Fir &process(const AudioBase &obj) {
+    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
+      process(obj.vector());
+    } else
+      m_error = AULIB_ERROR;
+    return *this;
+  }
+};
+
+/*! \class Fir Fir.h AuLib/Fir.h
+ */
 }
 #endif

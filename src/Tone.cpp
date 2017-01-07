@@ -11,18 +11,14 @@
 #include "ToneHP.h"
 #include "ToneLP.h"
 
-void
-AuLib::ToneLP::update()
-{
-  double costh = 2. - cos(2.*pi*m_freq/m_sr);
-  m_b = sqrt(costh*costh - 1.) - costh;
+void AuLib::ToneLP::update() {
+  double costh = 2. - cos(2. * pi * m_freq / m_sr);
+  m_b = sqrt(costh * costh - 1.) - costh;
   m_a = (1. + m_b);
 }
 
-void
-AuLib::ToneHP::update()
-{
-  double costh = 2. - cos(2.*pi*m_freq/m_sr);
-  m_b = costh - sqrt(costh*costh - 1.);
+void AuLib::ToneHP::update() {
+  double costh = 2. - cos(2. * pi * m_freq / m_sr);
+  m_b = costh - sqrt(costh * costh - 1.);
   m_a = (1. - m_b);
 }

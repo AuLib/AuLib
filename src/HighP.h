@@ -14,31 +14,28 @@
 
 namespace AuLib {
 
-  /**  2nd-order Butterworth high-pass filter
+/**  2nd-order Butterworth high-pass filter
+ */
+class HighP : public LowP {
+
+protected:
+  /** Coefficients update
    */
-  class HighP : public LowP {
+  virtual void update();
 
-  protected:
-
-    /** Coefficients update
-     */    
-    virtual void update();
-    
-  public:
-    
-    /** Highp constructor \n\n
-	cf - cutoff frequency \n
-	vframes - vector size \n
-        sr - sampling rate
-    */  
-    HighP(double cf, uint32_t vframes = def_vframes, double sr = def_sr) :
-      LowP(cf,vframes,sr) {
-      update();
-	};
+public:
+  /** Highp constructor \n\n
+      cf - cutoff frequency \n
+      vframes - vector size \n
+      sr - sampling rate
+  */
+  HighP(double cf, uint32_t vframes = def_vframes, double sr = def_sr)
+      : LowP(cf, vframes, sr) {
+    update();
   };
+};
 
-  /*! \class HighP HighP.h AuLib/HighP.h
-   */
-
+/*! \class HighP HighP.h AuLib/HighP.h
+ */
 }
 #endif

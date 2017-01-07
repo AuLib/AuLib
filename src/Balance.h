@@ -16,48 +16,42 @@
 
 namespace AuLib {
 
-  /** Balance description
+/** Balance description
+*/
+class Balance : public AudioBase {
+
+protected:
+  Rms m_cmp;
+  Rms m_sig;
+
+public:
+  /** Balance constructor \n\n
+      cf - LP cutoff freq \n
+      nchnls - number of channels \n
+      vframes - vector size \n
+      sr - sampling rate
   */
-  class Balance : public AudioBase {
+  Balance(double cf = 10., uint32_t vframes = def_vframes, double sr = def_sr)
+      : AudioBase(1, vframes, sr), m_cmp(cf, vframes, sr),
+        m_sig(cf, vframes, sr){};
 
-  protected:
-    Rms m_cmp;
-    Rms m_sig;
-    
-  public:
-    /** Balance constructor \n\n
-	cf - LP cutoff freq \n
-        nchnls - number of channels \n
-	vframes - vector size \n
-        sr - sampling rate
-    */  
-  Balance(double cf = 10., uint32_t vframes = def_vframes,
-	  double sr = def_sr) :
-    AudioBase(1,vframes,sr),
-    m_cmp(cf,vframes,sr),
-    m_sig(cf,vframes,sr) { };
-
-    /** process a sig with a comparator cmp
-     */
-    virtual const double* process(const double* sig, const double *cmp);
-
-    /** process a signal in obj
-     */
-    virtual const Balance& process(const AudioBase& obj,
-				   const AudioBase& cmp) {
-      if(obj.vframes() == m_vframes &&
-	 obj.nchnls() == m_nchnls &&
-	 cmp.vframes() == m_vframes &&
-	 cmp.nchnls() == m_nchnls) {
-	process(obj.vector(),cmp.vector());
-      } else m_error = AULIB_ERROR;
-      return *this;
-    }
-    
-  };
-
-  /*! \class Balance Balance.h AuLib/Balance.h
+  /** process a sig with a comparator cmp
    */
+  virtual const double *process(const double *sig, const double *cmp);
 
+  /** process a signal in obj
+   */
+  virtual const Balance &process(const AudioBase &obj, const AudioBase &cmp) {
+    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls &&
+        cmp.vframes() == m_vframes && cmp.nchnls() == m_nchnls) {
+      process(obj.vector(), cmp.vector());
+    } else
+      m_error = AULIB_ERROR;
+    return *this;
+  }
+};
+
+/*! \class Balance Balance.h AuLib/Balance.h
+ */
 }
 #endif

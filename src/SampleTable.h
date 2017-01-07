@@ -15,47 +15,40 @@
 
 namespace AuLib {
 
-  /** Error codes
+/** Error codes
+ */
+enum sampletable_error_codes {
+  AULIB_FILE_ERROR = AULIB_ERROR + 1,
+  AULIB_READ_ERROR
+};
+
+/** Standard Error messages
+ */
+static const char *sampletable_error[] = {"SampleTable: file open error",
+                                          "SampleTable: file read error"};
+
+/** Sampled-sound table from a soundfile
+ */
+class SampleTable : public FuncTable {
+
+public:
+  /** SampleTable constructor \n\n
+      name - filename \n
+      chn - channel to load (0 = all channels) \n
+  */
+  SampleTable(const char *name, uint32_t chn = 1);
+
+  /** Get error message
    */
-  enum sampletable_error_codes {
-    AULIB_FILE_ERROR
-    = AULIB_ERROR + 1,
-    AULIB_READ_ERROR
-  };
+  virtual const char *error_message() const {
+    if (m_error > AULIB_ERROR)
+      return sampletable_error[m_error - AULIB_ERROR - 1];
+    else
+      return aulib_error[m_error];
+  }
+};
 
-  /** Standard Error messages
-   */
-  static const char* sampletable_error[] = {
-    "SampleTable: file open error",
-    "SampleTable: file read error"
-  };
-  
-  
-  /** Sampled-sound table from a soundfile
-   */
-  class SampleTable : public FuncTable {
-
-  public:
-    /** SampleTable constructor \n\n
-	name - filename \n
-	chn - channel to load (0 = all channels) \n
-    */
-    SampleTable(const char *name,
-		uint32_t chn = 1);
-
- 
-    /** Get error message
-     */
-    virtual const char* error_message() const {
-      if(m_error > AULIB_ERROR)
-	return sampletable_error[m_error - AULIB_ERROR - 1];
-      else return aulib_error[m_error];
-    }
-
-  };
-
-  /*! \class SampleTable SampleTable.h AuLib/SampleTable.h
-   */
-
+/*! \class SampleTable SampleTable.h AuLib/SampleTable.h
+ */
 }
 #endif

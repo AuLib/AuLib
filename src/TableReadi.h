@@ -14,33 +14,29 @@
 
 namespace AuLib {
 
-  /** Table reader with linear interpolation
+/** Table reader with linear interpolation
+ */
+class TableReadi : public TableRead {
+
+protected:
+  /** truncated table lookup
    */
-  class TableReadi : public TableRead {
+  virtual void lookup(const double *phs);
 
-  protected:
+public:
+  /** TableReadi constructor \n\n
+      ftable - function table \n
+      phase - initial phase \n
+      norm - normalisation switch \n
+      wrap - wraparound switch \n
+      vframes - vector size \n
+  */
+  TableReadi(const FuncTable &ftable, double phase = 0., bool norm = true,
+             bool wrap = true, uint32_t vframes = def_vframes)
+      : TableRead(ftable, phase, norm, wrap, vframes){};
+};
 
-    /** truncated table lookup
-     */
-    virtual void lookup(const double *phs);
-    
-  public:
-    /** TableReadi constructor \n\n
-	ftable - function table \n
-	phase - initial phase \n
-	norm - normalisation switch \n
-	wrap - wraparound switch \n
-	vframes - vector size \n
-    */
-    TableReadi(const FuncTable& ftable, double phase = 0.,
-	       bool norm = true, bool wrap = true,
-	       uint32_t vframes = def_vframes) :
-      TableRead(ftable,phase,norm,wrap,vframes) { };
-
-  };
-
-  /*! \class TableReadi TableReadi.h AuLib/TableReadi.h
-   */
-  
+/*! \class TableReadi TableReadi.h AuLib/TableReadi.h
+ */
 }
 #endif

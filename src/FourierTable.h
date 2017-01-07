@@ -15,50 +15,39 @@
 
 namespace AuLib {
 
-  /** Table type constants
-   */
-  enum wave_types {
-    SAW=1,
-    SQUARE,
-    TRIANGLE};
+/** Table type constants
+ */
+enum wave_types { SAW = 1, SQUARE, TRIANGLE };
 
-  /** Function tables based on
-      Fourier Series
+/** Function tables based on
+    Fourier Series
+*/
+class FourierTable : public FuncTable {
+
+protected:
+  /** Create the table
+   */
+  void create(uint32_t harms, double *amps, double phase);
+
+public:
+  /** FourierTable constructor \n\n
+      harms - number of harmonics \n
+      amps - array of harmonic amplitudes \n
+      phase - phase offset \n
+      tframes - table size \n
   */
-  class FourierTable : public FuncTable {
+  FourierTable(uint32_t harms = 1, double *amps = nullptr, double phase = 0.,
+               uint64_t tframes = def_tframes);
 
-  protected:
-    /** Create the table
-     */ 
-    void create(uint32_t harms,
-		double *amps,
-		double phase);
+  /** FourierTable constructor \n\n
+      harms - number of harmonics \n
+      type - wave type \n
+      tframes - table size \n
+  */
+  FourierTable(uint32_t harms, uint32_t type, uint64_t tframes = def_tframes);
+};
 
-  public:
-    /** FourierTable constructor \n\n
-	harms - number of harmonics \n
-	amps - array of harmonic amplitudes \n
-	phase - phase offset \n
-	tframes - table size \n
-    */
-    FourierTable(uint32_t harms=1,
-		 double *amps=nullptr,
-		 double phase=0.,
-		 uint64_t tframes = def_tframes);
-  
-    /** FourierTable constructor \n\n
-	harms - number of harmonics \n
-	type - wave type \n
-	tframes - table size \n
-    */
-    FourierTable(uint32_t harms,
-		 uint32_t type,
-		 uint64_t tframes = def_tframes);
-
-  };
-
-  /*! \class FourierTable FourierTable.h AuLib/FourierTable.h
-   */
-
+/*! \class FourierTable FourierTable.h AuLib/FourierTable.h
+ */
 }
 #endif

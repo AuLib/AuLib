@@ -15,51 +15,49 @@
 
 namespace AuLib {
 
-  /** Phase signal (ramp) generator
+/** Phase signal (ramp) generator
+ */
+class Phasor : public AudioBase {
+
+protected:
+  double m_freq;
+  double m_phs;
+  double m_incr;
+
+  /** phase modulo
    */
-  class Phasor : public AudioBase {
+  void mod() {
+    while (m_phs >= 1.0)
+      m_phs -= 1.;
+    while (m_phs < 0.0)
+      m_phs += 1.;
+  }
 
-  protected:
-    double m_freq;
-    double m_phs;  
-    double m_incr;
-  
-    /** phase modulo
-     */
-    void mod(){
-      while(m_phs >= 1.0) m_phs -= 1.;
-      while(m_phs < 0.0) m_phs += 1.;
-    }
+public:
+  /** Phasor constructor \n\n
+      freq - frequency in Hz \n
+      phase - init phase (0-1) \n
+      sr - sampling rate \n
+      vframes - vector size \n
+  */
+  Phasor(double freq = 0., double phase = 0., uint32_t vframes = def_vframes,
+         double sr = def_sr);
 
-  public:
-    /** Phasor constructor \n\n
-	freq - frequency in Hz \n
-	phase - init phase (0-1) \n 
-	sr - sampling rate \n
-	vframes - vector size \n
-    */
-    Phasor(double freq = 0.,
-	   double phase = 0.,
-	   uint32_t vframes = def_vframes,
-	   double sr = def_sr);
-
-    /** Process one vector of audio
-     */
-    virtual const Phasor& process();
-  
-    /** Process one vector of audio with
-	frequency freq
-    */
-    virtual const Phasor& process(double freq){
-      m_freq = freq;
-      m_incr = m_freq/m_sr;
-      return process();
-    }
-
-  };
-
-  /*! \class Phasor Phasor.h AuLib/Phasor.h
+  /** Process one vector of audio
    */
+  virtual const Phasor &process();
 
+  /** Process one vector of audio with
+      frequency freq
+  */
+  virtual const Phasor &process(double freq) {
+    m_freq = freq;
+    m_incr = m_freq / m_sr;
+    return process();
+  }
+};
+
+/*! \class Phasor Phasor.h AuLib/Phasor.h
+ */
 }
 #endif
