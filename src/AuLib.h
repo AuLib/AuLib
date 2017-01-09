@@ -59,51 +59,50 @@
  *
  * \code
  *
- *#include <Chn.h>
- *#include <Delay.h>
- *#include <Pan.h>
- *#include <SigBus.h>
- *#include <SoundIn.h>
- *#include <SoundOut.h>
- *#include <iostream>
- *#include <vector>
- *
- *using namespace AuLib;
- *using namespace std;
- *
- *int main(int argc, const char **argv) {
- *
- *  if (argc > 2) {
- *
- *    SoundIn input(argv[1]);
- *    std::vector<Chn> chn(input.nchnls());
- *    std::vector<Delay> echo(input.nchnls(),
- *                            Delay(0.5, 0.75, def_vframes, input.sr()));
- *    std::vector<Pan> pan(input.nchnls());
- *    SigBus mix(1. / input.nchnls(), 0., false, 2);
- *    SoundOut output(argv[2], 2, def_vframes, input.sr());
- *
- *    cout << Info::version();
- *
- *    for (uint64_t i = 0; i < input.dur(); i += def_vframes) {
- *      input.read();
- *      for (uint32_t j = 0; j < input.nchnls(); j++) {
- *        chn[j].process(input, j + 1);
- *        echo[j].process(chn[j]);
- *        pan[j].process(echo[j] += chn[j], (1 + j) * input.nchnls() / 2.);
- *        mix.process(pan[j]);
- *      }
- *      output.write(mix);
- *      mix.clear();
- *    }
- *
- *    return 0;
- *
- *  } else
- *   std::cout << "usage: " << argv[0] << " <source> <dest>\n";
- *  return 1;
- *}
- *
+#include <Chn.h>
+#include <Delay.h>
+#include <Pan.h>
+#include <SigBus.h>
+#include <SoundIn.h>
+#include <SoundOut.h>
+#include <iostream>
+#include <vector>
+
+using namespace AuLib;
+using namespace std;
+
+int main(int argc, const char **argv) {
+
+  if (argc > 2) {
+
+    SoundIn input(argv[1]);
+    std::vector<Chn> chn(input.nchnls());
+    std::vector<Delay> echo(input.nchnls(),
+                            Delay(0.5, 0.75, def_vframes, input.sr()));
+    std::vector<Pan> pan(input.nchnls());
+    SigBus mix(1. / input.nchnls(), 0., false, 2);
+    SoundOut output(argv[2], 2, def_vframes, input.sr());
+
+    cout << Info::version();
+
+    for (uint64_t i = 0; i < input.dur(); i += def_vframes) {
+      input.read();
+      for (uint32_t j = 0; j < input.nchnls(); j++) {
+        chn[j].process(input, j + 1);
+        echo[j].process(chn[j]);
+        pan[j].process(echo[j] += chn[j], (1 + j) * input.nchnls() / 2.);
+        mix.process(pan[j]);
+      }
+      output.write(mix);
+      mix.clear();
+    }
+
+    return 0;
+
+  } else
+    std::cout << "usage: " << argv[0] << " <source> <dest>\n";
+  return 1;
+}
  *
  * \endcode
  *
@@ -123,45 +122,42 @@
  * class that demonstrates these ideas:
  *
  * \code
- * namespace AuLib {
  *
- * class NewClass : public AudioBase {
- *
- *   protected:
- *     double m_par;
- *
- *   public:
- *
- *     NewClass(double param = .5, uint32_t nchnls=def_nchnls
- * 	   uint32_t vframes = def_vframes, double sr = def_sr) :
- *         m_param(param),
- *         AudioBase(nchnls,vframes,sr) { };
- *
- *     virtual const double* process(const double* sig);
- *
- *     virtual const double* process(const double* sig, double par){
- *       m_par = par;
- *       return process(sig);
- *     }
- *
- *     virtual const NewClass& process(const AudioBase& obj){
- *       if(obj.vframes() == m_vframes &&
- * 	 obj.nchnls() == m_nchnls) {
- * 	   process(obj.vector());
- *       } else m_error = AULIB_ERROR;
- *       return *this;
- *     }
- *
- *     virtual const NewClass& process(const AudioBase& obj,
- *                                      double par){
- *       m_par = par;
- *       process(obj);
- *       return *this;
- *     }
- *
- *   };
- *
- * }
+namespace AuLib {
+
+class NewClass : public AudioBase {
+
+protected:
+  double m_par;
+
+public:
+  NewClass(double param = .5,
+           uint32_t nchnls = def_nchnls uint32_t vframes = def_vframes,
+           double sr = def_sr)
+      : m_param(param), AudioBase(nchnls, vframes, sr){};
+
+  virtual const double *process(const double *sig);
+
+  virtual const double *process(const double *sig, double par) {
+    m_par = par;
+    return process(sig);
+  }
+
+  virtual const NewClass &process(const AudioBase &obj) {
+    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
+      process(obj.vector());
+    } else
+      m_error = AULIB_ERROR;
+    return *this;
+  }
+
+  virtual const NewClass &process(const AudioBase &obj, double par) {
+    m_par = par;
+    process(obj);
+    return *this;
+  }
+};
+}
  *
  * \endcode
  *
@@ -189,6 +185,18 @@
 #include <iostream>
 #include <limits>
 #include <sstream>
+
+#ifndef AULIB_MAJOR_V
+#define AULIB_MAJOR_V 0
+#endif
+
+#ifndef AULIB_MINOR_V
+#define AULIB_MINOR_V 0
+#endif
+
+#ifndef BETA
+#define BETA 1
+#endif
 
 #define NONCOPYABLE(A)                                                         \
 public:                                                                        \
@@ -247,11 +255,11 @@ const uint32_t def_tframes = 8192;
 
 /** the pi definition.
  */
-const double pi = 4 * atan(1.);
+const double pi = 4. * atan(1.);
 
 /** the two pi definition.
  */
-const double twopi = 8 * atan(1.);
+const double twopi = 8. * atan(1.);
 
 /** the min. pos. double
  */
