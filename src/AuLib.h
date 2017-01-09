@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // AuLib.h: Library-wide definitions
 // Copyright (C) 2016-7 V Lazzarini
 //
@@ -7,7 +7,7 @@
 // License as published by the Free Software Foundation; either
 // version 3.0 of the License, or (at your option) any later version.
 //
-/////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 #ifndef _AU_LIB_H
 #define _AU_LIB_H
 
@@ -29,11 +29,11 @@
  *
  * \code
  *
- * $ mkdir build
- * $ cd build
- * $ cmake ..
- * $ make
- * $ make install
+ $ mkdir build
+ $ cd build
+ $ cmake ..
+ $ make
+ $ make install
  *
  * \endcode
  *
