@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "fft.h"
 
-void AuLib::fft::reorder(std::vector<std::complex<double>> &s) {
+static void reorder(std::vector<std::complex<double>> &s) {
   size_t N = s.size();
   uint32_t j = 0, m;
   for (int i = 0; i < N; i++) {

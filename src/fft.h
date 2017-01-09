@@ -20,10 +20,6 @@ namespace AuLib {
 
 namespace fft {
 
-/** reorder data for Radix-2 FFT
- */
-void reorder(std::vector<std::complex<double>> &s);
-
 /** In-place complex-to-complex FFT \n
     data - data to be transformed  \n
     fwd - true for forward operation, false for inverse \n
