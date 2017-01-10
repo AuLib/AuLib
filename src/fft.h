@@ -45,9 +45,6 @@ void transform(std::vector<std::complex<double>> &out, double *in);
 */
 void transform(double *out, std::vector<std::complex<double>> &in);
 
-/** imaginary constant
- */
-const std::complex<double> _j(0., 1.);
 }
 }
 

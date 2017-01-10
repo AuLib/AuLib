@@ -1,7 +1,7 @@
 AuLib
 =================
 
-A simple lightweight audio DSP library in C++ (ISO C++11). Licensed under
+A simple lightweight audio DSP library in C++ (ISO C++14). Licensed under
 the GNU LGPL 3.0.
 
 Building

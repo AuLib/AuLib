@@ -13,7 +13,7 @@
 
 /*! \mainpage
  *
- *  AuLib is a simple lightweight C++ (ISO C++11) class library
+ *  AuLib is a simple lightweight C++ (ISO C++14) class library
  *  for audio DSP.
  *
  *  <a href="https://github.com/vlazzarini/AuLib">
