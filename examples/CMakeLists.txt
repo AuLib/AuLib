@@ -1,9 +1,10 @@
 
 # find the dependencies
 if(APPLE)
+ message(STATUS "platform is OSX")
  find_library(LIBSNDFILE libsndfile.dylib)
  find_library(PORTAUDIO libportaudio.dylib)
-elseif(LINUX)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
  message(STATUS "platform is linux")
  find_library(LIBSNDFILE libsndfile.so)
  find_library(PORTAUDIO libportaudio.so) 
@@ -41,6 +42,6 @@ add_executable(echoex echoex.cpp)
 target_link_libraries(echoex AuLib ${LIBSNDFILE} ${PORTAUDIO})
 
 # installation targets
-INSTALL(TARGETS sampleplay saw readtable sine fm
- RUNTIME DESTINATION bin
+INSTALL(TARGETS sampleplay saw readtable sine fm panning ringmod ping
+  envelope adsr glide filterex play echoex RUNTIME DESTINATION bin
 )
