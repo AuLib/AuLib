@@ -186,7 +186,6 @@ public:
 #include <limits>
 #include <sstream>
 
-
 #ifndef AULIB_MAJOR_V
 #define AULIB_MAJOR_V 0
 #endif

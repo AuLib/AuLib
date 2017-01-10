@@ -56,13 +56,13 @@ const AuLib::AudioBase &AuLib::Envel::process() {
       m_cseg = nsegs;
     } else if (m_cnt == m_time && m_cseg != -1) {
       m_cseg++;
-      if ((uint32_t) m_cseg < nsegs) {
+      if ((uint32_t)m_cseg < nsegs) {
         m_y = m_segs.endpts()[m_cseg - 1];
         m_incr = m_segs.incrs()[m_cseg];
         m_time = m_segs.durs()[m_cseg];
         m_cnt = 0;
       } else {
-        if ((uint32_t) m_cseg == nsegs)
+        if ((uint32_t)m_cseg == nsegs)
           m_y = m_segs.endpts()[m_cseg - 1];
         m_incr = linear ? 0. : 1.;
         m_cseg = -1;

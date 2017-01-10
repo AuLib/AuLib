@@ -10,10 +10,10 @@
 /////////////////////////////////////////////////////////////////////
 #ifndef _TABLEREAD_H
 #define _TABLEREAD_H
-#include <memory>
 #include "AudioBase.h"
 #include "FourierTable.h"
 #include "FuncTable.h"
+#include <memory>
 
 namespace AuLib {
 

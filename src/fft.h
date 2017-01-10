@@ -44,7 +44,6 @@ void transform(std::vector<std::complex<double>> &out, double *in);
     may reside in the same memory location for an in-place transform
 */
 void transform(double *out, std::vector<std::complex<double>> &in);
-
 }
 }
 

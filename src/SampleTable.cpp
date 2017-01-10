@@ -29,15 +29,16 @@ AuLib::SampleTable::SampleTable(const char *name, uint32_t chn) : FuncTable() {
     m_vector.resize(m_vframes * m_nchnls);
     sf_count_t read = 0, frms;
     std::vector<double> tmp(def_vframes * info.channels);
-    while (read != (int32_t) m_tframes) {
+    while (read != (int32_t)m_tframes) {
       frms = sf_readf_double(sf, tmp.data(), def_vframes);
       if (frms == 0 || sf_error(sf) != SF_ERR_NO_ERROR) {
         m_error = AULIB_FILE_ERROR;
         break;
       }
-      if (chn && (uint32_t) info.channels != m_nchnls)
-        for (uint32_t i = 0,
-	       j = chn <= (uint32_t) info.channels ? chn - 1 : info.channels - 1;
+      if (chn && (uint32_t)info.channels != m_nchnls)
+        for (uint32_t i = 0, j = chn <= (uint32_t)info.channels
+                                     ? chn - 1
+                                     : info.channels - 1;
              i < frms; i++, j += info.channels) {
           m_vector[i + read] = tmp[j];
         }
