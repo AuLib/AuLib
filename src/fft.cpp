@@ -11,9 +11,9 @@
 #include "fft.h"
 
 static void reorder(std::vector<std::complex<double>> &s) {
-  size_t N = s.size();
+  uint32_t N = s.size();
   uint32_t j = 0, m;
-  for (int i = 0; i < N; i++) {
+  for (uint32_t i = 0; i < N; i++) {
     if (j > i) {
       std::swap(s[i], s[j]);
     }
@@ -27,7 +27,7 @@ static void reorder(std::vector<std::complex<double>> &s) {
 }
 
 void AuLib::fft::transform(std::vector<std::complex<double>> &s, bool fwd) {
-  size_t N = s.size();
+  uint32_t N = s.size();
   std::complex<double> wp, w, even, odd;
   double o;
   uint32_t i;
@@ -54,7 +54,7 @@ void AuLib::fft::transform(std::vector<std::complex<double>> &s, bool fwd) {
 
 void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r) {
   using namespace std::complex_literals;
-  size_t N = c.size();
+  uint32_t N = c.size();
   std::complex<double> wp, w = 1., even, odd;
   double o, zro, nyq;
   double *s = reinterpret_cast<double *>(c.data());
@@ -79,7 +79,7 @@ void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r) {
 
 void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c) {
   using namespace std::complex_literals;
-  size_t N = c.size();
+  uint32_t N = c.size();
   std::complex<double> wp, w = 1., even, odd;
   double o, zro, nyq;
   double *s = reinterpret_cast<double *>(c.data());

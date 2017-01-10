@@ -33,7 +33,7 @@ AuLib::EnvelTable::EnvelTable(const Segments &segs, bool norm) : FuncTable() {
       cnt++;
     if (cnt == time && cseg >= 0) {
       cseg++;
-      if (cseg < nsegs) {
+      if ((uint32_t) cseg < nsegs) {
         y = segs.endpts()[cseg - 1];
         incr = segs.incrs()[cseg];
         time = segs.durs()[cseg];

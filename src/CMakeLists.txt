@@ -3,7 +3,6 @@ add_library(AuLib
 Oscil.cpp 
 Phasor.cpp
 TableRead.cpp
-SoundOut.cpp
 FourierTable.cpp
 SampleTable.cpp
 Pan.cpp
@@ -13,10 +12,11 @@ Filter.cpp
 Tone.cpp
 Balance.cpp
 Delay.cpp
-Tap.cpp
 SoundIn.cpp
 fft.cpp
 Stft.cpp
+SoundOut.cpp
+Tap.cpp
 )
 
 

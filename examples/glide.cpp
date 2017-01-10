@@ -30,7 +30,7 @@ int main() {
     if (amp.error() == AULIB_NOERROR) {
       if (sig.error() == AULIB_NOERROR) {
         if (output.error() == AULIB_NOERROR) {
-          for (int i = 0; i < end + rel; i += def_vframes) {
+          for (uint64_t i = 0; i < end + rel; i += def_vframes) {
             freq.process();
             amp.process();
             sig.process(amp, freq);

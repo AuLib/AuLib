@@ -4,9 +4,11 @@ if(APPLE)
  find_library(LIBSNDFILE libsndfile.dylib)
  find_library(PORTAUDIO libportaudio.dylib)
 elseif(LINUX)
+ message(STATUS "platform is linux")
  find_library(LIBSNDFILE libsndfile.so)
  find_library(PORTAUDIO libportaudio.so) 
 endif()
+
 
 # example programs
 add_executable(sine sine.cpp)

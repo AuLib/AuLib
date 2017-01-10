@@ -62,7 +62,7 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
       m_handle = (void *)sf;
       m_mode = SOUNDIN_SNDFILE;
       m_sr = info.samplerate;
-      if (m_nchnls != info.channels) {
+      if (m_nchnls != (uint32_t) info.channels) {
         m_nchnls = info.channels;
         m_vector.resize(m_nchnls * m_vframes);
       }

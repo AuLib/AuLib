@@ -16,7 +16,7 @@ const AuLib::Tap &AuLib::Tap::process(const Delay &obj, double time) {
     const AudioBase &delay = obj.delayline();
     int32_t rp = (uint32_t)(time > 0. ? time * m_sr : 0);
     int32_t pos = obj.pos() - m_vframes;
-    uint32_t max = delay.vsamps();
+    int32_t max = delay.vsamps();
     if (rp > max)
       rp = max;
     if (pos < 0)
@@ -38,7 +38,7 @@ const AuLib::Tapi &AuLib::Tapi::process(const Delay &obj, double time) {
     double a, b;
     double frac, rp = (time > 0. ? time * m_sr : 0);
     int32_t pos = obj.pos() - m_vframes;
-    uint32_t rpi, max = delay.vsamps();
+    int32_t rpi, max = delay.vsamps();
     if (rp > max)
       rp = (double)max;
     if (pos < 0)
@@ -65,7 +65,7 @@ const double *AuLib::Tapi::process(const Delay &obj, const double *time) {
     double a, b;
     double frac, rp;
     int32_t pos = obj.pos() - m_vframes;
-    uint32_t rpi, max = delay.vsamps();
+    int32_t rpi, max = delay.vsamps();
     if (pos < 0)
       pos += max;
     for (uint32_t i = 0; i < m_vframes; i++) {

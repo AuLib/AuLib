@@ -16,7 +16,7 @@
 
 namespace AuLib {
 
-const uint32_t octs = 10;
+const int32_t octs = 10;
 const double base = 20;
 
 /** A set of tables for BlOsc
