@@ -284,7 +284,7 @@ enum error_codes { AULIB_NOERROR = 0, AULIB_ERROR };
 
 /** Standard Error messages
  */
-  const std::string aulib_error[] = {"Aulib: no error",
-                                    "Aulib: general object error"};
+const std::string aulib_error[] = {"Aulib: no error",
+                                   "Aulib: general object error"};
 };
 #endif // ifndef _AU_LIB_H

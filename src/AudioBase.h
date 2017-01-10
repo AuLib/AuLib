@@ -190,7 +190,9 @@ public:
 
   /** Get error message
    */
-  virtual const char *error_message() const { return aulib_error[m_error].c_str(); }
+  virtual const char *error_message() const {
+    return aulib_error[m_error].c_str();
+  }
 };
 
 /*! \class AudioBase AudioBase.h AuLib/AudioBase.h

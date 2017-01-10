@@ -24,8 +24,8 @@ enum sampletable_error_codes {
 
 /** Standard Error messages
  */
-  const std::string sampletable_error[] = {"SampleTable: file open error",
-                                          "SampleTable: file read error"};
+const std::string sampletable_error[] = {"SampleTable: file open error",
+                                         "SampleTable: file read error"};
 
 /** Sampled-sound table from a soundfile
  */
