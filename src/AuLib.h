@@ -199,6 +199,7 @@ public:
 #endif
 
 #define NONCOPYABLE(A)                                                         \
+  \
 public:                                                                        \
   A(const A &) = delete;                                                       \
   A &operator=(A) = delete
@@ -252,6 +253,14 @@ const uint32_t def_nchnls = 1;
 /** default function table length
  */
 const uint32_t def_tframes = 8192;
+
+/** default fftsize
+ */
+const uint32_t def_fftsize = 1024;
+
+/** default decimation
+ */
+const uint32_t def_decim = 4;
 
 /** the pi definition.
  */
