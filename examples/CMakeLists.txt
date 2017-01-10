@@ -10,8 +10,13 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
  find_library(PORTAUDIO libportaudio.so) 
 endif()
 
-
+if(NOT LIBSNDFILE)
+ message(STATUS "libsndfile was not found, not building examples")
+elseif(NOT PORTAUDIO)
+ message(STATUS "portaudio was not found, not building examples")
+else()
 # example programs
+message(STATUS "building examples")
 add_executable(sine sine.cpp)
 target_link_libraries(sine AuLib ${LIBSNDFILE} ${PORTAUDIO})
 add_executable(saw saw.cpp)
@@ -45,3 +50,4 @@ target_link_libraries(echoex AuLib ${LIBSNDFILE} ${PORTAUDIO})
 INSTALL(TARGETS sampleplay saw readtable sine fm panning ringmod ping
   envelope adsr glide filterex play echoex RUNTIME DESTINATION bin
 )
+endif()
