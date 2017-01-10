@@ -1,15 +1,4 @@
 
-# find the dependencies
-if(APPLE)
- message(STATUS "platform is OSX")
- find_library(LIBSNDFILE libsndfile.dylib)
- find_library(PORTAUDIO libportaudio.dylib)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
- message(STATUS "platform is linux")
- find_library(LIBSNDFILE libsndfile.so)
- find_library(PORTAUDIO libportaudio.so) 
-endif()
-
 if(NOT LIBSNDFILE)
  message(STATUS "libsndfile was not found, not building examples")
 elseif(NOT PORTAUDIO)

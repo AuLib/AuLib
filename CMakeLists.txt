@@ -24,6 +24,17 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
 
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
+# find the dependencies
+if(APPLE)
+ message(STATUS "platform is OSX")
+ find_library(LIBSNDFILE libsndfile.dylib)
+ find_library(PORTAUDIO libportaudio.dylib)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+ message(STATUS "platform is linux")
+ find_library(LIBSNDFILE libsndfile.so)
+ find_library(PORTAUDIO libportaudio.so) 
+endif()
+
 # AuLib sources
 add_subdirectory(src)
 
