@@ -53,6 +53,7 @@ void AuLib::fft::transform(std::vector<std::complex<double>> &s, bool fwd) {
 }
 
 void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r) {
+  using namespace std::complex_literals;
   size_t N = c.size();
   std::complex<double> wp, w = 1., even, odd;
   double o, zro, nyq;
@@ -69,7 +70,7 @@ void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r) {
   for (uint32_t i = 1, j = 0; i < N / 2; i++) {
     j = N - i;
     even = .5 * (c[i] + conj(c[j]));
-    odd = .5 * _j * (conj(c[j]) - c[i]);
+    odd = .5i * (conj(c[j]) - c[i]);
     c[i] = even + w * odd;
     c[j] = conj(even - w * odd);
     w *= wp;
@@ -77,6 +78,7 @@ void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r) {
 }
 
 void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c) {
+  using namespace std::complex_literals;
   size_t N = c.size();
   std::complex<double> wp, w = 1., even, odd;
   double o, zro, nyq;
@@ -89,7 +91,7 @@ void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c) {
   for (uint32_t i = 1, j = 0; i < N / 2 + 1; i++) {
     j = N - i;
     even = .5 * (c[i] + conj(c[j]));
-    odd = .5 * _j * (c[i] - conj(c[j]));
+    odd = .5i * (c[i] - conj(c[j]));
     c[i] = even + w * odd;
     c[j] = conj(even - w * odd);
     w *= wp;
