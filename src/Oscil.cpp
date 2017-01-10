@@ -81,7 +81,6 @@ void AuLib::SamplePlayer::lookup() {
   uint32_t phi;
   double frac, a, b;
   for (uint32_t i = 0; i < m_vframes; i++) {
-    // am_fm(i);
     phi = (uint32_t)m_phs;
     frac = m_phs - phi;
     phi *= m_nchnls;

@@ -16,6 +16,7 @@ Delay.cpp
 Tap.cpp
 SoundIn.cpp
 fft.cpp
+Stft.cpp
 )
 
 
