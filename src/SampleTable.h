@@ -24,7 +24,7 @@ enum sampletable_error_codes {
 
 /** Standard Error messages
  */
-static const char *sampletable_error[] = {"SampleTable: file open error",
+  const std::string sampletable_error[] = {"SampleTable: file open error",
                                           "SampleTable: file read error"};
 
 /** Sampled-sound table from a soundfile
@@ -42,9 +42,9 @@ public:
    */
   virtual const char *error_message() const {
     if (m_error > AULIB_ERROR)
-      return sampletable_error[m_error - AULIB_ERROR - 1];
+      return sampletable_error[m_error - AULIB_ERROR - 1].c_str();
     else
-      return aulib_error[m_error];
+      return aulib_error[m_error].c_str();
   }
 };
 

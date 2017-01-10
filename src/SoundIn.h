@@ -19,7 +19,7 @@ enum { SOUNDIN_RT = 1, SOUNDIN_STDIN, SOUNDIN_SNDFILE };
 
 /** Standard Error messages
 */
-static const char *soundin_error[] = {
+const std::string soundin_error[] = {
     "SoundIn: file open error", "SoundIn: RT initialisation error",
     "SoundIn: RT open error", "SoundIn: RT stream start error",
     "SoundIn: general error"};
@@ -72,9 +72,9 @@ public:
    */
   virtual const char *error_message() const {
     if (m_error > AULIB_ERROR)
-      return soundin_error[m_error - AULIB_ERROR - 1];
+      return soundin_error[m_error - AULIB_ERROR - 1].c_str();
     else
-      return aulib_error[m_error];
+      return aulib_error[m_error].c_str();
   }
 };
 

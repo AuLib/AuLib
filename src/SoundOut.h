@@ -31,7 +31,7 @@ enum soundout_error_codes {
 
 /** Standard Error messages
  */
-static const char *soundout_error[] = {
+const std::string soundout_error[] = {
     "SoundOut: file open error", "SoundOut: RT initialisation error",
     "SoundOut: RT open error", "SoundOut: RT stream start error",
     "SoundOut: general error"};
@@ -93,9 +93,9 @@ public:
    */
   virtual const char *error_message() const {
     if (m_error > AULIB_ERROR)
-      return soundout_error[m_error - AULIB_ERROR - 1];
+      return soundout_error[m_error - AULIB_ERROR - 1].c_str();
     else
-      return aulib_error[m_error];
+      return aulib_error[m_error].c_str();
   }
 };
 
