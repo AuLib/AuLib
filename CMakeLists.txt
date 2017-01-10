@@ -32,8 +32,10 @@ if(APPLE)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
  message(STATUS "platform is linux")
  find_library(LIBSNDFILE libsndfile.so)
- find_library(PORTAUDIO libportaudio.so) 
-endif()
+ find_library(PORTAUDIO libportaudio.so)
+else()
+ message(STATUS "platform is undefined")
+endif(APPLE)
 
 # AuLib sources
 add_subdirectory(src)
@@ -49,7 +51,9 @@ if(DOXYGEN_FOUND)
     add_custom_target(doc ${DOXYGEN_EXECUTABLE}
             ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
+     )
+ else()
+   message(STATUS "Not building documentation")
 endif(DOXYGEN_FOUND)
 
 
