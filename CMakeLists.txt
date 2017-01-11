@@ -13,7 +13,7 @@ set(AuLib_MINOR_V 0)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
 -std=c++14 -DAULIB_MAJOR_V=${AuLib_MAJOR_V} \
--DAULIB_MINOR_V=${AuLib_MINOR_V}")
+-DAULIB_MINOR_V=${AuLib_MINOR_V} ")
 
 if(CMAKE_BUILD_TYPE MATCHES DEBUG)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBETA=1 \
@@ -22,6 +22,7 @@ else()
  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBETA=0")
 ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
 
+include_directories("/usr/local/include")
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
 # find the dependencies
