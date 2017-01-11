@@ -8,6 +8,7 @@
 //
 /////////////////////////////////////////////////////////////////////
 #include <Chn.h>
+#include <Tapi.h>
 #include <Delay.h>
 #include <Pan.h>
 #include <SigBus.h>
@@ -26,7 +27,8 @@ int main(int argc, const char **argv) {
     SoundIn input(argv[1]);
     std::vector<Chn> chn(input.nchnls());
     std::vector<Delay> echo(input.nchnls(),
-                            Delay(0.5, 0.75, def_vframes, input.sr()));
+                            Delay(0.5, 0.5, def_vframes, input.sr()));
+    std::vector<Tapi> tap(input.nchnls());
     std::vector<Pan> pan(input.nchnls());
     SigBus mix(1. / input.nchnls(), 0., false, 2);
     SoundOut output(argv[2], 2, def_vframes, input.sr());
@@ -38,7 +40,8 @@ int main(int argc, const char **argv) {
       for (uint32_t j = 0; j < input.nchnls(); j++) {
         chn[j].process(input, j + 1);
         echo[j].process(chn[j]);
-        pan[j].process(echo[j] += chn[j], (1 + j) * input.nchnls() / 2.);
+	tap[j].process(echo[j], 0.25+j*0.1);
+        pan[j].process(tap[j] += chn[j], (1 + j) * input.nchnls() / 2.);
         mix.process(pan[j]);
       }
       output.write(mix);

@@ -21,15 +21,16 @@ const double *AuLib::Stft::process(const double *sig, uint32_t vframes) {
         if (m_pos[j] == m_N) {
           uint32_t offset = j * m_H;
           double *r = reinterpret_cast<double *>(m_cdata.data());
-          for (uint32_t n = 0; j < m_N; n++) {
-            r[(n + offset) % m_N] = m_framebufs[j][n] * m_win[n];
+          for (uint32_t n = 0; n < m_N; n++) {
+            r[(n + offset)%m_N] = m_framebufs[j][n] * m_win[n];
           }
           fft::transform(m_cdata, r);
           if (m_polar) {
-            for (uint32_t n = 2, k = 1; j < m_N; n += 2, k++) {
-              m_vector[n] = std::abs(m_cdata[k]);
+	    m_vector[0] = m_cdata[0].real(), m_vector[1] = m_cdata[0].imag();
+	    for(uint32_t n = 2, k = 1; n < m_N; n+=2, k++) {
+	      m_vector[n] = std::abs(m_cdata[k]);
               m_vector[n + 1] = std::arg(m_cdata[k]);
-            }
+	    }
           } else
             std::copy(r, r + m_N, m_vector.begin());
           m_pos[j] = 0;
@@ -40,14 +41,16 @@ const double *AuLib::Stft::process(const double *sig, uint32_t vframes) {
         if (m_pos[j] == m_N) {
           uint32_t offset = j * m_H;
           double *r = reinterpret_cast<double *>(m_cdata.data());
+	  m_cdata[0].real(sig[0]),  m_cdata[0].imag(sig[1]);
           if (m_polar) {
-            for (uint32_t n = 2, k = 1; j < m_N; n += 2, k++)
-              m_cdata[k] = std::polar(sig[n], sig[n + 1]);
+	    for(uint32_t n = 2, k = 1; n < m_N; n+=2, k++) {
+	      m_cdata[k] = std::polar(sig[n],sig[n+1]);
+	    }
           } else
             std::copy(sig, sig + m_N, r);
           fft::transform(r, m_cdata);
-          for (uint32_t n = 0; j < m_N; n++) {
-            m_framebufs[j][n] = r[(n + offset) % m_N] * m_win[n];
+          for (uint32_t n = 0; n < m_N; n++) {
+            m_framebufs[j][n] = r[(n + offset)%m_N] * m_win[n];
           }
           m_pos[j] = 0;
           m_framecount++;

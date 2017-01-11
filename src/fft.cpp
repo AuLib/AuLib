@@ -86,9 +86,10 @@ void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c) {
   zro = c[0].real(), nyq = c[0].imag();
   c[0].real(zro + nyq), c[0].imag(zro - nyq);
   o = -pi / N;
-  wp.real(cos(o)), wp.imag(cos(o));
+  wp.real(cos(o)), wp.imag(sin(o));
   w *= wp;
-  for (uint32_t i = 1, j = 0; i < N / 2 + 1; i++) {
+  int j;
+  for (uint32_t i = 1; i < N / 2 + 1; i++) {
     j = N - i;
     even = .5 * (c[i] + conj(c[j]));
     odd = .5i * (c[i] - conj(c[j]));
@@ -100,3 +101,27 @@ void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c) {
   if (s != r)
     std::copy(s, s + 2 * N, r);
 }
+/*def irfft(s):
+    N = len(s)
+    w = complex(1,0)
+    nyqs = s[0].imag
+    zero = s[0].real 
+    R = (zero + nyqs)
+    I = 1j*(zero - nyqs)
+    s[0] =  R + w*I
+    o = -pl.pi/N
+    wp = pl.cos(o) + pl.sin(o)*1j
+    w *= wp
+    for i in range(1,N//2+1):
+        j = N - i
+        R = 0.5*(s[i] + s[j].conjugate())
+        I = 0.5j*(s[i] - s[j].conjugate())
+        s[i] = R + w*I
+        s[j] = (R - w*I).conjugate()
+        w *= wp
+    s = ifft(s)
+    sig = pl.zeros(2*N)
+    sig[0::2] = s.real
+    sig[1::2] = s.imag 
+    return sig
+*/        

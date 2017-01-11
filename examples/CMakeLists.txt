@@ -34,6 +34,8 @@ add_executable(play play.cpp)
 target_link_libraries(play AuLib ${LIBSNDFILE} ${PORTAUDIO})
 add_executable(echoex echoex.cpp)
 target_link_libraries(echoex AuLib ${LIBSNDFILE} ${PORTAUDIO})
+add_executable(stftest stftest.cpp)
+target_link_libraries(stftest AuLib ${LIBSNDFILE} ${PORTAUDIO})
 
 # installation targets
 INSTALL(TARGETS sampleplay saw readtable sine fm panning ringmod ping

@@ -31,7 +31,8 @@ protected:
   uint32_t m_H;
   uint32_t m_D;
   bool m_fwd;
-  bool m_polar;
+
+    bool m_polar;
   uint64_t m_framecount;
   const FuncTable &m_win;
   std::vector<std::vector<double>> m_framebufs;
@@ -49,13 +50,13 @@ public:
   */
   Stft(const FuncTable &win, bool fwd = true, uint32_t decim = def_decim,
        bool polar = false, uint32_t vframes = def_vframes, double sr = def_sr)
-      : AudioBase(1, fwd ? win.tframes() : vframes, sr), m_N(win.tframes()),
-        m_H(decim ? m_N / decim : m_N), m_D(decim ? decim : 1), m_fwd(fwd),
+    : AudioBase(1, fwd ? win.tframes() : vframes, sr), m_N(win.tframes()),
+      m_H(decim ? m_N / decim : m_N), m_D(decim ? decim : 1), m_fwd(fwd),
         m_polar(polar), m_framecount(0), m_win(win),
         m_framebufs(m_D, std::vector<double>(m_N)), m_pos(m_D),
         m_cdata(m_N / 2) {
     for (uint32_t i = 0; i < decim; i++)
-      m_pos[i] = m_D - i - 1;
+      m_pos[i] = (m_D - i - 1)*m_H;
   };
 
   /** transform an signal sig, vframes is the (time-domain) processing vector
