@@ -30,8 +30,6 @@ protected:
   uint32_t m_N;
   uint32_t m_H;
   uint32_t m_D;
-  uint32_t m_cnt;
-  uint32_t m_cur;
   bool m_fwd;
   bool m_polar;
   uint64_t m_framecount;
@@ -52,8 +50,8 @@ public:
   Stft(const FuncTable &win, bool fwd = true, uint32_t decim = def_decim,
        bool polar = false, uint32_t vframes = def_vframes, double sr = def_sr)
       : AudioBase(1, fwd ? win.tframes() : vframes, sr), m_N(win.tframes()),
-        m_H(decim ? m_N / decim : m_N), m_D(decim ? decim : 1), m_cnt(0),
-        m_cur(0), m_fwd(fwd), m_polar(polar), m_framecount(0), m_win(win),
+        m_H(decim ? m_N / decim : m_N), m_D(decim ? decim : 1), m_fwd(fwd),
+        m_polar(polar), m_framecount(0), m_win(win),
         m_framebufs(m_D, std::vector<double>(m_N)), m_pos(m_D),
         m_cdata(m_N / 2) {
     for (uint32_t i = 0; i < decim; i++)

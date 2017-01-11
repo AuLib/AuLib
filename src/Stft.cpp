@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 // Implementation of the Stft and derived classes
 // Copyright (C) 2016-7 V Lazzarini
 //
@@ -7,51 +7,52 @@
 //  License as published by the Free Software Foundation; either
 // version 3.0 of the License, or (at your option) any later version.
 //
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 #include "Stft.h"
 #include "Pvoc.h"
 
 const double *AuLib::Stft::process(const double *sig, uint32_t vframes) {
-  for (uint32_t i = 0; i < vframes; i++, m_cnt++) {
-    if (m_cnt == m_H) {
-      uint32_t offset = m_cur * m_H;
-      double *r = reinterpret_cast<double *>(m_cdata.data());
-      if (m_fwd) {
-        for (uint32_t j = 0; j < m_N; j++) {
-          r[(i + offset) % m_N] = m_framebufs[m_cur][i] * m_win[i];
-        }
-        fft::transform(m_cdata, r);
-        if (m_polar) {
-          for (uint32_t j = 2, k = 1; j < m_N; j += 2, k++) {
-            m_vector[j] = std::abs(m_cdata[k]);
-            m_vector[j + 1] = std::arg(m_cdata[k]);
-          }
-        } else
-          std::copy(r, r + m_N, m_vector.begin());
-      } else {
-        if (m_polar) {
-          for (uint32_t j = 2, k = 1; j < m_N; j += 2, k++)
-            m_cdata[k] = std::polar(sig[j], sig[j + 1]);
-        } else
-          std::copy(sig, sig + m_N, r);
-        fft::transform(r, m_cdata);
-        for (uint32_t j = 0; j < m_N; j++) {
-          m_framebufs[m_cur][i] = r[(i + offset) % m_N] * m_win[i];
-        }
-      }
-      m_cur = m_cur == m_D ? 0 : m_cur + 1;
-      m_framecount++;
-      m_cnt = 0;
-    }
+  for (uint32_t i = 0; i < vframes; i++) {
     if (!m_fwd)
       m_vector[i] = 0.;
     for (uint32_t j = 0; j < m_D; j++) {
       if (m_fwd) {
-        m_framebufs[j][m_pos[j]] = sig[i];
+        m_framebufs[j][m_pos[j]++] = sig[i];
+        if (m_pos[j] == m_N) {
+          uint32_t offset = j * m_H;
+          double *r = reinterpret_cast<double *>(m_cdata.data());
+          for (uint32_t n = 0; j < m_N; n++) {
+            r[(n + offset) % m_N] = m_framebufs[j][n] * m_win[n];
+          }
+          fft::transform(m_cdata, r);
+          if (m_polar) {
+            for (uint32_t n = 2, k = 1; j < m_N; n += 2, k++) {
+              m_vector[n] = std::abs(m_cdata[k]);
+              m_vector[n + 1] = std::arg(m_cdata[k]);
+            }
+          } else
+            std::copy(r, r + m_N, m_vector.begin());
+          m_pos[j] = 0;
+          m_framecount++;
+        }
       } else {
-        m_vector[i] += m_framebufs[j][m_pos[j]];
+        m_vector[i] += m_framebufs[j][m_pos[j]++];
+        if (m_pos[j] == m_N) {
+          uint32_t offset = j * m_H;
+          double *r = reinterpret_cast<double *>(m_cdata.data());
+          if (m_polar) {
+            for (uint32_t n = 2, k = 1; j < m_N; n += 2, k++)
+              m_cdata[k] = std::polar(sig[n], sig[n + 1]);
+          } else
+            std::copy(sig, sig + m_N, r);
+          fft::transform(r, m_cdata);
+          for (uint32_t n = 0; j < m_N; n++) {
+            m_framebufs[j][n] = r[(n + offset) % m_N] * m_win[n];
+          }
+          m_pos[j] = 0;
+          m_framecount++;
+        }
       }
-      m_pos[j] = m_pos[j] == m_N - 1 ? 0 : m_pos[j] + 1;
     }
   }
   return vector();
