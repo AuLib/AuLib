@@ -8,7 +8,7 @@
 //
 /////////////////////////////////////////////////////////////////////
 #include <Oscili.h>
-#include <Stft.h>
+#include <Pvoc.h>
 #include <Wintabs.h>
 #include <SoundOut.h>
 #include <iostream>
@@ -20,7 +20,7 @@ int main(int argc, const char **argv) {
   if (argc > 1) {
     Oscil sig;
     Hann win;
-    Stft anal(win,fft::forward), syn(win,fft::inverse);
+    Pvoc anal(win,fft::forward), syn(win,fft::inverse);
     SoundOut output(argv[1]);
     cout << Info::version();
     if (sig.error() == AULIB_NOERROR) {
@@ -28,6 +28,7 @@ int main(int argc, const char **argv) {
         for (int i = 0; i < def_sr * 2; i += def_vframes) {
           sig.process(0.5, 440.);
 	  anal.process(sig);
+	  cout << anal.bin(9) << "\n";
 	  syn.process(anal);
           output.write(syn);
         }

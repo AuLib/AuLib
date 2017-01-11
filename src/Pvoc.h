@@ -18,6 +18,10 @@ class Pvoc : public Stft {
   std::vector<double> m_sbuf;
   bool m_done;
 
+  /** PVOC transform
+   */
+  virtual const double *transform(const double *sig, uint32_t vframes);
+
 public:
   /** Pvoc constructor \n\n
     win - analysis window \n
@@ -26,26 +30,10 @@ public:
     vframes - vector size \n
     sr - sampling rate \n
 */
-  Pvoc(const FuncTable &win, bool fwd = true, uint32_t decim = def_decim,
+  Pvoc(const FuncTable &win, bool dir, uint32_t decim = def_decim,
        uint32_t vframes = def_vframes, double sr = def_sr)
-      : Stft(win, fwd, decim, true, vframes, sr), m_sbuf(fwd ? m_N / 2 : m_N),
-        m_done(false) {}
-
-  /** transform an signal sig, vframes is the (time-domain) processing vector
-   * size.
-    */
-  virtual const double *process(const double *sig,
-                                uint32_t vframes = def_vframes);
-
-  /** transform a signal in obj
-   */
-  virtual const Stft &process(const AudioBase &obj) {
-    if (obj.nchnls() == 1) {
-      process(obj.vector(), m_fwd ? obj.vframes() : m_vframes);
-    } else
-      m_error = AULIB_ERROR;
-    return *this;
-  }
+      : Stft(win, dir, decim, polar, vframes, sr),
+        m_sbuf(dir == fft::forward ? m_N / 2 : m_N), m_done(false) {}
 };
 
 /*! \class Pvoc Pvoc.h AuLib/Pvoc.h

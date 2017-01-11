@@ -14,7 +14,7 @@
 const AuLib::Tap &AuLib::Tap::process(const Delay &obj, double time) {
   if (obj.vframes() == m_vframes && obj.sr() == m_sr) {
     const AudioBase &delay = obj.delayline();
-    int32_t dt = (uint32_t)(time > 0. ? time * m_sr : 0), rp ;
+    int32_t dt = (uint32_t)(time > 0. ? time * m_sr : 0), rp;
     int32_t pos = obj.pos() - m_vframes;
     int32_t max = delay.vsamps();
     if (dt > max)

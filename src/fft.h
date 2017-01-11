@@ -20,12 +20,20 @@ namespace AuLib {
 
 namespace fft {
 
+/** definition of forward
+ */
+const bool forward = true;
+
+/** definition of inverse
+ */
+const bool inverse = false;
+
 /** In-place complex-to-complex FFT \n
     data - data to be transformed  \n
     fwd - true for forward operation, false for inverse \n
     Size of data is expected to be a power-of-two.
  */
-void transform(std::vector<std::complex<double>> &data, bool fwd = true);
+void transform(std::vector<std::complex<double>> &data, bool dir);
 
 /** Real-to-complex forward FFT (size N) \n
     in - pointer to real array of size N \n
