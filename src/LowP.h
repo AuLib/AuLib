@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 // LowP class: low-pass filter using Butterworth design
 // Copyright (C) 2016-7 V Lazzarini
 //
@@ -7,16 +7,16 @@
 // License as published by the Free Software Foundation; either
 // version 3.0 of the License, or (at your option) any later version.
 //
-/////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 #ifndef _LOWP_H_
 #define _LOWP_H_
-#include "Filter.h"
+#include "Iir.h"
 
 namespace AuLib {
 
 /** 2nd-order Butterworth low-pass filter
  */
-class LowP : public Filter {
+class LowP : public Iir {
 
 protected:
   double m_freq;
@@ -32,7 +32,7 @@ public:
       sr - sampling rate
   */
   LowP(double cf, uint32_t vframes = def_vframes, double sr = def_sr)
-      : Filter(vframes, sr), m_freq(cf) {
+      : Iir(vframes, sr), m_freq(cf) {
     update();
   };
 

@@ -1,5 +1,5 @@
-////////////////////////////////////////////////////////////////////
-// Implementation of the Filter and Filter-derived classes
+/////////////////////////////////////////////////////////////////////////////////
+// Implementation of the Iir and Iir-derived classes
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
@@ -7,8 +7,8 @@
 //  License as published by the Free Software Foundation; either
 // version 3.0 of the License, or (at your option) any later version.
 //
-/////////////////////////////////////////////////////////////////////
-#include "Filter.h"
+/////////////////////////////////////////////////////////////////////////////////
+#include "Iir.h"
 #include "BandP.h"
 #include "BandR.h"
 #include "HighP.h"
@@ -16,7 +16,7 @@
 #include "Reson.h"
 #include "ResonR.h"
 
-const double *AuLib::Filter::filter(const double *sig) {
+const double *AuLib::Iir::filter(const double *sig) {
   double w, y;
 
   for (uint32_t i = 0; i < m_vframes; i++) {
