@@ -38,6 +38,19 @@ else()
  message(STATUS "platform is undefined")
 endif(APPLE)
 
+if(PORTAUDIO)
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_PORTAUDIO ")
+else()
+ message(STATUS "portaudio not found, not building realtime audio IO support")
+endif(PORTAUDIO)
+
+if(LIBSNDFILE)
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_LIBSNDFILE ")
+else()
+ message(STATUS "libsndfile not found, not building soundfile IO support")
+endif(LIBSNDFILE)
+
+
 # AuLib sources
 add_subdirectory(src)
 

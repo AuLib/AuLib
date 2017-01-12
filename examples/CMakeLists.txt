@@ -1,9 +1,4 @@
 
-if(NOT LIBSNDFILE)
- message(STATUS "libsndfile was not found, not building examples")
-elseif(NOT PORTAUDIO)
- message(STATUS "portaudio was not found, not building examples")
-else()
 # example programs
 message(STATUS "building examples")
 add_executable(sine sine.cpp)
@@ -43,4 +38,3 @@ target_link_libraries(pvoctest AuLib ${LIBSNDFILE} ${PORTAUDIO})
 INSTALL(TARGETS sampleplay saw readtable sine fm panning ringmod ping
   envelope adsr glide filterex play echoex stftest pvoctest RUNTIME DESTINATION bin
 )
-endif()

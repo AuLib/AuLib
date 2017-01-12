@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 // SoundIn class implementation
-// dependencies: libsndfile, portaudio
+// optional dependencies: libsndfile, portaudio
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
@@ -13,14 +13,19 @@
 #include "SoundOut.h"
 #include <cstring>
 #include <iostream>
+#ifdef HAVE_PORTAUDIO
 #include <portaudio.h>
+#endif
+#ifdef HAVE_LIBSNDFILE
 #include <sndfile.h>
+#endif
 
 AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
                         uint64_t bframes, double sr)
     : AudioBase(nchnls, vframes, sr), m_src(src), m_mode(0),
       m_cnt(bframes * nchnls), m_dur(std::numeric_limits<uint64_t>::max()),
       m_framecnt(0), m_inbuf(bframes * nchnls), m_handle(NULL) {
+#ifdef HAVE_PORTAUDIO
   if (m_src == "adc") {
     // RT audio
     PaError err;
@@ -51,10 +56,16 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
       m_error = AULIB_RTINIT_ERROR;
       m_vframes = 0;
     }
-  } else if (m_src == "stdin") {
+  } else
+#endif
+    if (m_src == "stdin") {
     // stdout
     m_mode = SOUNDIN_STDIN;
-  } else {
+    m_handle = nullptr;
+    m_cnt = 0;
+  }
+#ifdef HAVE_LIBSNDFILE
+    else {
     // sndfile
     SF_INFO info{0};
     SNDFILE *sf = sf_open(m_src.c_str(), SFM_READ, &info);
@@ -72,20 +83,32 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
       m_vframes = 0;
     }
   }
+#else
+  else {
+    m_error =  AULIB_NOIO_ERROR;
+    m_src = "none";
+  }
+#endif
 }
 
 AuLib::SoundIn::~SoundIn() {
+#ifdef HAVE_PORTAUDIO
   if (m_mode == SOUNDIN_RT && m_handle != NULL) {
     Pa_StopStream((PaStream *)m_handle);
     Pa_CloseStream((PaStream *)m_handle);
     Pa_Terminate();
-  } else if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
+  }
+#endif
+#ifdef HAVE_LIBSNDFILE
+  if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
     sf_close((SNDFILE *)m_handle);
   }
+#endif
 }
 
 const double *AuLib::SoundIn::read(uint32_t frames) {
   uint32_t samples = frames * m_nchnls;
+#ifdef HAVE_PORTAUDIO
   if (m_mode == SOUNDIN_RT && m_handle != NULL) {
     PaError err;
     uint32_t bsamples = m_inbuf.size();
@@ -100,14 +123,18 @@ const double *AuLib::SoundIn::read(uint32_t frames) {
       }
       m_vector[i] = (double)buffer[m_cnt++];
     }
-  } else if (m_mode == SOUNDIN_STDIN) {
+  } else
+#endif
+    if (m_mode == SOUNDIN_STDIN) {
     uint32_t sample_cnt = 0;
     for (uint32_t i = 0; i < samples; i++) {
       std::cin >> m_vector[i];
       sample_cnt++;
     }
     m_framecnt += sample_cnt / m_nchnls;
-  } else if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
+  }
+#ifdef HAVE_LIBSNDFILE
+    else if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
     uint32_t bsamples = m_inbuf.size();
     for (uint32_t i = 0; i < samples; i++) {
       if (m_cnt == bsamples) {
@@ -117,7 +144,9 @@ const double *AuLib::SoundIn::read(uint32_t frames) {
       }
       m_vector[i] = m_inbuf[m_cnt++];
     }
-  } else
-    return NULL;
+  }
+#endif
+    else
+    return nullptr;
   return vector();
 }

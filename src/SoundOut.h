@@ -26,7 +26,8 @@ enum soundout_error_codes {
   AULIB_RTINIT_ERROR,
   AULIB_RTOPEN_ERROR,
   AULIB_RTSTREAM_ERROR,
-  AULIB_SOUNDOUT_ERROR
+  AULIB_NOIO_ERROR,
+  AULIB_SOUNDIO_ERROR
 };
 
 /** Standard Error messages
@@ -34,6 +35,7 @@ enum soundout_error_codes {
 const std::string soundout_error[] = {
     "SoundOut: file open error", "SoundOut: RT initialisation error",
     "SoundOut: RT open error", "SoundOut: RT stream start error",
+    "SoundOut: destination not available",
     "SoundOut: general error"};
 
 /** Audio output class

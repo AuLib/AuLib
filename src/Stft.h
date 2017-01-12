@@ -65,11 +65,15 @@ public:
   };
 
   /** transform an signal sig, vframes is the (time-domain) processing vector
-   * size.
+   *  size and it is required to be >= analysis hopsize, otherwise no processing
+   *  takes place.
    */
   virtual const double *process(const double *sig,
                                 uint32_t vframes = def_vframes) {
-    return transform(sig, vframes);
+    if(vframes >= m_H)
+     return transform(sig, vframes);
+    else 
+      return vector();
   }
 
   /** transform a signal in obj

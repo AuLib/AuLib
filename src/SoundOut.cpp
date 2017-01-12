@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 // SoundOut class implementation
-// dependencies: libsndfile, portaudio
+// optional dependencies: libsndfile, portaudio
 // Copyright (C) 2016-7 V Lazzarini
 //
 // This software is free software; you can redistribute it and/or
@@ -12,13 +12,19 @@
 #include "SoundOut.h"
 #include <cstring>
 #include <iostream>
+#ifdef HAVE_PORTAUDIO
 #include <portaudio.h>
+#endif
+#ifdef HAVE_LIBSNDFILE
 #include <sndfile.h>
+#endif
 
 AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls, uint32_t vframes,
                           double sr)
     : AudioBase(nchnls, vframes, sr), m_dest(dest), m_mode(0), m_cnt(0),
       m_framecnt(0), m_handle(NULL) {
+  
+#ifdef HAVE_PORTAUDIO
   if (m_dest == "dac") {
     // RT audio
     PaError err;
@@ -49,10 +55,16 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls, uint32_t vframes,
       m_error = AULIB_RTINIT_ERROR;
       m_vframes = 0;
     }
-  } else if (m_dest == "stdout") {
+  } else
+#endif
+    if (m_dest == "stdout") {
     // stdout
     m_mode = SOUNDOUT_STDOUT;
-  } else {
+    m_handle = nullptr;
+    m_cnt = 0;
+  }
+#ifdef HAVE_LIBSNDFILE
+    else {
     // sndfile
     SF_INFO info{0};
     uint32_t fformat = SF_FORMAT_RAW;
@@ -74,20 +86,32 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls, uint32_t vframes,
       m_vframes = 0;
     }
   }
+#else
+  else {
+    m_error =  AULIB_NOIO_ERROR;
+    m_dest = "none";
+  }
+#endif
 }
 
 AuLib::SoundOut::~SoundOut() {
+#ifdef HAVE_PORTAUDIO
   if (m_mode == SOUNDOUT_RT && m_handle != NULL) {
     Pa_StopStream((PaStream *)m_handle);
     Pa_CloseStream((PaStream *)m_handle);
     Pa_Terminate();
-  } else if (m_mode == SOUNDOUT_SNDFILE && m_handle != NULL) {
+  } 
+#endif
+#ifdef HAVE_LIBSNDFILE
+    if (m_mode == SOUNDOUT_SNDFILE && m_handle != NULL) {
     sf_close((SNDFILE *)m_handle);
   }
+#endif
 }
 
 uint64_t AuLib::SoundOut::write(const double *sig, uint32_t frames) {
   uint32_t samples = frames * m_nchnls;
+#ifdef HAVE_PORTAUDIO
   if (m_mode == SOUNDOUT_RT && m_handle != NULL) {
     PaError err;
     uint32_t bsamples = m_vframes * m_nchnls;
@@ -103,14 +127,18 @@ uint64_t AuLib::SoundOut::write(const double *sig, uint32_t frames) {
         m_cnt = 0;
       }
     }
-  } else if (m_mode == SOUNDOUT_STDOUT) {
+  } else
+#endif
+    if (m_mode == SOUNDOUT_STDOUT) {
     uint32_t sample_cnt = 0;
     for (uint32_t i = 0; i < samples; i++) {
       std::cout << sig[i] << "\n";
       sample_cnt++;
     }
     m_framecnt += sample_cnt / m_nchnls;
-  } else if (m_mode == SOUNDOUT_SNDFILE && m_handle != NULL) {
+  }
+#ifdef HAVE_LIBSNDFILE
+    else if (m_mode == SOUNDOUT_SNDFILE && m_handle != NULL) {
     uint32_t bsamples = m_vframes * m_nchnls;
     for (uint32_t i = 0; i < samples; i++) {
       m_vector[m_cnt++] = sig[i];
@@ -121,7 +149,8 @@ uint64_t AuLib::SoundOut::write(const double *sig, uint32_t frames) {
         m_cnt = 0;
       }
     }
-  } else
-    return 0;
+  }
+#endif
+    else return 0;
   return m_framecnt;
 }

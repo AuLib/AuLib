@@ -25,12 +25,18 @@ int main(int argc, const char **argv) {
           sig.process(0.5, 440.);
           output.write(sig);
         }
-      } else
+      } else {
         cout << output.error_message() << "\n";
-    } else
+        return 1;
+      }
+    } else {
       cout << sig.error_message() << "\n";
+      return 1;
+    }
     cout << "wrote samples to " << output.dest() << "\n";
-  } else
+    return 0;
+  } else {
     cout << "usage: " << argv[0] << " filename\n";
-  return 0;
+    return 1;
+  }
 }
