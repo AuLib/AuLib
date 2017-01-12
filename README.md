@@ -7,7 +7,7 @@ the GNU LGPL 3.0.
 Building
 ----------------------
 The library and example programs are built with CMake.The only
-optional dependencies are libsndfile and portaudio for audio IO, but
+*optional* dependencies are libsndfile and portaudio for audio IO, but
 the library can be built without these (but with no built-in support
 for soundfile or realtime audio IO).
 
