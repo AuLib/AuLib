@@ -25,7 +25,7 @@ const double *AuLib::Stft::transform(const double *sig, uint32_t vframes) {
             r[(n + offset) % m_N] = m_framebufs[j][n] * m_win[n];
           }
           fft::transform(m_cdata, r);
-          if (m_repr == polar) {
+          if (m_repr == fft::polar) {
             m_vector[0] = m_cdata[0].real(), m_vector[1] = m_cdata[0].imag();
             for (uint32_t n = 2, k = 1; n < m_N; n += 2, k++) {
               m_vector[n] = std::abs(m_cdata[k]);
@@ -42,7 +42,7 @@ const double *AuLib::Stft::transform(const double *sig, uint32_t vframes) {
           uint32_t offset = j * m_H;
           double *r = reinterpret_cast<double *>(m_cdata.data());
           m_cdata[0].real(sig[0]), m_cdata[0].imag(sig[1]);
-          if (m_repr == polar) {
+          if (m_repr == fft::polar) {
             for (uint32_t n = 2, k = 1; n < m_N; n += 2, k++) {
               m_cdata[k] = std::polar(sig[n], sig[n + 1]);
             }
@@ -78,8 +78,6 @@ const double *AuLib::Pvoc::transform(const double *sig, uint32_t vframes) {
           delta += twopi;
         m_vector[i + 1] = j * c + delta * d;
       }
-      double *r = reinterpret_cast<double *>(m_cdata.data());
-      std::copy(m_vector.begin(), m_vector.end(), r);
       m_done = true;
     }
   } else {

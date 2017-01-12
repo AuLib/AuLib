@@ -32,8 +32,19 @@ public:
 */
   Pvoc(const FuncTable &win, bool dir, uint32_t decim = def_decim,
        uint32_t vframes = def_vframes, double sr = def_sr)
-      : Stft(win, dir, decim, polar, vframes, sr),
+    : Stft(win, dir, decim, fft::polar, vframes, sr),
         m_sbuf(dir == fft::forward ? m_N / 2 : m_N), m_done(false) {}
+
+  /** return spectrum as a complex<double> vector ref
+      (only meaningful in forward transforms)
+   */
+  virtual const std::vector<std::complex<double>> &spectrum() {
+      double *r = reinterpret_cast<double *>(m_cdata.data());
+      std::copy(m_vector.begin(), m_vector.end(), r);
+      return m_cdata;
+  }
+  
+  
 };
 
 /*! \class Pvoc Pvoc.h AuLib/Pvoc.h

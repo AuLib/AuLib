@@ -28,6 +28,14 @@ const bool forward = true;
  */
 const bool inverse = false;
 
+/** definition of polar
+ */
+const bool polar = true;
+
+/** definition of rectang
+ */
+const bool rectang = false;
+
 /** In-place complex-to-complex FFT \n
     data - data to be transformed  \n
     fwd - true for forward operation, false for inverse \n

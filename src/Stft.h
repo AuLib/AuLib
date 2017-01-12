@@ -16,14 +16,6 @@
 
 namespace AuLib {
 
-/** definition of polar
- */
-const bool polar = true;
-
-/** definition of rectang
- */
-const bool rectang = false;
-
 /** Stft implements a streaming Short-time Fourier Transform
     overlapped windows are taken from the input (forward mode)
     and analysis frames in either rectangular or polar formats
@@ -52,16 +44,17 @@ protected:
   virtual const double *transform(const double *sig, uint32_t vframes);
 
 public:
+  
   /** Stft constructor \n\n
       win - analysis window \n
       decim - decimation \n
       dir - transform direction, forward or inverse \n
-      repr - data format, polar or rectang \n
+      repr - data format, fft::polar or fft::rectang \n
       vframes - vector size \n
       sr - sampling rate \n
   */
   Stft(const FuncTable &win, bool dir, uint32_t decim = def_decim,
-       bool repr = rectang, uint32_t vframes = def_vframes, double sr = def_sr)
+       bool repr = fft::rectang, uint32_t vframes = def_vframes, double sr = def_sr)
       : AudioBase(1, dir == fft::forward ? win.tframes() : vframes, sr),
         m_z(0., 0.), m_N(win.tframes()), m_H(decim ? m_N / decim : m_N),
         m_D(decim ? decim : 1), m_dir(dir), m_repr(repr), m_framecount(0),
@@ -90,7 +83,7 @@ public:
     return *this;
   }
 
-  /** return data format (polar or rectang)
+  /** return data format (fft::polar or fft::rectang)
    */
   bool repr() const { return m_repr; }
 
@@ -98,14 +91,18 @@ public:
    */
   bool framecount() const { return m_framecount; }
 
+  /** spectrum as a complex<double> vector ref
+      (only meaningful in forward transforms)
+   */
+  virtual const std::vector<std::complex<double>> &spectrum() {
+      return m_cdata;
+  }
+
   /** return bin data as a complex<double> ref
-      (only in forward transforms)
+      (only meaningful in forward transforms)
    */
   const std::complex<double> &bin(uint32_t n) {
-    if (m_dir == fft::forward)
-      return m_cdata[n < m_N ? n : m_N - 1];
-    else
-      return m_z;
+    return spectrum()[n < m_N/2 ? n : m_N/2 - 1];
   }
 };
 

@@ -28,7 +28,7 @@ int main(int argc, const char **argv) {
         for (int i = 0; i < def_sr * 2; i += def_vframes) {
           sig.process(0.5, 440.);
 	  anal.process(sig);
-	  cout << anal.bin(9) << "\n";
+	  cout << anal.bin(10) << "\n";
 	  syn.process(anal);
           output.write(syn);
         }
