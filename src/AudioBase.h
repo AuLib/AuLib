@@ -147,11 +147,11 @@ public:
 
   /** Conversion operator for const double*
    */
-  operator const double *() const { return m_vector.data(); }
+  explicit operator const double *() const { return m_vector.data(); }
 
   /** Get the audio vector
    */
-  const double *vector() const { return *this; }
+  const double *vector() const { return static_cast<const double *>(*this); }
 
   /** Get a single sample at frame ndx
       and channel chn off the data vector
