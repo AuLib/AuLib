@@ -58,14 +58,14 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
     }
   } else
 #endif
-    if (m_src == "stdin") {
+      if (m_src == "stdin") {
     // stdout
     m_mode = SOUNDIN_STDIN;
     m_handle = nullptr;
     m_cnt = 0;
   }
 #ifdef HAVE_LIBSNDFILE
-    else {
+  else {
     // sndfile
     SF_INFO info{0};
     SNDFILE *sf = sf_open(m_src.c_str(), SFM_READ, &info);
@@ -85,7 +85,7 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
   }
 #else
   else {
-    m_error =  AULIB_NOIO_ERROR;
+    m_error = AULIB_NOIO_ERROR;
     m_src = "none";
   }
 #endif
@@ -125,7 +125,7 @@ const double *AuLib::SoundIn::read(uint32_t frames) {
     }
   } else
 #endif
-    if (m_mode == SOUNDIN_STDIN) {
+      if (m_mode == SOUNDIN_STDIN) {
     uint32_t sample_cnt = 0;
     for (uint32_t i = 0; i < samples; i++) {
       std::cin >> m_vector[i];
@@ -134,7 +134,7 @@ const double *AuLib::SoundIn::read(uint32_t frames) {
     m_framecnt += sample_cnt / m_nchnls;
   }
 #ifdef HAVE_LIBSNDFILE
-    else if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
+  else if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
     uint32_t bsamples = m_inbuf.size();
     for (uint32_t i = 0; i < samples; i++) {
       if (m_cnt == bsamples) {
@@ -146,7 +146,7 @@ const double *AuLib::SoundIn::read(uint32_t frames) {
     }
   }
 #endif
-    else
+  else
     return nullptr;
   return vector();
 }

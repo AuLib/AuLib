@@ -33,7 +33,7 @@ AuLib::Oscil::Oscil(double amp, double freq, const FuncTable &ftable,
   m_phs = mod(m_phs * m_tframes);
 }
 
-void AuLib::Oscil::lookup() {
+void AuLib::Oscil::oscillator() {
   for (uint32_t i = 0; i < m_vframes; i++) {
     am_fm(i);
     m_vector[i] = m_amp * m_table[(uint32_t)m_phs];
@@ -41,7 +41,7 @@ void AuLib::Oscil::lookup() {
   }
 }
 
-void AuLib::Oscili::lookup() {
+void AuLib::Oscili::oscillator() {
   uint32_t phi;
   double frac, a, b;
   for (uint32_t i = 0; i < m_vframes; i++) {
@@ -55,7 +55,7 @@ void AuLib::Oscili::lookup() {
   }
 }
 
-void AuLib::Oscilic::lookup() {
+void AuLib::Oscilic::oscillator() {
   uint32_t phi;
   double frac, a, b, c, d;
   double tmp, fracsq, fracb;
@@ -77,7 +77,7 @@ void AuLib::Oscilic::lookup() {
   }
 }
 
-void AuLib::SamplePlayer::lookup() {
+void AuLib::SamplePlayer::oscillator() {
   uint32_t phi;
   double frac, a, b;
   for (uint32_t i = 0; i < m_vframes; i++) {

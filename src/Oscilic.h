@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 // Oscilic class: cubic interpolating oscillator
 // Copyright (C) 2016-7 V Lazzarini
 //
@@ -7,7 +7,7 @@
 // License as published by the Free Software Foundation; either
 // version 3.0 of the License, or (at your option) any later version.
 //
-/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 #ifndef _OSCILIC_H
 #define _OSCILIC_H
 
@@ -22,7 +22,7 @@ class Oscilic : public Oscil {
 protected:
   /** cubic oscillator process
    */
-  virtual void lookup();
+  virtual void oscillator();
 
 public:
   /** Sinusoidal Oscilic constructor \n\n

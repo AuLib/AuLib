@@ -20,10 +20,9 @@ enum { SOUNDIN_RT = 1, SOUNDIN_STDIN, SOUNDIN_SNDFILE };
 /** Standard Error messages
 */
 const std::string soundin_error[] = {
-    "SoundIn: file open error", "SoundIn: RT initialisation error",
-    "SoundIn: RT open error", "SoundIn: RT stream start error",
-    "SoundOut: source not available",
-    "SoundIn: general error"};
+    "SoundIn: file open error",       "SoundIn: RT initialisation error",
+    "SoundIn: RT open error",         "SoundIn: RT stream start error",
+    "SoundOut: source not available", "SoundIn: general error"};
 
 /** Audio input class
  */

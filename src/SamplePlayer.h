@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 // SamplePlayer class: sampled-sound player
 // Copyright (C) 2016-7 V Lazzarini
 //
@@ -7,7 +7,7 @@
 // License as published by the Free Software Foundation; either
 // version 3.0 of the License, or (at your option) any later version.
 //
-/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 #ifndef _SAMPLEPLAYER_H
 #define _SAMPLEPLAYER_H
 
@@ -23,7 +23,7 @@ class SamplePlayer : public Oscili {
 protected:
   /** Oscillator for multichannel tables
    */
-  virtual void lookup();
+  virtual void oscillator();
 
 public:
   /** SamplePlayer constructor \n\n
@@ -47,7 +47,7 @@ public:
   /** Process one vector of audio
    */
   virtual const SamplePlayer &process() {
-    m_nchnls > 1 ? lookup() : Oscili::lookup();
+    m_nchnls > 1 ? oscillator() : Oscili::oscillator();
     return *this;
   }
 
@@ -70,6 +70,28 @@ public:
     m_incr = pitch;
     process();
     return *this;
+  }
+
+  /** Process one vector of audio
+      with amplitude modulation from obja
+  */
+  virtual const Oscil &process(const AudioBase &obja) {
+    if (obja.vframes() == m_vframes) {
+      m_am = obja.vector();
+      process();
+    } else
+      m_error = AULIB_ERROR;
+    return *this;
+  }
+
+  /** Process one vector of audio
+      with amplitude modulation from obja
+      and pitch pitch
+  */
+  virtual const Oscil &process(const AudioBase &obja, double pitch) {
+    m_freq = pitch * m_sr / m_tframes;
+    m_incr = pitch;
+    return process(obja);
   }
 };
 

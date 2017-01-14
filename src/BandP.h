@@ -49,10 +49,16 @@ public:
     return *this;
   }
 
+  /** process a signal sig with cutoff freq cf
+   */
+  virtual const double *process(const double *sig, double cf) {
+    return LowP::process(sig, cf);
+  }
+
   /** process a signal sig with cutoff freq cf and bandwidth bw
    */
-  virtual const double *process(const double *sig, double cf, double bw = 0.) {
-    if ((bw != 0. && m_bw != bw) || m_freq != cf) {
+  virtual const double *process(const double *sig, double cf, double bw) {
+    if (m_bw != bw || m_freq != cf) {
       m_bw = bw > 0. ? bw : m_bw;
       m_freq = cf;
       update();
@@ -61,12 +67,17 @@ public:
     return vector();
   }
 
+  /** process a signal in obj with cutoff freq cf
+   */
+  virtual const LowP &process(const AudioBase &obj, double cf) {
+    return LowP::process(obj, cf);
+  }
+
   /** process a signal in obj with cutoff freq cf and
       bandwidth bw
   */
-  virtual const BandP &process(const AudioBase &obj, double cf,
-                               double bw = 0.) {
-    if ((bw != 0. && m_bw != bw) || m_freq != cf) {
+  virtual const BandP &process(const AudioBase &obj, double cf, double bw) {
+    if (m_bw != bw || m_freq != cf) {
       m_bw = bw > 0. ? bw : m_bw;
       m_freq = cf;
       update();

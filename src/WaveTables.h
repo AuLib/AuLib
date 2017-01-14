@@ -18,7 +18,7 @@ namespace AuLib {
 
 /** Sawtooth wave table
  */
-struct SawTable : public FourierTable {
+struct SawTable : FourierTable {
   /** SawTable constructor \n\n
       harms - number of harmonics \n
       tframes - table size \n
@@ -29,7 +29,7 @@ struct SawTable : public FourierTable {
 
 /** Square wave table
  */
-struct SquareTable : public FourierTable {
+struct SquareTable : FourierTable {
   /** SquareTable constructor \n\n
       harms - number of harmonics \n
       tframes - table size \n
@@ -40,7 +40,7 @@ struct SquareTable : public FourierTable {
 
 /** Triangle wave table
  */
-struct TriangleTable : public FourierTable {
+struct TriangleTable : FourierTable {
   /** TriangleTable constructor \n\n
       harms - number of harmonics \n
       tframes - table size \n

@@ -141,9 +141,17 @@ public:
     }
   }
 
-  /** Get the audio vector vector
+  /** Conversion operator for const std::vector<double>&
    */
-  const double *vector() const { return m_vector.data(); }
+  operator const std::vector<double> &() const { return m_vector; }
+
+  /** Conversion operator for const double*
+   */
+  operator const double *() const { return m_vector.data(); }
+
+  /** Get the audio vector
+   */
+  const double *vector() const { return *this; }
 
   /** Get a single sample at frame ndx
       and channel chn off the data vector

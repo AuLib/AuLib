@@ -19,7 +19,7 @@ namespace AuLib {
 
 /** von Hann window
  */
-struct Hann : public FourierTable {
+struct Hann : FourierTable {
 
   /** Hann constructor \n\n
       tframes - table size \n
@@ -33,7 +33,7 @@ struct Hann : public FourierTable {
 
 /** Hamming window
  */
-struct Hamming : public FourierTable {
+struct Hamming : FourierTable {
 
   /** Hamming constructor \n\n
       tframes - table size \n

@@ -40,7 +40,7 @@ public:
       sr - sampling rate
   */
   Iir(const double *a, const double *b, uint32_t vframes = def_vframes,
-         double sr = def_sr)
+      double sr = def_sr)
       : AudioBase(1, vframes, sr), m_del{0., 0.}, m_a{0., 0., 0.}, m_b{0., 0.},
         m_scal(1.) {
     std::copy(a, a + 3, m_a);
@@ -83,8 +83,7 @@ public:
 
   /** process a signal in obj with coefficients lists a and b
    */
-  const Iir &process(const AudioBase &obj, const double *a,
-                        const double *b) {
+  const Iir &process(const AudioBase &obj, const double *a, const double *b) {
     std::copy(a, a + 3, m_a);
     std::copy(b, b + 3, m_a);
     return process(obj);

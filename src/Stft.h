@@ -44,7 +44,6 @@ protected:
   virtual const double *transform(const double *sig, uint32_t vframes);
 
 public:
-  
   /** Stft constructor \n\n
       win - analysis window \n
       decim - decimation \n
@@ -54,7 +53,8 @@ public:
       sr - sampling rate \n
   */
   Stft(const FuncTable &win, bool dir, uint32_t decim = def_decim,
-       bool repr = fft::rectang, uint32_t vframes = def_vframes, double sr = def_sr)
+       bool repr = fft::rectang, uint32_t vframes = def_vframes,
+       double sr = def_sr)
       : AudioBase(1, dir == fft::forward ? win.tframes() : vframes, sr),
         m_z(0., 0.), m_N(win.tframes()), m_H(decim ? m_N / decim : m_N),
         m_D(decim ? decim : 1), m_dir(dir), m_repr(repr), m_framecount(0),
@@ -70,9 +70,9 @@ public:
    */
   virtual const double *process(const double *sig,
                                 uint32_t vframes = def_vframes) {
-    if(vframes >= m_H)
-     return transform(sig, vframes);
-    else 
+    if (vframes >= m_H)
+      return transform(sig, vframes);
+    else
       return vector();
   }
 
@@ -99,14 +99,14 @@ public:
       (only meaningful in forward transforms)
    */
   virtual const std::vector<std::complex<double>> &spectrum() {
-      return m_cdata;
+    return m_cdata;
   }
 
   /** return bin data as a complex<double> ref
       (only meaningful in forward transforms)
    */
   const std::complex<double> &bin(uint32_t n) {
-    return spectrum()[n < m_N/2 ? n : m_N/2 - 1];
+    return spectrum()[n < m_N / 2 ? n : m_N / 2 - 1];
   }
 };
 

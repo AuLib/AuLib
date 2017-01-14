@@ -84,7 +84,7 @@ public:
   /** Process one vector of audio
    */
   virtual const BlOsc &process() {
-    Oscili::lookup();
+    Oscili::oscillator();
     return *this;
   }
 
@@ -93,8 +93,7 @@ public:
   */
   virtual const BlOsc &process(double amp) {
     m_amp = amp;
-    Oscili::lookup();
-    return *this;
+    return process();
   }
 
   /** Process one vector of audio
@@ -102,12 +101,33 @@ public:
       pitch transposition
   */
   virtual const BlOsc &process(double amp, double freq) {
-    m_amp = amp;
     m_freq = freq;
     m_incr = m_freq * m_tframes / m_sr;
     tselect();
-    Oscili::lookup();
+    return process(amp);
+  }
+
+  /** Process one vector of audio
+     with amplitude modulation from obja
+ */
+  virtual const Oscil &process(const AudioBase &obja) {
+    if (obja.vframes() == m_vframes) {
+      m_am = obja.vector();
+      process();
+    } else
+      m_error = AULIB_ERROR;
     return *this;
+  }
+
+  /** Process one vector of audio
+      with amplitude modulation from obja
+      and frequency freq
+  */
+  virtual const Oscil &process(const AudioBase &obja, double freq) {
+    m_freq = freq;
+    m_incr = m_freq * m_tframes / m_sr;
+    tselect();
+    return process(obja);
   }
 };
 

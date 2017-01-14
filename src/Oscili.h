@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 // Oscili class: interpolating oscillator
 // Copyright (C) 2016-7 V Lazzarini
 //
@@ -7,7 +7,7 @@
 // License as published by the Free Software Foundation; either
 // version 3.0 of the License, or (at your option) any later version.
 //
-/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 #ifndef _OSCILI_H
 #define _OSCILI_H
 
@@ -22,7 +22,7 @@ class Oscili : public Oscil {
 protected:
   /** interpolating oscillator process
    */
-  virtual void lookup();
+  virtual void oscillator();
 
 public:
   /** Sinusoidal Oscili constructor \n\n

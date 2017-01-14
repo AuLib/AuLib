@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 // Oscil class: truncating oscillator
 // Copyright (C) 2016-7 V Lazzarini
 //
@@ -7,7 +7,7 @@
 // License as published by the Free Software Foundation; either
 // version 3.0 of the License, or (at your option) any later version.
 //
-/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 #ifndef _OSCIL_H
 #define _OSCIL_H
 
@@ -28,7 +28,7 @@ protected:
 
   /** truncating oscillator process
    */
-  virtual void lookup();
+  virtual void oscillator();
 
   /** AM/FM processing
    */
@@ -67,8 +67,14 @@ public:
   /** Process one vector of audio
    */
   virtual const Oscil &process() {
-    lookup();
+    oscillator();
     return *this;
+  }
+
+  /** Looks up the table directly using base class method
+   */
+  virtual const double *process(const double *sig) {
+    return TableRead::process(sig);
   }
 
   /** Process one vector of audio
@@ -151,7 +157,7 @@ public:
       with amplitude amp
       and freq modulation from objf
   */
-  virtual const Oscil &process(double amp, const AudioBase &objf) {
+  const Oscil &process(double amp, const AudioBase &objf) {
     if (objf.vframes() == m_vframes && objf.nchnls() == 1) {
       m_amp = amp;
       m_fm = objf.vector();
@@ -164,7 +170,7 @@ public:
   /** Process one vector of audio
       with amplitude from obja and freq modulation from objf
   */
-  virtual const Oscil &process(const AudioBase &obja, const AudioBase &objf) {
+  const Oscil &process(const AudioBase &obja, const AudioBase &objf) {
     if (obja.vframes() == m_vframes && objf.vframes() == m_vframes &&
         obja.nchnls() == 1 && objf.nchnls() == 1) {
       m_am = obja.vector();
