@@ -214,7 +214,7 @@ const uint32_t major_version = AULIB_MAJOR_V;
 const uint32_t minor_version = AULIB_MINOR_V;
 
 /** returns the version string */
-static const std::string version() {
+static inline const std::string version() {
   std::ostringstream stm;
   stm << "Aulib version " << major_version << '.' << minor_version
       << (BETA ? " beta\n" : "\n");
@@ -222,7 +222,7 @@ static const std::string version() {
 }
 
 /** returns the copyright string */
-static const std::string copyright() {
+static inline const std::string copyright() {
   std::ostringstream stm;
   stm << "Aulib version " << major_version << '.' << minor_version;
   stm << "\n(c) 2016-7 V.Lazzarini, licensed by the LGPL\n";

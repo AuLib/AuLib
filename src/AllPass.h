@@ -56,33 +56,6 @@ public:
     m_fdb = fdb;
     return process(obj);
   }
-
-  /** process signal sig with feedback fdb, dt is ignored
-   */
-  virtual const double *process(const double *sig, const double *dt,
-                                double fdb) {
-    m_fdb = fdb;
-    return process(sig);
-  }
-
-  /** process signal in obj with feedback fdb, dt is ignored
-  */
-  virtual const Delay &process(const AudioBase &obj, const AudioBase &dt,
-                               double fdb) {
-    return process(obj, 0, fdb);
-  }
-
-  /** process signal in obj with feedback fdb, dt is ignored
-  */
-  virtual const Delay &process(const AudioBase &obj, double dt, double fdb) {
-    return process(obj, fdb);
-  }
-
-  /** process signal sig with feedback fdb, dt is ignored
-*/
-  virtual const double *process(const double *sig, double dt, double fdb) {
-    return process(sig, fdb);
-  }
 };
 
 /*! \class AllPass AllPass.h AuLib/AllPass.h

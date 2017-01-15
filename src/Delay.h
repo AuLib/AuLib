@@ -39,15 +39,27 @@ public:
    */
   virtual const double *process(const double *sig);
 
+  /** delay a signal for dt seconds and with feedback fdb
+   */
+  virtual const double *process(const double *sig, double dt) {
+    return process(sig, dt, 0.);
+  }
+
   /** delay a signal for dt seconds and with optional feedback fdb
    */
-  virtual const double *process(const double *sig, double dt, double fdb = 0.);
+  virtual const double *process(const double *sig, double dt, double fdb);
+
+  /** delay a signal for delay time taken from the signal dt
+  */
+  virtual const double *process(const double *sig, const double *dt) {
+    return process(sig, dt, 0.);
+  }
 
   /** delay a signal for delay time taken from the signal dt and
       with optional feedback fdb
   */
   virtual const double *process(const double *sig, const double *dt,
-                                double fdb = 0.);
+                                double fdb);
 
   /** delay a signal in obj for a fixed time
    */
@@ -59,11 +71,16 @@ public:
     return *this;
   }
 
-  /** delay a signal in obj, optionally for dt seconds
-      and with optional feedback fdb.
+  /** delay a signal in obj, optionally for dt seconds.
   */
-  virtual const Delay &process(const AudioBase &obj, double dt,
-                               double fdb = 0.) {
+  virtual const Delay &process(const AudioBase &obj, double dt) {
+    return process(obj, dt, 0.);
+  }
+
+  /** delay a signal in obj, optionally for dt seconds
+      and with feedback fdb.
+  */
+  virtual const Delay &process(const AudioBase &obj, double dt, double fdb) {
     m_fdb = fdb;
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
       if (dt < 0)
@@ -76,14 +93,19 @@ public:
   }
 
   /** delay a signal in obj for dt sec with variable delaytime sig
+  */
+  virtual const Delay &process(const AudioBase &obj, const AudioBase &dt) {
+    return process(obj, dt, 0.);
+  }
+
+  /** delay a signal in obj for dt sec with variable delaytime sig
       and with optional feedback fdb.
   */
   virtual const Delay &process(const AudioBase &obj, const AudioBase &dt,
-                               double fdb = 0.) {
-    m_fdb = fdb;
+                               double fdb) {
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls &&
         dt.vframes() == m_vframes && dt.nchnls() == m_nchnls) {
-      process(obj.vector(), dt.vector());
+      process(obj.vector(), dt.vector(), fdb);
     } else
       m_error = AULIB_ERROR;
     return *this;

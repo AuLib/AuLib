@@ -157,7 +157,7 @@ public:
       with amplitude amp
       and freq modulation from objf
   */
-  const Oscil &process(double amp, const AudioBase &objf) {
+  virtual const Oscil &process(double amp, const AudioBase &objf) {
     if (objf.vframes() == m_vframes && objf.nchnls() == 1) {
       m_amp = amp;
       m_fm = objf.vector();
@@ -170,7 +170,7 @@ public:
   /** Process one vector of audio
       with amplitude from obja and freq modulation from objf
   */
-  const Oscil &process(const AudioBase &obja, const AudioBase &objf) {
+  virtual const Oscil &process(const AudioBase &obja, const AudioBase &objf) {
     if (obja.vframes() == m_vframes && objf.vframes() == m_vframes &&
         obja.nchnls() == 1 && objf.nchnls() == 1) {
       m_am = obja.vector();
