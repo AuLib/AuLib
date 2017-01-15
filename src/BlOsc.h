@@ -51,6 +51,18 @@ class BlOsc : public Oscili {
 protected:
   const FuncTable *m_waves;
 
+  /** AM/FM processing
+ */
+  virtual void am_fm(uint32_t ndx) {
+    if (m_am != nullptr)
+      m_amp = m_am[ndx];
+    if (m_fm != nullptr) {
+      m_freq = m_fm[ndx];
+      m_incr = m_freq * m_tframes / m_sr;
+      tselect();
+    }
+  }
+
   /** table selection
    */
   void tselect() {
@@ -98,7 +110,7 @@ public:
 
   /** Process one vector of audio
       with amplitude amp and
-      pitch transposition
+      frequency freq
   */
   virtual const BlOsc &process(double amp, double freq) {
     m_freq = freq;
@@ -108,14 +120,35 @@ public:
   }
 
   /** Process one vector of audio
+        with amplitude modulation
+   */
+  virtual const double *process(const double *amp) {
+    return Oscil::process(amp);
+  }
+
+  /** Process one vector of audio
+     with amplitude amp
+     and freq modulation
+ */
+  virtual const double *process(double amp, const double *freq) {
+    Oscil::process(amp, freq);
+    return vector();
+  }
+
+  /** Process one vector of audio
+      with amplitude modulation
+      and frequency freq
+  */
+  virtual const double *process(const double *amp, double freq) {
+    Oscil::process(amp, freq);
+    return vector();
+  }
+
+  /** Process one vector of audio
      with amplitude modulation from obja
  */
-  virtual const Oscil &process(const AudioBase &obja) {
-    if (obja.vframes() == m_vframes) {
-      m_am = obja.vector();
-      process();
-    } else
-      m_error = AULIB_ERROR;
+  virtual const BlOsc &process(const AudioBase &obja) {
+    Oscil::process(obja);
     return *this;
   }
 
@@ -123,11 +156,28 @@ public:
       with amplitude modulation from obja
       and frequency freq
   */
-  virtual const Oscil &process(const AudioBase &obja, double freq) {
+  virtual const BlOsc &process(const AudioBase &obja, double freq) {
     m_freq = freq;
     m_incr = m_freq * m_tframes / m_sr;
     tselect();
     return process(obja);
+  }
+
+  /** Process one vector of audio
+      with amplitude amp
+      and pitch modulation from objf
+  */
+  virtual const BlOsc &process(double amp, const AudioBase &objf) {
+    Oscil::process(amp, objf);
+    return *this;
+  }
+
+  /** Process one vector of audio
+      with amplitude from obja and pitch modulation from objf
+  */
+  virtual const BlOsc &process(const AudioBase &obja, const AudioBase &objf) {
+    Oscil::process(obja, objf);
+    return *this;
   }
 };
 

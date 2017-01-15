@@ -32,7 +32,7 @@ protected:
 
   /** AM/FM processing
    */
-  void am_fm(uint32_t ndx) {
+  virtual void am_fm(uint32_t ndx) {
     if (m_am != nullptr)
       m_amp = m_am[ndx];
     if (m_fm != nullptr) {
@@ -71,12 +71,6 @@ public:
     return *this;
   }
 
-  /** Looks up the table directly using base class method
-   */
-  virtual const double *process(const double *sig) {
-    return TableRead::process(sig);
-  }
-
   /** Process one vector of audio
       with amplitude amp
   */
@@ -97,14 +91,20 @@ public:
   }
 
   /** Process one vector of audio
-      with amplitude and (optional) freq modulation
+      with amplitude and freq modulation
   */
-  virtual const double *process(const double *amp,
-                                const double *freq = nullptr) {
+  virtual const double *process(const double *amp, const double *freq) {
     m_am = amp;
     m_fm = freq;
     process();
     return vector();
+  }
+
+  /** Process one vector of audio
+        with amplitude modulation
+   */
+  virtual const double *process(const double *amp) {
+    return process(amp, nullptr);
   }
 
   /** Process one vector of audio

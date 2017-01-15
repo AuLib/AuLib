@@ -50,6 +50,7 @@ else()
  message(STATUS "libsndfile not found, not building soundfile IO support")
 endif(LIBSNDFILE)
 
+find_program(CLANG_FORMAT clang-format)
 
 # AuLib sources
 add_subdirectory(src)

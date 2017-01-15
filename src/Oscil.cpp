@@ -78,17 +78,20 @@ void AuLib::Oscilic::oscillator() {
 }
 
 void AuLib::SamplePlayer::oscillator() {
-  uint32_t phi;
-  double frac, a, b;
-  for (uint32_t i = 0; i < m_vframes; i++) {
-    phi = (uint32_t)m_phs;
-    frac = m_phs - phi;
-    phi *= m_nchnls;
-    for (uint32_t j = 0; j < m_nchnls; j++) {
-      a = m_table[phi + j];
-      b = m_table[phi + j + m_nchnls];
-      m_vector[i * m_nchnls + j] = m_amp * (a + frac * (b - a));
+  if (m_nchnls > 1) {
+    uint32_t phi;
+    double frac, a, b;
+    for (uint32_t i = 0; i < m_vframes; i++) {
+      phi = (uint32_t)m_phs;
+      frac = m_phs - phi;
+      phi *= m_nchnls;
+      for (uint32_t j = 0; j < m_nchnls; j++) {
+        a = m_table[phi + j];
+        b = m_table[phi + j + m_nchnls];
+        m_vector[i * m_nchnls + j] = m_amp * (a + frac * (b - a));
+      }
+      m_phs = mod(m_phs + m_incr);
     }
-    m_phs = mod(m_phs + m_incr);
-  }
+  } else
+    Oscili::oscillator();
 }

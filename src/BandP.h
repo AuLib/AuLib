@@ -69,8 +69,9 @@ public:
 
   /** process a signal in obj with cutoff freq cf
    */
-  virtual const LowP &process(const AudioBase &obj, double cf) {
-    return LowP::process(obj, cf);
+  virtual const BandP &process(const AudioBase &obj, double cf) {
+    LowP::process(obj, cf);
+    return *this;
   }
 
   /** process a signal in obj with cutoff freq cf and
