@@ -92,23 +92,13 @@ public:
       a single sample at sample pos ndx
       off the data vector
   */
-  double &operator[](uint32_t ndx) {
-    if (ndx < vsamps())
-      return m_vector[ndx];
-    else
-      return m_vector[vsamps()];
-  }
+  double &operator[](uint32_t ndx) { return m_vector.at(ndx); }
 
   /** Get a constant reference of
       a single sample at sample pos ndx
        off the data vector
  */
-  const double &operator[](uint32_t ndx) const {
-    if (ndx < vsamps())
-      return m_vector[ndx];
-    else
-      return m_vector[vsamps()];
-  }
+  const double &operator[](uint32_t ndx) const { return m_vector.at(ndx); }
 
   /** set the data vector to a sig vector
       return the AudioBase obj reference
@@ -135,10 +125,8 @@ public:
       double ret = m_vector[p];
       m_vector[p] = v;
       return ret;
-    } else {
-      std::cout << p << "\n";
+    } else
       return 0.;
-    }
   }
 
   /** Conversion operator for const std::vector<double>&

@@ -58,9 +58,10 @@ public:
       normalise_table();
   }
 
+  /** return the nominal table size, ie. the total vectorsize minus the
+      two guard points.
+   */
   uint64_t tframes() const { return m_tframes; }
-
-  const double *table() const { return vector(); }
 };
 
 /*! \class FuncTable FuncTable.h AuLib/FuncTable.h

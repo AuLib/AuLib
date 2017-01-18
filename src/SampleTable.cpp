@@ -9,9 +9,12 @@
 //
 /////////////////////////////////////////////////////////////////////
 #include "SampleTable.h"
+#ifdef HAVE_LIBSNDFILE
 #include "sndfile.h"
+#endif
 
 AuLib::SampleTable::SampleTable(const char *name, uint32_t chn) : FuncTable() {
+#ifdef HAVE_LIBSNDFILE
   SF_INFO info;
   SNDFILE *sf = sf_open(name, SFM_READ, &info);
   if (sf != NULL) {
@@ -53,4 +56,5 @@ AuLib::SampleTable::SampleTable(const char *name, uint32_t chn) : FuncTable() {
     sf_close(sf);
   } else
     m_error = AULIB_FILE_ERROR;
+#endif
 }

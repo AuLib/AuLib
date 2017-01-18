@@ -74,12 +74,13 @@ const double *AuLib::AllPass::process(const double *sig) {
 
 const double *AuLib::Fir::process(const double *sig) {
   double out = 0;
+  uint32_t irsize = m_ir.tframes();
   for (uint32_t i = 0; i < m_vframes; i++) {
     m_delay[m_pos] = sig[i];
-    m_pos = m_pos != m_irsize - 1 ? m_pos + 1 : 0;
-    for (uint32_t j = 0, rp = m_pos; j < m_irsize; j++) {
-      out += m_delay[rp] * m_ir[m_irsize - 1 - j];
-      rp = rp != m_irsize ? rp + 1 : 0;
+    m_pos = m_pos != irsize - 1 ? m_pos + 1 : 0;
+    for (uint32_t j = 0, rp = m_pos; j < irsize; j++) {
+      out += m_delay[rp] * m_ir[irsize - 1 - j];
+      rp = rp != irsize ? rp + 1 : 0;
     }
     m_vector[i] = out;
     out = 0.;

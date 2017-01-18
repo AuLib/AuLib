@@ -59,7 +59,7 @@ public:
   TableRead(const FuncTable &ftable, double phase = 0., bool norm = true,
             bool wrap = true, uint32_t vframes = def_vframes,
             double sr = def_sr)
-      : AudioBase(1, vframes, sr), m_sine(nullptr), m_table(ftable.table()),
+      : AudioBase(1, vframes, sr), m_sine(nullptr), m_table(ftable.vector()),
         m_phs(phase), m_norm(norm), m_wrap(wrap), m_tframes(ftable.tframes()) {
     if (m_table == nullptr) {
       m_vframes = 0;
@@ -76,8 +76,8 @@ public:
   */
   TableRead(double phase = 0., bool norm = true, bool wrap = true,
             uint32_t vframes = def_vframes, double sr = def_sr)
-      : AudioBase(1, vframes), m_sine(new FourierTable),
-        m_table(m_sine->table()), m_phs(phase), m_norm(norm), m_wrap(wrap),
+      : AudioBase(1, vframes), m_sine(new FourierTable), m_table(*m_sine),
+        m_phs(phase), m_norm(norm), m_wrap(wrap),
         m_tframes(m_sine->tframes()){};
 
   /** takes in a frame of phase values

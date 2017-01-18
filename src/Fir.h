@@ -21,8 +21,7 @@ namespace AuLib {
 class Fir : public Delay {
 
 protected:
-  const double *m_ir;
-  uint64_t m_irsize;
+  const FuncTable &m_ir;
 
 public:
   /** Fir constructor \n\n
@@ -31,8 +30,7 @@ public:
       sr - sampling rate
   */
   Fir(const FuncTable &ir, uint32_t vframes = def_vframes, double sr = def_sr)
-      : Delay(ir.tframes() * sr, 0., vframes, sr), m_ir(ir.table()),
-        m_irsize(ir.tframes()){};
+      : Delay(ir.tframes() * sr, 0., vframes, sr), m_ir(ir){};
 
   /** apply convolution to a signal sig
    */

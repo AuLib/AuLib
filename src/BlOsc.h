@@ -38,10 +38,11 @@ public:
     }
   }
 
-  /** returns a read-only pointer to
-      the array of FuncTables
+  /** returns a function table in the set.
   */
-  const FuncTable *tables() const { return m_waves.data(); }
+  const FuncTable &operator[](uint32_t num) const {
+    return num < m_waves.size() ? m_waves[num] : m_waves.back();
+  }
 };
 
 /** Bandlimited wavetable oscillator
@@ -49,7 +50,7 @@ public:
 class BlOsc : public Oscili {
 
 protected:
-  const FuncTable *m_waves;
+  const TableSet &m_waves;
 
   /** AM/FM processing
  */
@@ -68,7 +69,7 @@ protected:
   void tselect() {
     int32_t num = (int32_t)log2(m_freq / base);
     num = num < 0 ? 0 : (num > octs - 1 ? octs - 1 : num);
-    m_table = m_waves[num].table();
+    m_table = m_waves[num].vector();
   }
 
 public:
@@ -83,13 +84,7 @@ public:
   */
   BlOsc(double amp, double freq, const TableSet &waveset, double phase = 0.,
         uint32_t vframes = def_vframes, double sr = def_sr)
-      : Oscili(amp, freq, waveset.tables()[0], phase, vframes, sr),
-        m_waves(waveset.tables()) {
-    if (m_waves == nullptr) {
-      m_vframes = 0;
-      m_error = AULIB_ERROR;
-      return;
-    }
+      : Oscili(amp, freq, waveset[0], phase, vframes, sr), m_waves(waveset) {
     tselect();
   }
 
@@ -104,8 +99,8 @@ public:
       with amplitude amp
   */
   virtual const BlOsc &process(double amp) {
-    m_amp = amp;
-    return process();
+    Oscili::process(amp);
+    return *this;
   }
 
   /** Process one vector of audio
@@ -116,14 +111,15 @@ public:
     m_freq = freq;
     m_incr = m_freq * m_tframes / m_sr;
     tselect();
-    return process(amp);
+    Oscili::process(amp);
+    return *this;
   }
 
   /** Process one vector of audio
         with amplitude modulation
    */
   virtual const double *process(const double *amp) {
-    return Oscil::process(amp);
+    return Oscili::process(amp);
   }
 
   /** Process one vector of audio
@@ -131,7 +127,7 @@ public:
      and freq modulation
  */
   virtual const double *process(double amp, const double *freq) {
-    Oscil::process(amp, freq);
+    Oscili::process(amp, freq);
     return vector();
   }
 
@@ -140,7 +136,7 @@ public:
       and frequency freq
   */
   virtual const double *process(const double *amp, double freq) {
-    Oscil::process(amp, freq);
+    Oscili::process(amp, freq);
     return vector();
   }
 
@@ -148,7 +144,7 @@ public:
      with amplitude modulation from obja
  */
   virtual const BlOsc &process(const AudioBase &obja) {
-    Oscil::process(obja);
+    Oscili::process(obja);
     return *this;
   }
 
@@ -160,7 +156,8 @@ public:
     m_freq = freq;
     m_incr = m_freq * m_tframes / m_sr;
     tselect();
-    return process(obja);
+    Oscili::process(obja);
+    return *this;
   }
 
   /** Process one vector of audio
@@ -168,7 +165,7 @@ public:
       and pitch modulation from objf
   */
   virtual const BlOsc &process(double amp, const AudioBase &objf) {
-    Oscil::process(amp, objf);
+    Oscili::process(amp, objf);
     return *this;
   }
 
@@ -176,7 +173,7 @@ public:
       with amplitude from obja and pitch modulation from objf
   */
   virtual const BlOsc &process(const AudioBase &obja, const AudioBase &objf) {
-    Oscil::process(obja, objf);
+    Oscili::process(obja, objf);
     return *this;
   }
 };
