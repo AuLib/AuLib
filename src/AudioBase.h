@@ -28,9 +28,9 @@ protected:
   uint32_t m_error;
 
 public:
-  /** AudioBase constructor
-     nchnls - number of channels
-     vframes - number of frames in vector
+  /** AudioBase constructor  \n
+     nchnls - number of channels \n
+     vframes - number of frames in vector \n
      sr - sampling rate
   */
   AudioBase(uint32_t nchnls = def_nchnls, uint32_t vframes = def_vframes,
@@ -40,7 +40,7 @@ public:
 
   /** Scale the data vector
    */
-  const AudioBase &operator*=(double scal) {
+  virtual const AudioBase &operator*=(double scal) {
     for (uint32_t i = 0; i < m_vector.size(); i++)
       m_vector[i] *= scal;
     return *this;
@@ -48,7 +48,7 @@ public:
 
   /** Multiply the data vector by a sig vector
    */
-  const AudioBase &operator*=(const double *sig) {
+  virtual const AudioBase &operator*=(const double *sig) {
     for (uint32_t i = 0; i < m_vector.size(); i++)
       m_vector[i] *= sig[i];
     return *this;
@@ -56,7 +56,7 @@ public:
 
   /** Multiply the data vector by the vector from obj
    */
-  const AudioBase &operator*=(const AudioBase &obj) {
+  virtual const AudioBase &operator*=(const AudioBase &obj) {
     if (m_vframes == obj.m_vframes && m_nchnls == obj.m_nchnls)
       return *this *= obj.vector();
     else
@@ -65,7 +65,7 @@ public:
 
   /** DC offset the data vector
    */
-  const AudioBase &operator+=(double offs) {
+  virtual const AudioBase &operator+=(double offs) {
     for (uint32_t i = 0; i < m_vector.size(); i++)
       m_vector[i] += offs;
     return *this;
@@ -73,7 +73,7 @@ public:
 
   /** Add a vector sig to the data vector
    */
-  const AudioBase &operator+=(const double *sig) {
+  virtual const AudioBase &operator+=(const double *sig) {
     for (uint32_t i = 0; i < m_vector.size(); i++)
       m_vector[i] += sig[i];
     return *this;
@@ -81,7 +81,7 @@ public:
 
   /** Add a vector sig from obj to the data vector
    */
-  const AudioBase &operator+=(const AudioBase &obj) {
+  virtual const AudioBase &operator+=(const AudioBase &obj) {
     if (m_vframes == obj.m_vframes && m_nchnls == obj.m_nchnls)
       return *this += obj.vector();
     else
@@ -136,6 +136,22 @@ public:
   /** Conversion operator for const double*
    */
   explicit operator const double *() const { return m_vector.data(); }
+
+  /** Stream output operator
+   */
+  friend std::ostream &operator<<(std::ostream &os, const AudioBase &obj) {
+    for (uint32_t i = 0; i < obj.m_vframes * obj.m_nchnls; i++)
+      os << obj.m_vector[i] << std::endl;
+    return os;
+  }
+
+  /** Stream input operator
+   */
+  friend std::istream &operator>>(std::istream &is, AudioBase &obj) {
+    for (uint32_t i = 0; i < obj.m_vframes * obj.m_nchnls; i++)
+      is >> obj.m_vector[i];
+    return is;
+  }
 
   /** Get the audio vector
    */

@@ -35,7 +35,8 @@ protected:
       if (m_cnt < m_x1) {
         m_y += m_incr;
         m_cnt++;
-      }
+      } else
+        m_y = m_y1;
     }
   }
 

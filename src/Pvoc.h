@@ -43,6 +43,66 @@ public:
     std::copy(m_vector.begin(), m_vector.end(), r);
     return m_cdata;
   }
+
+  /** Scale the spectral data vector
+ */
+  virtual const AudioBase &operator*=(double scal) {
+    return Stft::operator*=(scal);
+  }
+
+  /** Multiply the data vector by a spectral vector
+   */
+  virtual const AudioBase &operator*=(const double *sig) {
+    for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+      m_vector[i] *= sig[i];
+    }
+    return *this;
+  }
+
+  /** Multiply the data vector by the vector from obj
+   */
+  virtual const AudioBase &operator*=(const Pvoc &obj) {
+    if (m_vframes == vframes()) {
+      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+        m_vector[i] *= obj[i];
+      }
+    }
+    return *this;
+  }
+
+  /** Add a double to the magnitude of spectral data
+  */
+  virtual const AudioBase &operator+=(double num) {
+    for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+      m_vector[i] += num;
+    }
+    return *this;
+  }
+
+  /** Mix a spectral vector into this object
+   */
+  virtual const AudioBase &operator+=(const double *sig) {
+    for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+      if (m_vector[i] < sig[i]) {
+        m_vector[i] = sig[i];
+        m_vector[i + 1] = sig[i + 1];
+      }
+    }
+    return *this;
+  }
+
+  /** Mix a vector sig from obj into this object
+   */
+  virtual const AudioBase &operator+=(const Stft &obj) {
+    if (m_vframes == obj.vframes())
+      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+        if (m_vector[i] < obj[i]) {
+          m_vector[i] = obj[i];
+          m_vector[i + 1] = obj[i + 1];
+        }
+      }
+    return *this;
+  }
 };
 
 /*! \class Pvoc Pvoc.h AuLib/Pvoc.h

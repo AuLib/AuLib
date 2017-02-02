@@ -26,7 +26,7 @@ protected:
 
   /** phase modulo
    */
-  void mod() {
+  void mod1() {
     while (m_phs >= 1.0)
       m_phs -= 1.;
     while (m_phs < 0.0)

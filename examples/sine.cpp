@@ -23,6 +23,7 @@ int main(int argc, const char **argv) {
       if (output.error() == AULIB_NOERROR) {
         for (int i = 0; i < def_sr * 2; i += def_vframes) {
           sig.process(0.5, 440.);
+	  std::cout << sig << std::endl;
           output.write(sig);
         }
       } else {

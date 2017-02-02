@@ -108,6 +108,78 @@ public:
   const std::complex<double> &bin(uint32_t n) {
     return spectrum()[n < m_N / 2 ? n : m_N / 2 - 1];
   }
+
+  /** Scale the spectral data vector
+   */
+  virtual const AudioBase &operator*=(double scal) {
+    if (m_repr == fft::polar) {
+      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+        m_vector[i] *= scal;
+      }
+    } else
+      return AudioBase::operator*=(scal);
+    return *this;
+  }
+
+  /** Multiply the data vector by a spectral vector
+   */
+  virtual const AudioBase &operator*=(const double *sig) {
+    if (m_repr == fft::polar) {
+      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+        m_vector[i] *= sig[i];
+        m_vector[i + 1] *= sig[i + 1];
+      }
+    } else
+      return AudioBase::operator*=(sig);
+    return *this;
+  }
+
+  /** Multiply the data vector by the vector from obj
+   */
+  virtual const AudioBase &operator*=(const Stft &obj) {
+    if (m_vframes == obj.m_vframes && m_repr == obj.repr()) {
+      if (m_repr == fft::polar) {
+        for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+          m_vector[i] *= obj[i];
+          m_vector[i + 1] *= obj[i + 1];
+        }
+      } else
+        AudioBase::operator*=(obj);
+    }
+    return *this;
+  }
+
+  /** Add a double to the spectral data
+      (non-op for polar repr)
+  */
+  virtual const AudioBase &operator+=(double num) {
+    if (m_repr != fft::polar)
+      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+        m_vector[i] += num;
+      }
+    return *this;
+  }
+
+  /** Add a vector sig to the data vector
+      (non-op for polar repr)
+   */
+  virtual const AudioBase &operator+=(const double *sig) {
+    if (m_repr != fft::polar)
+      for (uint32_t i = 0; i < m_vector.size(); i += 2)
+        m_vector[i] += sig[i];
+    return *this;
+  }
+
+  /** Add a vector sig from obj to the data vector
+      (non-op for polar repr)
+   */
+  virtual const AudioBase &operator+=(const Stft &obj) {
+    if (m_vframes == obj.m_vframes && obj.repr() == m_repr &&
+        m_repr != fft::polar)
+      for (uint32_t i = 0; i < m_vector.size(); i += 2)
+        m_vector[i] += obj[i];
+    return *this;
+  }
 };
 
 /*! \class Stft Stft.h AuLib/Stft.h

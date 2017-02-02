@@ -1,0 +1,20 @@
+language: cpp
+compiler:
+      - gcc
+#      - clang
+sudo: required
+dist: trusty
+env:
+      global:
+           - VERBOSE=1
+install:
+      - sudo apt-get install -qq cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev
+before_script:
+        - mkdir -p build
+script:
+  - "cd $TRAVIS_BUILD_DIR/build && cmake .. && make"
+
+notifications:
+      email:
+          recipients:
+              - vlazzarini@nuim.ie
