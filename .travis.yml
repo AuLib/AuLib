@@ -1,35 +1,31 @@
 dist: trusty
 language: cpp
-compiler:
-      - clang
+compiler: clang
 sudo: required
 env:
-      global:
-		- secure: "cwr1nyJ9WPPGEBzlDUJ5PY/Hkdb6Ut0ZOwH811gW+9evit0rzH8N2QuUn5j2KSotWteK5iBUNF1sxZQzOLItRbb47FXOToA8ajgN58xxeL8BEd/ZgjMBvlBWKsCseIJs7uizbaIayrrRfLFM1hkVj7RtTOApgMEURFyj5VnZix6dqZuD2D2ndxSiUAzuXYbGgnvx72aTYdACpzbNfTufe+ABeE27jBTxFbTcz6F96LQMEv6Dt4rNqbCrD6vtklINIdZVmdSRbbC6fvsxsPqDPE5bgLtsMTC8QXiMTbpYsb27ICtgDzGGI7jZTIzA0EHtgIX+3FBSkHP9nkVFdy/jm62Mf3U3JucEmDuOXjPRzP1pbDvOG67nOYGFijNZSlo5WH1Pcr2QTQ/+PDOdfuM9CRyHksipLJSKms4eio0VYegYgi/H/WECTTld7UxGLk8CAWaQdMrk2Nc7r0nLgO3NCTFEplVmGSSsN8WjMO0zjp8wT8qRHhgoOLhZNrzxOpF3j6JRVoXmXcw+ifF9fSlpcaFR09i1oL6QLEewapZRwyKyk7zNLFo0wmVcEGo21RQneFXHg06tUv436hgz9mPXEAfn8W2WJTXijad/CTH9DZbhwg+i43TQDfDhKIxN4t0w1SpC2i9WT+Wzq5FrSV1igqRatGFmpwIr4fEipHsB2HE="
-           	- VERBOSE=1
-	   
-before_install:
-      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+       global:
+                 - secure: "cwr1nyJ9WPPGEBzlDUJ5PY/Hkdb6Ut0ZOwH811gW+9evit0rzH8N2QuUn5j2KSotWteK5iBUNF1sxZQzOLItRbb47FXOToA8ajgN58xxeL8BEd/ZgjMBvlBWKsCseIJs7uizbaIayrrRfLFM1hkVj7RtTOApgMEURFyj5VnZix6dqZuD2D2ndxSiUAzuXYbGgnvx72aTYdACpzbNfTufe+ABeE27jBTxFbTcz6F96LQMEv6Dt4rNqbCrD6vtklINIdZVmdSRbbC6fvsxsPqDPE5bgLtsMTC8QXiMTbpYsb27ICtgDzGGI7jZTIzA0EHtgIX+3FBSkHP9nkVFdy/jm62Mf3U3JucEmDuOXjPRzP1pbDvOG67nOYGFijNZSlo5WH1Pcr2QTQ/+PDOdfuM9CRyHksipLJSKms4eio0VYegYgi/H/WECTTld7UxGLk8CAWaQdMrk2Nc7r0nLgO3NCTFEplVmGSSsN8WjMO0zjp8wT8qRHhgoOLhZNrzxOpF3j6JRVoXmXcw+ifF9fSlpcaFR09i1oL6QLEewapZRwyKyk7zNLFo0wmVcEGo21RQneFXHg06tUv436hgz9mPXEAfn8W2WJTXijad/CTH9DZbhwg+i43TQDfDhKIxN4t0w1SpC2i9WT+Wzq5FrSV1igqRatGFmpwIr4fEipHsB2HE="
 
+before_install:
+       - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 install:
-      - sudo apt-get install -qq cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libc++-dev
+       - sudo apt-get install -qq cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libc++-dev
       
 before_script:
-        - mkdir -p build
-	
+       - mkdir -p build
+
 script:
-  - "cd $TRAVIS_BUILD_DIR/build && cmake .. && make"
+       - "cd $TRAVIS_BUILD_DIR/build && cmake .. && make"
 
 addons:
-  coverity_scan:
-    project:
-      name: "vlazzarini/AuLib"
-      description: "AuLib"
-    notification_email: vlazzarini@nuim.ie
-    build_command_prepend: "mkdir -p $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build && cmake .."
-    build_command: "make -C $TRAVIS_BUILD_DIR/build"
-    branch_pattern: coverity_scan
+      coverity_scan:
+             project:
+               name: "vlazzarini/AuLib"
+               notification_email: vlazzarini@nuim.ie
+               build_command_prepend: "mkdir -p $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build && cmake .."
+               build_command: "make -C $TRAVIS_BUILD_DIR/build"
+               branch_pattern: coverity_scan
 
 notifications:
       email:
