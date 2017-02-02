@@ -5,16 +5,19 @@ compiler:
 sudo: required
 env:
       global:
-          - secure: "j4twFlxt3xl8Dv5yH5mTlljRdxa7ZlVBTRaEtY2KCEi2nqL79c5naPXwwvU1GX35gEGMXW2dM2h8WEm3Wfa2Sg5jE1Ujz49R2Aczi46qTVmKrhXUwdQYNH1U2CQ9VeoUky0RsPrB3i0wHuOXSG6NekyCwoVQ1+QhO9c61Ek+A7XDOIZ+vHvEZMqR5UsrCBqhMS8oKIrBTcMpXmOBh5bMUU1dLnEF2u27ks24TZJpSH0gqaptTD3nqkzh9T3nbHk/2PFSD0ZQkKNsmDyAP6Uh2NSBVyeeSNqPFBkzCPlB6BFS5kD7MWeoqqVWO8CfMoBHyCSSs/MegmfTVzjctqdGuPPsQbmRE4EuPKfeLI47QPthkoDtfzF4DNH03sVttFAAYc6/uFF114jIGrBHOIDLrnn/Rojv2FhHRFlwsDQxXaJBIdSXsHqWLUv/0Ze5G+IBWgkE198EMriqD/Jm8dw2V8MxX5QEWYoggrg7SWS1aMcuNtsN5S+pnx8ONtGPHWOYEHA5qLrChQpU8h7MemoOwknb4hGOQrp8dNJ/nVS4yXtxFpazRkKTikhk88LJby+uB2sgNI52Nyj8sU/35k+dRWOF1QpLz38ibhUbL4hyahzBSWAXmDyWAn5clhTYPkPmIJGqxBRm27a3hf/7iVjdIrG5woK5L6yK/lb5CBwhjWk="
+          - secure: "cwr1nyJ9WPPGEBzlDUJ5PY/Hkdb6Ut0ZOwH811gW+9evit0rzH8N2QuUn5j2KSotWteK5iBUNF1sxZQzOLItRbb47FXOToA8ajgN58xxeL8BEd/ZgjMBvlBWKsCseIJs7uizbaIayrrRfLFM1hkVj7RtTOApgMEURFyj5VnZix6dqZuD2D2ndxSiUAzuXYbGgnvx72aTYdACpzbNfTufe+ABeE27jBTxFbTcz6F96LQMEv6Dt4rNqbCrD6vtklINIdZVmdSRbbC6fvsxsPqDPE5bgLtsMTC8QXiMTbpYsb27ICtgDzGGI7jZTIzA0EHtgIX+3FBSkHP9nkVFdy/jm62Mf3U3JucEmDuOXjPRzP1pbDvOG67nOYGFijNZSlo5WH1Pcr2QTQ/+PDOdfuM9CRyHksipLJSKms4eio0VYegYgi/H/WECTTld7UxGLk8CAWaQdMrk2Nc7r0nLgO3NCTFEplVmGSSsN8WjMO0zjp8wT8qRHhgoOLhZNrzxOpF3j6JRVoXmXcw+ifF9fSlpcaFR09i1oL6QLEewapZRwyKyk7zNLFo0wmVcEGo21RQneFXHg06tUv436hgz9mPXEAfn8W2WJTXijad/CTH9DZbhwg+i43TQDfDhKIxN4t0w1SpC2i9WT+Wzq5FrSV1igqRatGFmpwIr4fEipHsB2HE="
            - VERBOSE=1
+	   
 before_install:
       - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 
 install:
       - sudo apt-get install -qq cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libc++-dev
+      
 before_script:
         - mkdir -p build
+	
 script:
   - "cd $TRAVIS_BUILD_DIR/build && cmake .. && make"
 
