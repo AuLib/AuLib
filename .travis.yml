@@ -7,7 +7,7 @@ env:
       global:
            - VERBOSE=1
 install:
-      - sudo apt-get install -qq cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev
+      - sudo apt-get install -qq cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libc++-dev
 before_script:
         - mkdir -p build
 script:
