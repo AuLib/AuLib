@@ -22,6 +22,7 @@ protected:
   double m_freq;
   double m_del;
   double m_a;
+  double m_a1;
   double m_b;
 
   /** Update filter coefficients
@@ -31,8 +32,12 @@ protected:
   /** filter kernel
    */
   virtual const double *filter(const double *sig) {
-    for (uint32_t i = 0; i < m_vframes; i++)
-      m_vector[i] = m_del = m_a * sig[i] - m_b * m_del;
+    double w;
+    for (uint32_t i = 0; i < m_vframes; i++) {
+      w = sig[i] - m_b*m_del;
+      m_vector[i] = m_a * w + m_a1 * m_del;
+      m_del = w;
+    }
     return vector();
   }
 
@@ -43,7 +48,7 @@ public:
       sr - sampling rate
   */
   ToneLP(double cf, uint32_t vframes = def_vframes, double sr = def_sr)
-      : AudioBase(1, vframes, sr), m_freq(cf), m_del(0.0), m_a(0.0), m_b(0.0) {
+    : AudioBase(1, vframes, sr), m_freq(cf), m_del(0.0), m_a(0.0), m_a1(0.0), m_b(0.0) {
     update();
   };
 
