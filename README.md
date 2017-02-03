@@ -1,4 +1,8 @@
 [![Build Status](https://travis-ci.org/vlazzarini/AuLib.svg?branch=master)](https://travis-ci.org/vlazzarini/AuLib)
+(<a href="https://scan.coverity.com/projects/vlazzarini-aulib">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/11643/badge.svg"/>
+</a>)
 
 [AuLib](http://github.com/vlazzarini/AuLib) is a simple lightweight C++ (ISO C++14) class library for audio DSP.
 
