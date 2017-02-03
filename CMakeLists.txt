@@ -10,10 +10,14 @@ project(AuLibProject)
 set(AuLib_MAJOR_V 1)
 set(AuLib_MINOR_V 0)
 
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
--std=c++14  -stdlib=libc++ -DAULIB_MAJOR_V=${AuLib_MAJOR_V} \
+-std=c++14  -DAULIB_MAJOR_V=${AuLib_MAJOR_V} \
 -DAULIB_MINOR_V=${AuLib_MINOR_V} ")
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif()
+
 
 if(CMAKE_BUILD_TYPE MATCHES DEBUG)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBETA=1 \
