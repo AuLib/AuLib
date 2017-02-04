@@ -22,7 +22,6 @@ protected:
   double m_freq;
   double m_del;
   double m_a;
-  double m_a1;
   double m_b;
 
   /** Update filter coefficients
