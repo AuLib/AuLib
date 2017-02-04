@@ -80,7 +80,7 @@ const double *AuLib::Tapi::process(const Delay &obj, const double *time) {
       a = delay[rpi];
       b = rpi + 1 < max ? delay[rpi] : delay[0];
       m_vector[i] = a + (b - a) * frac;
-      rp = rp == max - 1 ? 0 : rp + 1;
+      pos = pos == max - 1 ? 0 : pos + 1;
     }
   }
   return vector();
