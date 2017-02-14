@@ -19,6 +19,13 @@ namespace AuLib {
 */
 class SigBus : public AudioBase {
 
+  virtual const double *dsp(const double *sig) {
+    for (uint32_t i = 0; i < m_vframes * m_nchnls; i++)
+      m_vector[i] = m_ovw ? m_scal * sig[i] + m_offs
+                          : m_scal * sig[i] + m_offs + m_vector[i];
+    return vector();
+  }
+
 protected:
   double m_scal;
   double m_offs;
@@ -42,12 +49,7 @@ public:
       if overwrite is switched off
       once the bus data has been consumed
   */
-  virtual const double *process(const double *sig) {
-    for (uint32_t i = 0; i < m_vframes * m_nchnls; i++)
-      m_vector[i] = m_ovw ? m_scal * sig[i] + m_offs
-                          : m_scal * sig[i] + m_offs + m_vector[i];
-    return vector();
-  }
+  const double *process(const double *sig) { return dsp(sig); }
 
   /** Applies a gain scaling and optional
       offset to a signal vector. If
@@ -55,12 +57,12 @@ public:
       overwritten and a call to
       clear() is not required.
   */
-  virtual const SigBus &process(const double *sig, double scal,
-                                double offs = 0., bool overwrite = true) {
+  const SigBus &process(const double *sig, double scal, double offs = 0.,
+                        bool overwrite = true) {
     m_scal = scal;
     m_offs = offs;
     m_ovw = overwrite;
-    process(sig);
+    dsp(sig);
     return *this;
   }
 
@@ -68,9 +70,9 @@ public:
       Requires an explicit call to clear()
       once the bus data has been consumed
   */
-  virtual const SigBus &process(const AudioBase &obj) {
+  const SigBus &process(const AudioBase &obj) {
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
-      process(obj.vector());
+      dsp(obj.vector());
     } else
       m_error = AULIB_ERROR;
     return *this;
@@ -82,12 +84,12 @@ public:
       overwritten and a call to
       clear() is not required.
   */
-  virtual const SigBus &process(const AudioBase &obj, double scal,
-                                double offs = 0., bool overwrite = true) {
+  const SigBus &process(const AudioBase &obj, double scal, double offs = 0.,
+                        bool overwrite = true) {
     m_scal = scal;
     m_offs = offs;
     m_ovw = overwrite;
-    process(obj.vector());
+    dsp(obj.vector());
     return *this;
   }
 

@@ -22,7 +22,7 @@ class Oscili : public Oscil {
 protected:
   /** interpolating oscillator process
    */
-  virtual void oscillator();
+  virtual void dsp();
 
 public:
   /** Sinusoidal Oscili constructor \n\n

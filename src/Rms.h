@@ -25,7 +25,7 @@ protected:
 
   /** RMS processing
   */
-  virtual const double *filter(const double *sig) {
+  virtual const double *dsp(const double *sig) {
     for (uint32_t i = 0; i < m_vframes; i++)
       m_vector[i] = m_del = m_a * rect(sig[i]) - m_b * m_del;
     return vector();

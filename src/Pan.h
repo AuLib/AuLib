@@ -19,6 +19,8 @@ namespace AuLib {
 */
 class Pan : public AudioBase {
 
+  virtual const double *dsp(const double *sig);
+
 protected:
   double m_pos;
 
@@ -32,18 +34,18 @@ public:
 
   /** Pan a signal sig
    */
-  virtual const double *process(const double *sig);
+  const double *process(const double *sig) { return dsp(sig); }
 
   /** Pan a signal sig according to position pos (0-1)
    */
-  virtual const double *process(const double *sig, double pos) {
+  const double *process(const double *sig, double pos) {
     m_pos = pos;
-    return process(sig);
+    return dsp(sig);
   }
 
   /** Pan a signal in obj
    */
-  virtual const Pan &process(const AudioBase &obj) {
+  const Pan &process(const AudioBase &obj) {
     if (obj.vframes() == m_vframes && obj.nchnls() == 1) {
       process(obj.vector());
     } else
@@ -53,7 +55,7 @@ public:
 
   /** Pan a signal in obj according to position pos (0-1)
    */
-  virtual const Pan &process(const AudioBase &obj, double pos) {
+  const Pan &process(const AudioBase &obj, double pos) {
     m_pos = pos;
     process(obj);
     return *this;

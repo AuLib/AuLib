@@ -72,6 +72,13 @@ protected:
     m_table = m_waves[num].vector();
   }
 
+  /** set the sampling increment
+   */
+  virtual void set_incr(double f) {
+    Oscil::set_incr(f);
+    tselect();
+  }
+
 public:
   /** BlOsc constructor \n\n
       amp - amplitude   \n
@@ -86,95 +93,6 @@ public:
         uint32_t vframes = def_vframes, double sr = def_sr)
       : Oscili(amp, freq, waveset[0], phase, vframes, sr), m_waves(waveset) {
     tselect();
-  }
-
-  /** Process one vector of audio
-   */
-  virtual const BlOsc &process() {
-    Oscili::oscillator();
-    return *this;
-  }
-
-  /** Process one vector of audio
-      with amplitude amp
-  */
-  virtual const BlOsc &process(double amp) {
-    Oscili::process(amp);
-    return *this;
-  }
-
-  /** Process one vector of audio
-      with amplitude amp and
-      frequency freq
-  */
-  virtual const BlOsc &process(double amp, double freq) {
-    m_freq = freq;
-    m_incr = m_freq * m_tframes / m_sr;
-    tselect();
-    Oscili::process(amp);
-    return *this;
-  }
-
-  /** Process one vector of audio
-        with amplitude modulation
-   */
-  virtual const double *process(const double *amp) {
-    return Oscili::process(amp);
-  }
-
-  /** Process one vector of audio
-     with amplitude amp
-     and freq modulation
- */
-  virtual const double *process(double amp, const double *freq) {
-    Oscili::process(amp, freq);
-    return vector();
-  }
-
-  /** Process one vector of audio
-      with amplitude modulation
-      and frequency freq
-  */
-  virtual const double *process(const double *amp, double freq) {
-    Oscili::process(amp, freq);
-    return vector();
-  }
-
-  /** Process one vector of audio
-     with amplitude modulation from obja
- */
-  virtual const BlOsc &process(const AudioBase &obja) {
-    Oscili::process(obja);
-    return *this;
-  }
-
-  /** Process one vector of audio
-      with amplitude modulation from obja
-      and frequency freq
-  */
-  virtual const BlOsc &process(const AudioBase &obja, double freq) {
-    m_freq = freq;
-    m_incr = m_freq * m_tframes / m_sr;
-    tselect();
-    Oscili::process(obja);
-    return *this;
-  }
-
-  /** Process one vector of audio
-      with amplitude amp
-      and pitch modulation from objf
-  */
-  virtual const BlOsc &process(double amp, const AudioBase &objf) {
-    Oscili::process(amp, objf);
-    return *this;
-  }
-
-  /** Process one vector of audio
-      with amplitude from obja and pitch modulation from objf
-  */
-  virtual const BlOsc &process(const AudioBase &obja, const AudioBase &objf) {
-    Oscili::process(obja, objf);
-    return *this;
   }
 };
 

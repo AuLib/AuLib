@@ -19,6 +19,10 @@ namespace AuLib {
 */
 class Delay : public AudioBase {
 
+  virtual const double *dsp(const double *sig, double dt);
+  virtual const double *dsp(const double *sig, const double *dt);
+  virtual const double *dsp(const double *sig);
+
 protected:
   double m_fdb;
   uint64_t m_pos;
@@ -37,33 +41,37 @@ public:
 
   /** delay a signal sig for a fixed time
    */
-  virtual const double *process(const double *sig);
+  const double *process(const double *sig) { return dsp(sig); }
 
-  /** delay a signal for dt seconds and with feedback fdb
+  /** delay a signal for dt seconds
    */
-  virtual const double *process(const double *sig, double dt) {
-    return process(sig, dt, 0.);
-  }
+  const double *process(const double *sig, double dt) { return dsp(sig, dt); }
 
   /** delay a signal for dt seconds and with optional feedback fdb
    */
-  virtual const double *process(const double *sig, double dt, double fdb);
+  const double *process(const double *sig, double dt, double fdb) {
+    m_fdb = fdb;
+    return dsp(sig, dt);
+    ;
+  }
 
   /** delay a signal for delay time taken from the signal dt
   */
-  virtual const double *process(const double *sig, const double *dt) {
-    return process(sig, dt, 0.);
+  const double *process(const double *sig, const double *dt) {
+    return dsp(sig, dt);
   }
 
   /** delay a signal for delay time taken from the signal dt and
       with optional feedback fdb
   */
-  virtual const double *process(const double *sig, const double *dt,
-                                double fdb);
+  const double *process(const double *sig, const double *dt, double fdb) {
+    m_fdb = fdb;
+    return dsp(sig, dt);
+  }
 
   /** delay a signal in obj for a fixed time
    */
-  virtual const Delay &process(const AudioBase &obj) {
+  const Delay &process(const AudioBase &obj) {
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
       process(obj.vector());
     } else
@@ -73,15 +81,7 @@ public:
 
   /** delay a signal in obj, optionally for dt seconds.
   */
-  virtual const Delay &process(const AudioBase &obj, double dt) {
-    return process(obj, dt, 0.);
-  }
-
-  /** delay a signal in obj, optionally for dt seconds
-      and with feedback fdb.
-  */
-  virtual const Delay &process(const AudioBase &obj, double dt, double fdb) {
-    m_fdb = fdb;
+  const Delay &process(const AudioBase &obj, double dt) {
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
       if (dt < 0)
         process(obj.vector());
@@ -92,23 +92,31 @@ public:
     return *this;
   }
 
+  /** delay a signal in obj, optionally for dt seconds
+      and with feedback fdb.
+  */
+  const Delay &process(const AudioBase &obj, double dt, double fdb) {
+    m_fdb = fdb;
+    return process(obj, dt);
+  }
+
   /** delay a signal in obj for dt sec with variable delaytime sig
   */
-  virtual const Delay &process(const AudioBase &obj, const AudioBase &dt) {
-    return process(obj, dt, 0.);
+  const Delay &process(const AudioBase &obj, const AudioBase &dt) {
+    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls &&
+        dt.vframes() == m_vframes && dt.nchnls() == m_nchnls) {
+      process(obj.vector(), dt.vector());
+    } else
+      m_error = AULIB_ERROR;
+    return *this;
   }
 
   /** delay a signal in obj for dt sec with variable delaytime sig
       and with optional feedback fdb.
   */
-  virtual const Delay &process(const AudioBase &obj, const AudioBase &dt,
-                               double fdb) {
-    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls &&
-        dt.vframes() == m_vframes && dt.nchnls() == m_nchnls) {
-      process(obj.vector(), dt.vector(), fdb);
-    } else
-      m_error = AULIB_ERROR;
-    return *this;
+  const Delay &process(const AudioBase &obj, const AudioBase &dt, double fdb) {
+    m_fdb = fdb;
+    return process(obj, dt);
   }
 
   /** get the current write position

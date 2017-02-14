@@ -20,6 +20,11 @@ namespace AuLib {
 */
 class Tap : public AudioBase {
 
+  virtual const Tap &dsp(const Delay &obj, double time);
+  virtual const double *dsp(const Delay &obj, const double *time) {
+    return dsp(obj, time[0]).vector();
+  }
+
 public:
   /** Tap constructor \n\n
       vframes - vector size \n
@@ -30,7 +35,23 @@ public:
 
   /** tap a delay object at time secs
    */
-  virtual const Tap &process(const Delay &obj, double time);
+  const Tap &process(const Delay &obj, double time) { return dsp(obj, time); }
+
+  /** tap a delay object according to time signal in secs
+   */
+  const double *process(const Delay &obj, const double *time) {
+    return dsp(obj, time);
+  }
+
+  /** tap a delay object according to time signal from obj in secs
+  */
+  const Tap &process(const Delay &del, const AudioBase &obj) {
+    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
+      dsp(del, obj.vector());
+    } else
+      m_error = AULIB_ERROR;
+    return *this;
+  }
 };
 
 /*! \class Tap Tap.h AuLib/Tap.h

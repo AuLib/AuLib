@@ -20,7 +20,7 @@ namespace AuLib {
 class Expon : public Line {
 
 protected:
-  virtual void generate() {
+  virtual void dsp() {
     for (uint32_t i = 0; i < m_vframes; i++) {
       m_vector[i] = m_y;
       if (m_cnt < m_x1) {
@@ -28,6 +28,17 @@ protected:
         m_cnt++;
       }
     }
+  }
+
+  virtual void restart() {
+    m_cnt = 0;
+    if (m_y <= 0.)
+      m_y = db_min;
+    if (m_y0 <= 0.)
+      m_y0 = db_min;
+    if (m_y1 <= 0.)
+      m_y1 = db_min;
+    m_incr = pow(m_y1 / m_y0, 1. / m_x1);
   }
 
 public:
@@ -43,19 +54,6 @@ public:
       : Line(start, end, time, vframes, sr) {
     retrig();
   };
-
-  /** retrigger
-   */
-  virtual void retrig() {
-    m_cnt = 0;
-    if (m_y <= 0.)
-      m_y = db_min;
-    if (m_y0 <= 0.)
-      m_y0 = db_min;
-    if (m_y1 <= 0.)
-      m_y1 = db_min;
-    m_incr = pow(m_y1 / m_y0, 1. / m_x1);
-  }
 };
 
 /*! \class Expon Expon.h AuLib/Expon.h

@@ -12,7 +12,7 @@
 #include "TableReadi.h"
 #include "TableReadic.h"
 
-void AuLib::TableRead::lookup(const double *phs) {
+void AuLib::TableRead::dsp(const double *phs) {
   uint32_t pos;
   for (uint32_t i = 0; i < m_vframes; i++) {
     pos = (uint32_t)mod((m_norm ? phs[i] * m_tframes : phs[i]) + m_phs);
@@ -20,7 +20,7 @@ void AuLib::TableRead::lookup(const double *phs) {
   }
 }
 
-void AuLib::TableReadi::lookup(const double *phs) {
+void AuLib::TableReadi::dsp(const double *phs) {
   uint32_t posi;
   double pos, frac, a, b;
   for (uint32_t i = 0; i < m_vframes; i++) {
@@ -33,7 +33,7 @@ void AuLib::TableReadi::lookup(const double *phs) {
   }
 }
 
-void AuLib::TableReadic::lookup(const double *phs) {
+void AuLib::TableReadic::dsp(const double *phs) {
   uint32_t posi;
   double pos, frac, fracsq, fracb;
   double tmp, a, b, c, d;

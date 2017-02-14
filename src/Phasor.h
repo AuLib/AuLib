@@ -19,6 +19,8 @@ namespace AuLib {
  */
 class Phasor : public AudioBase {
 
+  virtual const Phasor &dsp();
+
 protected:
   double m_freq;
   double m_phs;
@@ -45,7 +47,7 @@ public:
 
   /** Process one vector of audio
    */
-  virtual const Phasor &process();
+  virtual const Phasor &process() { return dsp(); }
 
   /** Process one vector of audio with
       frequency freq

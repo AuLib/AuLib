@@ -26,7 +26,7 @@ protected:
 
   /** Filter kernel
    */
-  virtual const double *filter(const double *sig);
+  virtual const double *dsp(const double *sig);
 
   /** Coefficients update
    */
@@ -58,24 +58,21 @@ public:
 
   /** process a signal sig
    */
-  virtual const double *process(const double *sig) {
-    filter(sig);
-    return vector();
-  }
+  const double *process(const double *sig) { return dsp(sig); }
 
   /** process a signal sig with coefficients lists a and b
    */
   const double *process(const double *sig, const double *a, const double *b) {
     std::copy(a, a + 3, m_a);
     std::copy(b, b + 3, m_a);
-    return process(sig);
+    return dsp(sig);
   }
 
   /** process a signal in obj
    */
-  virtual const Iir &process(const AudioBase &obj) {
+  const Iir &process(const AudioBase &obj) {
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
-      process(obj.vector());
+      dsp(obj.vector());
     } else
       m_error = AULIB_ERROR;
     return *this;

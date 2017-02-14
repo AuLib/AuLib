@@ -18,6 +18,12 @@ namespace AuLib {
  */
 class AllPass : public Delay {
 
+  virtual const double *dsp(const double *sig, double dt) { return dsp(sig); }
+  virtual const double *dsp(const double *sig, const double *dt) {
+    return dsp(sig);
+  }
+  virtual const double *dsp(const double *sig);
+
 public:
   /** AllPass constructor \n\n
       dtime - delay time \n
@@ -28,34 +34,6 @@ public:
   AllPass(double dtime, double fdb, uint32_t vframes = def_vframes,
           double sr = def_sr)
       : Delay(dtime, fdb, vframes, sr){};
-
-  /** process signal sig
-   */
-  virtual const double *process(const double *sig);
-
-  /** process signal sig with feedback fdb
-   */
-  virtual const double *process(const double *sig, double fdb) {
-    m_fdb = fdb;
-    return process(sig);
-  }
-
-  /** process signal in obj
-  */
-  virtual const Delay &process(const AudioBase &obj) {
-    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
-      process(obj.vector());
-    } else
-      m_error = AULIB_ERROR;
-    return *this;
-  }
-
-  /** process signal in obj with feedback fdb
-  */
-  virtual const Delay &process(const AudioBase &obj, double fdb) {
-    m_fdb = fdb;
-    return process(obj);
-  }
 };
 
 /*! \class AllPass AllPass.h AuLib/AllPass.h

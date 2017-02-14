@@ -37,7 +37,7 @@ AuLib::Segments::Segments(double start, const std::vector<double> endpts,
   }
 }
 
-const AuLib::AudioBase &AuLib::Envel::process() {
+const AuLib::AudioBase &AuLib::Envel::dsp() {
   bool linear = m_segs.isLinear();
   uint32_t nsegs = m_segs.nsegs();
   for (uint32_t i = 0; i < m_vframes; i++) {

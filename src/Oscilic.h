@@ -22,7 +22,7 @@ class Oscilic : public Oscil {
 protected:
   /** cubic oscillator process
    */
-  virtual void oscillator();
+  virtual void dsp();
 
 public:
   /** Sinusoidal Oscilic constructor \n\n

@@ -19,30 +19,15 @@ namespace AuLib {
 */
 class Tapi : public Tap {
 
+  virtual const Tap &dsp(const Delay &obj, double time);
+  virtual const double *dsp(const Delay &obj, const double *time);
+
 public:
   /** Tapi constructor \n\n
       vframes - vector size \n
       sr - sampling rate
   */
   Tapi(uint32_t vframes = def_vframes, double sr = def_sr) : Tap(vframes, sr){};
-
-  /** tap a delay object at time secs
-   */
-  virtual const Tapi &process(const Delay &obj, double time);
-
-  /** tap a delay object according to time signal in secs
-   */
-  virtual const double *process(const Delay &obj, const double *time);
-
-  /** tap a delay object according to time signal from obj in secs
-   */
-  virtual const Tapi &process(const Delay &del, const AudioBase &obj) {
-    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
-      process(del, obj.vector());
-    } else
-      m_error = AULIB_ERROR;
-    return *this;
-  }
 };
 
 /*! \class Tapi Tapi.h AuLib/Tapi.h

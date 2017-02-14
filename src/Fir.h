@@ -20,6 +20,12 @@ namespace AuLib {
 */
 class Fir : public Delay {
 
+  virtual const double *dsp(const double *sig, double dt) { return dsp(sig); }
+  virtual const double *dsp(const double *sig, const double *dt) {
+    return dsp(sig);
+  }
+  virtual const double *dsp(const double *sig);
+
 protected:
   const FuncTable &m_ir;
 
@@ -31,20 +37,6 @@ public:
   */
   Fir(const FuncTable &ir, uint32_t vframes = def_vframes, double sr = def_sr)
       : Delay(ir.tframes() * sr, 0., vframes, sr), m_ir(ir){};
-
-  /** apply convolution to a signal sig
-   */
-  virtual const double *process(const double *sig);
-
-  /** apply convolution to a signal in obj
-   */
-  virtual const Fir &process(const AudioBase &obj) {
-    if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
-      process(obj.vector());
-    } else
-      m_error = AULIB_ERROR;
-    return *this;
-  }
 };
 
 /*! \class Fir Fir.h AuLib/Fir.h

@@ -11,7 +11,7 @@
 #include "Tap.h"
 #include "Tapi.h"
 
-const AuLib::Tap &AuLib::Tap::process(const Delay &obj, double time) {
+const AuLib::Tap &AuLib::Tap::dsp(const Delay &obj, double time) {
   if (obj.vframes() == m_vframes && obj.sr() == m_sr) {
     const AudioBase &delay = obj.delayline();
     int32_t dt = (uint32_t)(time > 0. ? time * m_sr : 0), rp;
@@ -32,7 +32,7 @@ const AuLib::Tap &AuLib::Tap::process(const Delay &obj, double time) {
   return *this;
 }
 
-const AuLib::Tapi &AuLib::Tapi::process(const Delay &obj, double time) {
+const AuLib::Tap &AuLib::Tapi::dsp(const Delay &obj, double time) {
   if (obj.vframes() == m_vframes && obj.sr() == m_sr) {
     const AudioBase &delay = obj.delayline();
     double a, b;
@@ -59,7 +59,7 @@ const AuLib::Tapi &AuLib::Tapi::process(const Delay &obj, double time) {
   return *this;
 }
 
-const double *AuLib::Tapi::process(const Delay &obj, const double *time) {
+const double *AuLib::Tapi::dsp(const Delay &obj, const double *time) {
   if (obj.vframes() == m_vframes && obj.sr() == m_sr) {
     const AudioBase &delay = obj.delayline();
     double a, b;

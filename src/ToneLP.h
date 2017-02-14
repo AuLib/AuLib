@@ -30,10 +30,10 @@ protected:
 
   /** filter kernel
    */
-  virtual const double *filter(const double *sig) {
+  virtual const double *dsp(const double *sig) {
     for (uint32_t i = 0; i < m_vframes; i++) {
-      m_del = m_a * sig[i] - m_b*m_del;
-      m_vector[i] = m_del; 
+      m_del = m_a * sig[i] - m_b * m_del;
+      m_vector[i] = m_del;
     }
     return vector();
   }
@@ -45,29 +45,29 @@ public:
       sr - sampling rate
   */
   ToneLP(double cf, uint32_t vframes = def_vframes, double sr = def_sr)
-    : AudioBase(1, vframes, sr), m_freq(cf), m_del(0.0), m_a(0.0), m_b(0.0) {
+      : AudioBase(1, vframes, sr), m_freq(cf), m_del(0.0), m_a(0.0), m_b(0.0) {
     update();
   };
 
   /** process a signal sig
    */
-  virtual const double *process(const double *sig) { return filter(sig); }
+  const double *process(const double *sig) { return dsp(sig); }
 
   /** process a signal sig with cutoff freq cf
    */
-  virtual const double *process(const double *sig, double cf) {
+  const double *process(const double *sig, double cf) {
     if (cf != m_freq) {
       m_freq = cf;
       update();
     }
-    return process(sig);
+    return dsp(sig);
   }
 
   /** process a signal in obj
    */
-  virtual const ToneLP &process(const AudioBase &obj) {
+  const ToneLP &process(const AudioBase &obj) {
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
-      process(obj.vector());
+      dsp(obj.vector());
     } else
       m_error = AULIB_ERROR;
     return *this;
@@ -75,13 +75,12 @@ public:
 
   /** process a signal in obj with cutoff freq cf
    */
-  virtual const ToneLP &process(const AudioBase &obj, double cf) {
+  const ToneLP &process(const AudioBase &obj, double cf) {
     if (cf != m_freq) {
       m_freq = cf;
       update();
     }
-    process(obj);
-    return *this;
+    return process(obj);
   }
 };
 

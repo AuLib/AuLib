@@ -68,8 +68,7 @@ public:
    *  size and it is required to be >= analysis hopsize, otherwise no processing
    *  takes place.
    */
-  virtual const double *process(const double *sig,
-                                uint32_t vframes = def_vframes) {
+  const double *process(const double *sig, uint32_t vframes = def_vframes) {
     if (vframes >= m_H)
       return transform(sig, vframes);
     else
@@ -78,7 +77,7 @@ public:
 
   /** transform a signal in obj
    */
-  virtual const Stft &process(const AudioBase &obj) {
+  const Stft &process(const AudioBase &obj) {
     if (obj.nchnls() == 1) {
       transform(obj.vector(),
                 m_dir == fft::forward ? obj.vframes() : m_vframes);

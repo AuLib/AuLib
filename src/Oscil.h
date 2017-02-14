@@ -11,24 +11,30 @@
 #ifndef _OSCIL_H
 #define _OSCIL_H
 
-#include "TableRead.h"
+#include "AudioBase.h"
+#include "FourierTable.h"
+#include "FuncTable.h"
 
 namespace AuLib {
 
 /** Truncating oscillator
  */
-class Oscil : public TableRead {
+class Oscil : public AudioBase {
 
 protected:
+  std::unique_ptr<FourierTable> m_sine;
+  const double *m_table;
+  double m_phs;
   double m_amp;
   double m_freq;
   double m_incr;
   const double *m_am;
   const double *m_fm;
+  uint64_t m_tframes;
 
   /** truncating oscillator process
    */
-  virtual void oscillator();
+  virtual void dsp();
 
   /** AM/FM processing
    */
@@ -39,6 +45,22 @@ protected:
       m_freq = m_fm[ndx];
       m_incr = m_freq * m_tframes / m_sr;
     }
+  }
+
+  /** set the sampling increment
+   */
+  virtual void set_incr(double f) {
+    m_freq = f;
+    m_incr = m_freq * m_tframes / m_sr;
+  }
+
+  /** modulo function
+   */
+  void mod() {
+    while (m_phs >= m_tframes)
+      m_phs -= m_tframes;
+    while (m_phs < 0)
+      m_phs += m_tframes;
   }
 
 public:
@@ -66,15 +88,15 @@ public:
 
   /** Process one vector of audio
    */
-  virtual const Oscil &process() {
-    oscillator();
+  const Oscil &process() {
+    dsp();
     return *this;
   }
 
   /** Process one vector of audio
       with amplitude amp
   */
-  virtual const Oscil &process(double amp) {
+  const Oscil &process(double amp) {
     m_amp = amp;
     return process();
   }
@@ -83,38 +105,35 @@ public:
       with amplitude amp and
       frequency freq
   */
-  virtual const Oscil &process(double amp, double freq) {
+  const Oscil &process(double amp, double freq) {
     m_amp = amp;
-    m_freq = freq;
-    m_incr = m_freq * m_tframes / m_sr;
+    set_incr(freq);
     return process();
   }
 
   /** Process one vector of audio
       with amplitude and freq modulation
   */
-  virtual const double *process(const double *amp, const double *freq) {
+  const double *process(const double *amp, const double *freq) {
     m_am = amp;
     m_fm = freq;
-    process();
+    dsp();
     return vector();
   }
 
   /** Process one vector of audio
         with amplitude modulation
    */
-  virtual const double *process(const double *amp) {
-    return process(amp, nullptr);
-  }
+  const double *process(const double *amp) { return process(amp, nullptr); }
 
   /** Process one vector of audio
       with amplitude amp
       and freq modulation
   */
-  virtual const double *process(double amp, const double *freq) {
+  const double *process(double amp, const double *freq) {
     m_amp = amp;
     m_fm = freq;
-    process();
+    dsp();
     return vector();
   }
 
@@ -122,21 +141,20 @@ public:
       with amplitude modulation
       and frequency freq
   */
-  virtual const double *process(const double *amp, double freq) {
+  const double *process(const double *amp, double freq) {
     m_am = amp;
-    m_freq = freq;
-    m_incr = m_freq * m_tframes / m_sr;
-    process();
+    set_incr(freq);
+    dsp();
     return vector();
   }
 
   /** Process one vector of audio
       with amplitude modulation from obja
   */
-  virtual const Oscil &process(const AudioBase &obja) {
+  const Oscil &process(const AudioBase &obja) {
     if (obja.vframes() == m_vframes) {
       m_am = obja.vector();
-      process();
+      dsp();
     } else
       m_error = AULIB_ERROR;
     return *this;
@@ -146,9 +164,9 @@ public:
       with amplitude modulation from obja
       and frequency freq
   */
-  virtual const Oscil &process(const AudioBase &obja, double freq) {
+  const Oscil &process(const AudioBase &obja, double freq) {
     m_freq = freq;
-    m_incr = m_freq * m_tframes / m_sr;
+    set_incr(freq);
     process(obja);
     return *this;
   }
@@ -157,11 +175,11 @@ public:
       with amplitude amp
       and freq modulation from objf
   */
-  virtual const Oscil &process(double amp, const AudioBase &objf) {
+  const Oscil &process(double amp, const AudioBase &objf) {
     if (objf.vframes() == m_vframes && objf.nchnls() == 1) {
       m_amp = amp;
       m_fm = objf.vector();
-      process();
+      dsp();
     } else
       m_error = AULIB_ERROR;
     return *this;
@@ -170,12 +188,12 @@ public:
   /** Process one vector of audio
       with amplitude from obja and freq modulation from objf
   */
-  virtual const Oscil &process(const AudioBase &obja, const AudioBase &objf) {
+  const Oscil &process(const AudioBase &obja, const AudioBase &objf) {
     if (obja.vframes() == m_vframes && objf.vframes() == m_vframes &&
         obja.nchnls() == 1 && objf.nchnls() == 1) {
       m_am = obja.vector();
       m_fm = objf.vector();
-      process();
+      dsp();
     } else
       m_error = AULIB_ERROR;
     return *this;

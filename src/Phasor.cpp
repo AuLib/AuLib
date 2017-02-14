@@ -16,7 +16,7 @@ AuLib::Phasor::Phasor(double freq, double phase, uint32_t vframes, double sr)
   mod1();
 }
 
-const AuLib::Phasor &AuLib::Phasor::process() {
+const AuLib::Phasor &AuLib::Phasor::dsp() {
   for (uint32_t i = 0; i < m_vframes; i++) {
     m_vector[i] = m_phs;
     m_phs += m_incr;

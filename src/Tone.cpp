@@ -19,6 +19,6 @@ void AuLib::ToneLP::update() {
 
 void AuLib::ToneHP::update() {
   double costh = 2. + cos(2. * pi * m_freq / m_sr);
-  m_b = costh - sqrt(costh * costh - 1.); 
+  m_b = costh - sqrt(costh * costh - 1.);
   m_a = (1. + m_b);
 }

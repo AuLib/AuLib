@@ -36,36 +36,29 @@ public:
     update();
   };
 
-  /** process a signal
+  /** using base class overloads
    */
-  virtual const double *process(const double *sig) { return filter(sig); }
-
-  /** process a signal in obj
-   */
-  virtual const LowP &process(const AudioBase &obj) {
-    filter(obj.vector());
-    return *this;
-  }
+  using Iir::process;
 
   /** process a signal sig with cutoff freq cf
    */
-  virtual const double *process(const double *sig, double cf) {
+  const double *process(const double *sig, double cf) {
     if (m_freq != cf) {
       m_freq = cf;
       update();
     }
-    filter(sig);
+    dsp(sig);
     return vector();
   }
 
   /** process a signal in obj with cutoff freq cf
    */
-  virtual const LowP &process(const AudioBase &obj, double cf) {
+  const LowP &process(const AudioBase &obj, double cf) {
     if (m_freq != cf) {
       m_freq = cf;
       update();
     }
-    filter(obj.vector());
+    dsp(obj.vector());
     return *this;
   }
 };

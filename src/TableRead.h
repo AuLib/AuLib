@@ -22,7 +22,6 @@ namespace AuLib {
 class TableRead : public AudioBase {
 
 protected:
-  std::unique_ptr<FourierTable> m_sine;
   const double *m_table;
   double m_phs;
   bool m_norm;
@@ -31,7 +30,7 @@ protected:
 
   /** truncated table lookup
    */
-  virtual void lookup(const double *phs);
+  virtual void dsp(const double *phs);
 
   /** modulo function
    */
@@ -59,41 +58,28 @@ public:
   TableRead(const FuncTable &ftable, double phase = 0., bool norm = true,
             bool wrap = true, uint32_t vframes = def_vframes,
             double sr = def_sr)
-      : AudioBase(1, vframes, sr), m_sine(nullptr), m_table(ftable.vector()),
-        m_phs(phase), m_norm(norm), m_wrap(wrap), m_tframes(ftable.tframes()) {
+      : AudioBase(1, vframes, sr), m_table(ftable.vector()), m_phs(phase),
+        m_norm(norm), m_wrap(wrap), m_tframes(ftable.tframes()) {
     if (m_table == nullptr) {
       m_vframes = 0;
       m_error = AULIB_ERROR;
     }
   };
 
-  /** TableRead constructor \n\n
-      phase - initial phase \n
-      norm - normalisation switch \n
-      wrap - wraparound switch \n
-      vframes - vector size \n
-      sr - sampling rate \n
-  */
-  TableRead(double phase = 0., bool norm = true, bool wrap = true,
-            uint32_t vframes = def_vframes, double sr = def_sr)
-      : AudioBase(1, vframes), m_sine(new FourierTable), m_table(*m_sine),
-        m_phs(phase), m_norm(norm), m_wrap(wrap),
-        m_tframes(m_sine->tframes()){};
-
   /** takes in a frame of phase values
       and lookups up the table values
   */
-  virtual const double *process(const double *phs) {
-    lookup(phs);
+  const double *process(const double *phs) {
+    dsp(phs);
     return vector();
   }
 
   /** takes in a frame of phase values
       and lookups up the table values
   */
-  virtual const TableRead &process(const AudioBase &obj) {
+  const TableRead &process(const AudioBase &obj) {
     if (obj.vframes() == m_vframes && obj.nchnls() == 1)
-      lookup(obj.vector());
+      dsp(obj.vector());
     else
       m_error = AULIB_ERROR;
     return *this;

@@ -21,7 +21,7 @@ class TableReadic : public TableRead {
 protected:
   /** truncated table lookup
    */
-  virtual void lookup(const double *phs);
+  virtual void dsp(const double *phs);
 
 public:
   /** TableReadic constructor \n\n

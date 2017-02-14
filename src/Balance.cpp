@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "Balance.h"
 
-const double *AuLib::Balance::process(const double *sig, const double *cmp) {
+const double *AuLib::Balance::dsp(const double *sig, const double *cmp) {
   const double *rms_cmp = m_cmp.process(cmp);
   const double *rms_sig = m_sig.process(sig);
   for (uint32_t i = 0; i < m_vframes; i++) {

@@ -12,7 +12,7 @@
 #include "AllPass.h"
 #include "Fir.h"
 
-const double *AuLib::Delay::process(const double *sig) {
+const double *AuLib::Delay::dsp(const double *sig) {
   for (uint32_t i = 0; i < m_vframes; i++) {
     m_vector[i] = m_delay.set(sig[i] + m_delay[m_pos] * m_fdb, m_pos);
     m_pos = m_pos == m_delay.vframes() - 1 ? 0. : m_pos + 1;
@@ -20,10 +20,9 @@ const double *AuLib::Delay::process(const double *sig) {
   return vector();
 }
 
-const double *AuLib::Delay::process(const double *sig, double dt, double fdb) {
+const double *AuLib::Delay::dsp(const double *sig, double dt) {
   uint32_t ds = dt * m_sr;
   int32_t rp;
-  m_fdb = fdb;
   if (ds > m_delay.vframes())
     ds = m_delay.vframes();
   for (uint32_t i = 0; i < m_vframes; i++) {
@@ -37,11 +36,9 @@ const double *AuLib::Delay::process(const double *sig, double dt, double fdb) {
   return vector();
 }
 
-const double *AuLib::Delay::process(const double *sig, const double *dt,
-                                    double fdb) {
+const double *AuLib::Delay::dsp(const double *sig, const double *dt) {
   double rp, ds, a, b, frac;
   uint32_t irp;
-  m_fdb = fdb;
   for (uint32_t i = 0; i < m_vframes; i++) {
     ds = dt[i] < 0. ? 0 : dt[i] * m_sr;
     if (ds > m_delay.vframes())
@@ -62,7 +59,7 @@ const double *AuLib::Delay::process(const double *sig, const double *dt,
   return vector();
 }
 
-const double *AuLib::AllPass::process(const double *sig) {
+const double *AuLib::AllPass::dsp(const double *sig) {
   double y;
   for (uint32_t i = 0; i < m_vframes; i++) {
     y = sig[i] + m_fdb * m_delay[m_pos];
@@ -72,7 +69,7 @@ const double *AuLib::AllPass::process(const double *sig) {
   return vector();
 }
 
-const double *AuLib::Fir::process(const double *sig) {
+const double *AuLib::Fir::dsp(const double *sig) {
   double out = 0;
   uint32_t N = m_ir.tframes();
   for (uint32_t i = 0; i < m_vframes; i++) {

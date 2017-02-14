@@ -19,6 +19,15 @@ namespace AuLib {
 */
 class Chn : public AudioBase {
 
+  virtual const double *dsp(const double *sig, uint32_t nchnls) {
+    if (m_chn && m_chn <= nchnls)
+      for (uint32_t i = 0, j = m_chn - 1; i < m_vframes; i++, j += nchnls)
+        m_vector[i] = sig[j];
+    else
+      set(0.);
+    return vector();
+  }
+
 protected:
   uint32_t m_chn;
 
@@ -33,28 +42,22 @@ public:
 
   /** extracts a channel from sig holding nchnls channels
    */
-  virtual const double *process(const double *sig, uint32_t nchnls) {
-    if (m_chn && m_chn <= nchnls)
-      for (uint32_t i = 0, j = m_chn - 1; i < m_vframes; i++, j += nchnls)
-        m_vector[i] = sig[j];
-    else
-      set(0.);
-    return vector();
+  const double *process(const double *sig, uint32_t nchnls) {
+    return dsp(sig, nchnls);
   }
 
   /** extracts channel chn from sig holding nchnls channels
    */
-  virtual const double *process(const double *sig, uint32_t chn,
-                                uint32_t nchnls) {
+  const double *process(const double *sig, uint32_t chn, uint32_t nchnls) {
     m_chn = chn;
-    return process(sig, nchnls);
+    return dsp(sig, nchnls);
   }
 
   /** extracts a channel from obj
    */
-  virtual const Chn &process(const AudioBase &obj) {
+  const Chn &process(const AudioBase &obj) {
     if (obj.vframes() == m_vframes) {
-      process(obj.vector(), obj.nchnls());
+      dsp(obj.vector(), obj.nchnls());
     } else
       m_error = AULIB_ERROR;
     return *this;
@@ -62,7 +65,7 @@ public:
 
   /** extracts channel chn from obj
    */
-  virtual const Chn &process(const AudioBase &obj, uint32_t chn) {
+  const Chn &process(const AudioBase &obj, uint32_t chn) {
     m_chn = chn;
     process(obj);
     return *this;

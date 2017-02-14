@@ -29,7 +29,7 @@ protected:
 
   /** process the output vector
    */
-  virtual void generate() {
+  virtual void dsp() {
     for (uint32_t i = 0; i < m_vframes; i++) {
       m_vector[i] = m_y;
       if (m_cnt < m_x1) {
@@ -38,6 +38,12 @@ protected:
       } else
         m_y = m_y1;
     }
+  }
+
+  virtual void restart() {
+    m_cnt = 0;
+    m_y = m_y0;
+    m_incr = (m_y1 - m_y0) / m_x1;
   }
 
 public:
@@ -55,18 +61,14 @@ public:
 
   /** process and return a reference to the object
    */
-  virtual const AudioBase &process() {
-    generate();
+  const AudioBase &process() {
+    dsp();
     return *this;
   }
 
   /** retrigger
    */
-  virtual void retrig() {
-    m_cnt = 0;
-    m_y = m_y0;
-    m_incr = (m_y1 - m_y0) / m_x1;
-  }
+  void retrig() { restart(); }
 
   /** reset and retrigger
    */
@@ -74,7 +76,7 @@ public:
     m_y0 = start;
     m_y1 = end;
     m_x1 = time * m_sr;
-    retrig();
+    restart();
   }
 };
 

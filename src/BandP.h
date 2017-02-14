@@ -38,52 +38,32 @@ public:
     update();
   };
 
-  /** process a signal
+  /** using base class overloads
    */
-  virtual const double *process(const double *sig) { return filter(sig); }
-
-  /** process a signal in obj
-   */
-  virtual const BandP &process(const AudioBase &obj) {
-    filter(obj.vector());
-    return *this;
-  }
-
-  /** process a signal sig with cutoff freq cf
-   */
-  virtual const double *process(const double *sig, double cf) {
-    return LowP::process(sig, cf);
-  }
+  using LowP::process;
 
   /** process a signal sig with cutoff freq cf and bandwidth bw
    */
-  virtual const double *process(const double *sig, double cf, double bw) {
+  const double *process(const double *sig, double cf, double bw) {
     if (m_bw != bw || m_freq != cf) {
       m_bw = bw > 0. ? bw : m_bw;
       m_freq = cf;
       update();
     }
-    filter(sig);
+    dsp(sig);
     return vector();
-  }
-
-  /** process a signal in obj with cutoff freq cf
-   */
-  virtual const BandP &process(const AudioBase &obj, double cf) {
-    LowP::process(obj, cf);
-    return *this;
   }
 
   /** process a signal in obj with cutoff freq cf and
       bandwidth bw
   */
-  virtual const BandP &process(const AudioBase &obj, double cf, double bw) {
+  const BandP &process(const AudioBase &obj, double cf, double bw) {
     if (m_bw != bw || m_freq != cf) {
       m_bw = bw > 0. ? bw : m_bw;
       m_freq = cf;
       update();
     }
-    filter(obj.vector());
+    dsp(obj.vector());
     return *this;
   }
 };

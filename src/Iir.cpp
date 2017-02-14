@@ -16,7 +16,7 @@
 #include "Reson.h"
 #include "ResonR.h"
 
-const double *AuLib::Iir::filter(const double *sig) {
+const double *AuLib::Iir::dsp(const double *sig) {
   double w, y;
 
   for (uint32_t i = 0; i < m_vframes; i++) {

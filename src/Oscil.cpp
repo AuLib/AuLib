@@ -15,33 +15,35 @@
 
 AuLib::Oscil::Oscil(double amp, double freq, double phase, uint32_t vframes,
                     double sr)
-    : TableRead(phase, false, true, vframes, sr), m_amp(amp), m_freq(freq),
-      m_am(NULL), m_fm(NULL) {
+    : AudioBase(1, vframes, sr), m_sine(new AuLib::FourierTable),
+      m_table(*m_sine), m_phs(phase), m_amp(amp), m_freq(freq), m_am(nullptr),
+      m_fm(nullptr), m_tframes(m_sine->tframes()) {
   m_incr = m_freq * m_tframes / m_sr;
-  m_phs = mod(m_phs * m_tframes);
+  mod();
 }
 
 AuLib::Oscil::Oscil(double amp, double freq, const FuncTable &ftable,
                     double phase, uint32_t vframes, double sr)
-    : TableRead(ftable, phase, false, true, vframes, sr), m_amp(amp),
-      m_freq(freq), m_am(nullptr), m_fm(nullptr) {
+    : AudioBase(1, vframes, sr), m_sine(nullptr), m_table(ftable.vector()),
+      m_phs(phase), m_amp(amp), m_freq(freq), m_am(nullptr), m_fm(nullptr),
+      m_tframes(ftable.tframes()) {
   if (m_table == nullptr) {
     m_vframes = 0;
     m_error = AULIB_ERROR;
   }
   m_incr = m_freq * m_tframes / m_sr;
-  m_phs = mod(m_phs * m_tframes);
+  mod();
 }
 
-void AuLib::Oscil::oscillator() {
+void AuLib::Oscil::dsp() {
   for (uint32_t i = 0; i < m_vframes; i++) {
     am_fm(i);
     m_vector[i] = m_amp * m_table[(uint32_t)m_phs];
-    m_phs = mod(m_phs + m_incr);
+    mod();
   }
 }
 
-void AuLib::Oscili::oscillator() {
+void AuLib::Oscili::dsp() {
   uint32_t phi;
   double frac, a, b;
   for (uint32_t i = 0; i < m_vframes; i++) {
@@ -51,11 +53,11 @@ void AuLib::Oscili::oscillator() {
     a = m_table[phi];
     b = m_table[phi + 1];
     m_vector[i] = m_amp * (a + frac * (b - a));
-    m_phs = mod(m_phs + m_incr);
+    mod();
   }
 }
 
-void AuLib::Oscilic::oscillator() {
+void AuLib::Oscilic::dsp() {
   uint32_t phi;
   double frac, a, b, c, d;
   double tmp, fracsq, fracb;
@@ -73,11 +75,11 @@ void AuLib::Oscilic::oscillator() {
     m_vector[i] = m_amp * (fracb * (-a - 3.f * c + tmp) / 6.f +
                            fracsq * ((a + c) / 2.f - b) +
                            frac * (c + (-2.f * a - tmp) / 6.f) + b);
-    m_phs = mod(m_phs + m_incr);
+    mod();
   }
 }
 
-void AuLib::SamplePlayer::oscillator() {
+void AuLib::SamplePlayer::dsp() {
   if (m_nchnls > 1) {
     uint32_t phi;
     double frac, a, b;
@@ -90,8 +92,8 @@ void AuLib::SamplePlayer::oscillator() {
         b = m_table[phi + j + m_nchnls];
         m_vector[i * m_nchnls + j] = m_amp * (a + frac * (b - a));
       }
-      m_phs = mod(m_phs + m_incr);
+      mod();
     }
   } else
-    Oscili::oscillator();
+    Oscili::dsp();
 }

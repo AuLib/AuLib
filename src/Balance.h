@@ -20,6 +20,8 @@ namespace AuLib {
 */
 class Balance : public AudioBase {
 
+  virtual const double *dsp(const double *sig, const double *cmp);
+
 protected:
   Rms m_cmp;
   Rms m_sig;
@@ -37,14 +39,16 @@ public:
 
   /** process a sig with a comparator cmp
    */
-  virtual const double *process(const double *sig, const double *cmp);
+  const double *process(const double *sig, const double *cmp) {
+    return dsp(sig, cmp);
+  }
 
   /** process a signal in obj
    */
-  virtual const Balance &process(const AudioBase &obj, const AudioBase &cmp) {
+  const Balance &process(const AudioBase &obj, const AudioBase &cmp) {
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls &&
         cmp.vframes() == m_vframes && cmp.nchnls() == m_nchnls) {
-      process(obj.vector(), cmp.vector());
+      dsp(obj.vector(), cmp.vector());
     } else
       m_error = AULIB_ERROR;
     return *this;

@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////
 #include "Pan.h"
 
-const double *AuLib::Pan::process(const double *sig) {
+const double *AuLib::Pan::dsp(const double *sig) {
   double lg, rg;
   lg = cos(m_pos * pi / 2.);
   rg = sin(m_pos * pi / 2.);
