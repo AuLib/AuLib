@@ -14,6 +14,7 @@
 #include "AudioBase.h"
 #include "FourierTable.h"
 #include "FuncTable.h"
+#include <memory>
 
 namespace AuLib {
 
