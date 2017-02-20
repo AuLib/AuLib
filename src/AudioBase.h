@@ -97,8 +97,32 @@ public:
   /** Get a constant reference of
       a single sample at sample pos ndx
        off the data vector
- */
+  */
   const double &operator[](uint32_t ndx) const { return m_vector.at(ndx); }
+
+  /** iterator for this class
+   */
+  typedef std::vector<double>::iterator iterator;
+
+   /** const iterator for this class
+   */
+  typedef std::vector<double>::const_iterator const_iterator;
+  
+  /** returns an iterator to the beginning
+   */
+  iterator begin() { return m_vector.begin(); }
+
+  /** returns an iterator to the end
+   */
+  iterator end() { return m_vector.end(); }
+
+  /** returns a const iterator to the beginning
+   */
+  const_iterator cbegin() const { return m_vector.cbegin(); }
+
+  /** returns a const iterator to the end
+   */
+  const_iterator cend() const { return m_vector.cend(); }
 
   /** set the data vector to a sig vector
       return the AudioBase obj reference

@@ -115,7 +115,9 @@ Extending
   processing facilities provided there. Supplying a processing
   method that consumes a vector of samples and another that reads
   from an AudioObj& is the minimum necessary to allow full
-  integration.
+  integration. The recommended approach is to separate
+  interface from implementation, and to provide a means for
+  overriding this.
  
   The following example is a skeleton of an AudioBase-derived
   class that demonstrates these ideas:
@@ -124,6 +126,8 @@ Extending
 namespace AuLib {
 
 class NewClass : public AudioBase {
+
+  virtual const double *dsp();
 
 protected:
   double m_par;
@@ -134,14 +138,16 @@ public:
            double sr = def_sr)
       : m_param(param), AudioBase(nchnls, vframes, sr){};
 
-  virtual const double process(const double sig);
+  const double process(const double sig) {
+    return dsp(sig);
+ }
 
-  virtual const double process(const double sig, double par) {
+  const double process(const double sig, double par) {
     m_par = par;
     return process(sig);
   }
 
-  virtual const NewClass &process(const AudioBase &obj) {
+  const NewClass &process(const AudioBase &obj) {
     if (obj.vframes() == m_vframes && obj.nchnls() == m_nchnls) {
       process(obj.vector());
     } else
@@ -149,7 +155,7 @@ public:
     return this;
   }
 
-  virtual const NewClass &process(const AudioBase &obj, double par) {
+  const NewClass &process(const AudioBase &obj, double par) {
     m_par = par;
     process(obj);
     return this;
