@@ -88,6 +88,8 @@ protected:
   uint32_t m_time;
   double m_incr;
   bool m_trig;
+  bool m_releasing;
+    int32_t m_rcnt;
   Segments m_segs;
 
 public:
@@ -99,8 +101,8 @@ public:
   */
   Envel(const Segments &segs, double rel = 0.f, uint32_t vframes = def_vframes,
         double sr = def_sr)
-      : AudioBase(1, vframes, sr), m_y(0.), m_cseg(0), m_rt(rel * sr), m_cnt(0),
-        m_time(segs.durs()[0]), m_incr(segs.incrs()[0]), m_trig(false),
+      : AudioBase(1, vframes, sr), m_y(segs.start()), m_cseg(0), m_rt(rel * sr), m_cnt(0),
+        m_time(segs.durs()[0]), m_incr(segs.incrs()[0]), m_trig(false), m_releasing(false), m_rcnt(rel * sr),
         m_segs(segs){};
 
   /** Envel constructor \n\n
@@ -110,7 +112,7 @@ public:
   */
   Envel(double rel = 0.f, uint32_t vframes = def_vframes, double sr = def_sr)
       : AudioBase(1, vframes, sr), m_y(0.), m_cseg(0), m_rt(rel * sr), m_cnt(0),
-        m_time(0), m_incr(0), m_trig(false){};
+        m_time(0), m_incr(0), m_trig(false),  m_releasing(false), m_rcnt(rel * sr) {};
 
   /** process envelope
    */
@@ -119,9 +121,13 @@ public:
   /** retrigger envelope
    */
   virtual void retrig() {
-    m_y = m_segs.start();
+    m_time = m_segs.durs()[0];
+    m_incr = m_segs.incrs()[0];
     m_cnt = 0;
     m_cseg = 0;
+    m_rcnt = m_rt;
+    m_trig = false;
+    m_releasing = false;
   }
 
   /** trigger release
@@ -132,8 +138,6 @@ public:
    */
   void reset(const Segments &segs, double rel = 0.f) {
     m_rt = rel * m_sr;
-    m_incr = segs.incrs()[0];
-    m_time = segs.durs()[0];
     m_segs = segs;
     retrig();
   }

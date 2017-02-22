@@ -16,14 +16,13 @@ using namespace std;
 
 int main(int argc, const char **argv) {
   if (argc > 1) {
-    Oscil sig;
+    Oscil sig(0.5,440);
     SoundOut output(argv[1]);
     cout << Info::version();
     if (sig.error() == AULIB_NOERROR) {
       if (output.error() == AULIB_NOERROR) {
         for (int i = 0; i < def_sr * 2; i += def_vframes) {
-          sig.process(0.5, 440.);
-	  std::cout << sig << std::endl;
+          sig.process();
           output.write(sig);
         }
       } else {

@@ -15,7 +15,7 @@
 
 AuLib::Oscil::Oscil(double amp, double freq, double phase, uint32_t vframes,
                     double sr)
-    : AudioBase(1, vframes, sr), m_sine(new AuLib::FourierTable),
+  : AudioBase(1, vframes, sr), m_sine(new AuLib::FourierTable),
       m_table(*m_sine), m_phs(phase), m_amp(amp), m_freq(freq), m_am(nullptr),
       m_fm(nullptr), m_tframes(m_sine->tframes()) {
   m_incr = m_freq * m_tframes / m_sr;
@@ -39,6 +39,7 @@ void AuLib::Oscil::dsp() {
   for (uint32_t i = 0; i < m_vframes; i++) {
     am_fm(i);
     m_vector[i] = m_amp * m_table[(uint32_t)m_phs];
+    m_phs += m_incr;
     mod();
   }
 }
@@ -53,6 +54,7 @@ void AuLib::Oscili::dsp() {
     a = m_table[phi];
     b = m_table[phi + 1];
     m_vector[i] = m_amp * (a + frac * (b - a));
+    m_phs += m_incr;
     mod();
   }
 }
@@ -75,6 +77,7 @@ void AuLib::Oscilic::dsp() {
     m_vector[i] = m_amp * (fracb * (-a - 3.f * c + tmp) / 6.f +
                            fracsq * ((a + c) / 2.f - b) +
                            frac * (c + (-2.f * a - tmp) / 6.f) + b);
+   m_phs += m_incr;
     mod();
   }
 }
@@ -92,6 +95,7 @@ void AuLib::SamplePlayer::dsp() {
         b = m_table[phi + j + m_nchnls];
         m_vector[i * m_nchnls + j] = m_amp * (a + frac * (b - a));
       }
+      m_phs += m_incr;
       mod();
     }
   } else

@@ -37,27 +37,77 @@ AuLib::Segments::Segments(double start, const std::vector<double> endpts,
   }
 }
 
+// const AuLib::AudioBase &AuLib::Envel::dsp() {
+//   bool linear = m_segs.isLinear();
+//   uint32_t nsegs = m_segs.nsegs();
+//   for (uint32_t i = 0; i < m_vframes; i++) {
+//     m_vector[i] = m_y;
+//     if (linear)
+//       m_y += m_incr;
+//     else
+//       m_y *= m_incr;
+//     if (m_cseg >= 0)
+//       m_cnt++;
+//     if (m_trig && m_rt > 0) {
+//       m_incr = linear ? -m_y / m_rt : pow(m120dBfs / m_y, 1. / m_rt);
+//       m_time = m_rt;
+//       m_cnt = 0;
+//       m_rcnt = m_rt;
+//       m_trig = false;
+//       m_releasing = true;
+//       m_cseg = nsegs;
+//     } else if (m_cnt == m_time && m_cseg != -1) {
+//       m_cseg++;
+//       if ((uint32_t)m_cseg < nsegs) {
+//         m_y = m_segs.endpts()[m_cseg - 1];
+//         m_incr = m_segs.incrs()[m_cseg];
+//         m_time = m_segs.durs()[m_cseg];
+//         m_cnt = 0;
+//       } else {
+//         if ((uint32_t)m_cseg == nsegs)
+//           m_y = m_segs.endpts()[m_cseg - 1];
+//         m_incr = linear ? 0. : 1.;
+//         m_cseg = -1;
+//       }
+//     }
+//     if(m_releasing == true){
+//     if(m_rcnt == 0) {
+//        m_incr = linear ? 0. : 1.;
+//        m_y = 0;
+//     }
+//     else m_rcnt--;
+//     }
+//   }
+//   return *this;
+// }
+
+
 const AuLib::AudioBase &AuLib::Envel::dsp() {
   bool linear = m_segs.isLinear();
   uint32_t nsegs = m_segs.nsegs();
   for (uint32_t i = 0; i < m_vframes; i++) {
     m_vector[i] = m_y;
-    if (linear)
-      m_y += m_incr;
-    else
-      m_y *= m_incr;
-    if (m_cseg >= 0)
-      m_cnt++;
-    if (m_trig && m_rt > 0) {
+
+    
+    if(m_trig) {
+      m_releasing = m_trig;
+      m_trig = false;
       m_incr = linear ? -m_y / m_rt : pow(m120dBfs / m_y, 1. / m_rt);
       m_time = m_rt;
       m_cnt = 0;
-      m_trig = false;
+      m_rcnt = m_rt;
       m_cseg = nsegs;
-    } else if (m_cnt == m_time && m_cseg != -1) {
+    }
+
+    if (linear)  m_y += m_incr;
+    else m_y *= m_incr;
+
+    if(!m_releasing) {
+     if (m_cseg >= 0) m_cnt++;
+     if (m_cnt == m_time && m_cseg != -1) {
       m_cseg++;
       if ((uint32_t)m_cseg < nsegs) {
-        m_y = m_segs.endpts()[m_cseg - 1];
+        m_y = (m_segs.endpts()[m_cseg - 1] + m_y)/2;
         m_incr = m_segs.incrs()[m_cseg];
         m_time = m_segs.durs()[m_cseg];
         m_cnt = 0;
@@ -67,7 +117,15 @@ const AuLib::AudioBase &AuLib::Envel::dsp() {
         m_incr = linear ? 0. : 1.;
         m_cseg = -1;
       }
+     }
+    } else {
+    if(m_rcnt == 0) {
+       m_incr = linear ? 0. : 1.;
+       m_y = 0;
     }
+    else m_rcnt--;
+     }
   }
+  
   return *this;
 }

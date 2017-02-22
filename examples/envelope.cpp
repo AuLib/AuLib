@@ -26,7 +26,7 @@ int main() {
   if (env.error() == AULIB_NOERROR) {
     if (sig.error() == AULIB_NOERROR) {
       if (output.error() == AULIB_NOERROR) {
-        for (uint32_t i = 0; i < end + rel; i += def_vframes) {
+        for (uint32_t i = 0; i < end + rel + 4400; i += def_vframes) {
           env.process();
           sig.process(env, 440.);
           if (!release && i >= end) {

@@ -40,7 +40,7 @@ public:
       retrigger
   */
   void reset(double amp, double att, double dec, double sus, double rel) {
-    m_segs = Segments(0., {amp, sus}, {att, dec});
+    m_segs = Segments(m_y, {amp, sus}, {att, dec});
     retrig();
   }
 };
