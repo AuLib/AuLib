@@ -33,8 +33,12 @@ add_executable(stftest stftest.cpp)
 target_link_libraries(stftest AuLib ${LIBSNDFILE} ${PORTAUDIO})
 add_executable(pvoctest pvoctest.cpp)
 target_link_libraries(pvoctest AuLib ${LIBSNDFILE} ${PORTAUDIO})
+if(PORTMIDI)
+add_executable(msynth midisynth.cpp)
+target_link_libraries(msynth AuLib ${LIBSNDFILE} ${PORTAUDIO} ${PORTMIDI})
+endif()
 
 # installation targets
 INSTALL(TARGETS sampleplay saw readtable sine fm panning ringmod ping
-  envelope adsr glide filterex play echoex stftest pvoctest RUNTIME DESTINATION bin
+  envelope adsr glide filterex play echoex stftest pvoctest msynth RUNTIME DESTINATION bin
 )

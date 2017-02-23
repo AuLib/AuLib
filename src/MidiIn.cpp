@@ -9,6 +9,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 #include <MidiIn.h>
+#ifdef HAVE_PORTMIDI
 #include <portmidi.h>
 #include <porttime.h>
 
@@ -56,5 +57,28 @@ void AuLib::MidiIn::list_devices() {
       if (info->input)
         m_devs.push_back(std::string(std::to_string(i) + ": " + info->name));
     }
-  }
+  } else m_devs.push_back(std::string("no devices\n"));
 }
+#else
+// stubs
+AuLib::MidiIn::MidiIn() : m_mstream(nullptr), m_devs() {
+  list_devices();
+};
+
+AuLib::MidiIn::~MidiIn() { };
+
+uint32_t AuLib::MidiIn::open(int dev) {
+  if(m_mstream) return 1;
+  else return 0;
+}
+
+void AuLib::MidiIn::close() { };
+
+uint32_t AuLib::MidiIn::read() {
+  return 0;
+}
+
+void AuLib::MidiIn::list_devices() {
+  m_devs.push_back(std::string("no devices\n"));
+}
+#endif
