@@ -33,19 +33,25 @@ uint32_t AuLib::MidiIn::open(int dev) {
 void AuLib::MidiIn::close() { Pm_Close((PortMidiStream *)m_mstream); }
 
 uint32_t AuLib::MidiIn::read() {
-  uint32_t cnt = 0;
   if (Pm_Poll(m_mstream)) {
+    uint32_t n = 0;
+    uint32_t cnt = 0;
     std::array<PmEvent, 32> msg{};
+    do {
     cnt = Pm_Read(m_mstream, msg.data(), 32);
-    for (int i = 0; i < cnt; i++) {
-      m_mdata[i].msg = Pm_MessageStatus(msg[i].message) & 0xF0;
-      m_mdata[i].chn = Pm_MessageStatus(msg[i].message) & 0x0F;
-      m_mdata[i].byte1 = Pm_MessageData1(msg[i].message);
-      m_mdata[i].byte2 = Pm_MessageData2(msg[i].message);
-      m_mdata[i].stamp = msg[i].timestamp;
+    for (uint32_t i = 0; i < cnt; i++, n++) {
+      if(n < 1024) {
+      m_mdata[n].msg = Pm_MessageStatus(msg[i].message) & 0xF0;
+      m_mdata[n].chn = Pm_MessageStatus(msg[i].message) & 0x0F;
+      m_mdata[n].byte1 = Pm_MessageData1(msg[i].message);
+      m_mdata[n].byte2 = Pm_MessageData2(msg[i].message);
+      m_mdata[n].stamp = msg[i].timestamp;
+      } else break;
     }
+    } while(cnt > 0 && n < 1024);
+    return n;
   }
-  return cnt;
+  return 0;
 }
 
 void AuLib::MidiIn::list_devices() {

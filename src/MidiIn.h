@@ -31,7 +31,7 @@ struct MidiData {
 class MidiIn {
   void *m_mstream;
   std::vector<std::string> m_devs;
-  std::array<MidiData, 32> m_mdata;
+  std::array<MidiData, 1024> m_mdata;
   void list_devices();
   uint32_t read();
 
