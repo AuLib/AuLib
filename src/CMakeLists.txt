@@ -17,6 +17,8 @@ fft.cpp
 Stft.cpp
 SoundOut.cpp
 Tap.cpp
+Note.cpp
+MidiIn.cpp
 )
 
 if(CLANG_FORMAT)

@@ -37,14 +37,13 @@ AuLib::Segments::Segments(double start, const std::vector<double> endpts,
   }
 }
 
-void
-AuLib::Segments::reset(double start, const std::vector<double> endpts,
-		       const std::vector<double> times, double sr) {
+void AuLib::Segments::reset(double start, const std::vector<double> endpts,
+                            const std::vector<double> times, double sr) {
   double y0 = m_linear ? start : start > 0 ? start : (m_start = db_min);
   double y1;
   for (uint32_t i = 0; i < m_nsegs; i++) {
-    if(i >= endpts.size() ||
-       i >= times.size()) break;
+    if (i >= endpts.size() || i >= times.size())
+      break;
     y1 = m_endpts[i] = endpts[i];
     if (times.size() > i)
       m_durs[i] = times[i] * sr;
@@ -63,7 +62,6 @@ AuLib::Segments::reset(double start, const std::vector<double> endpts,
     y0 = y1;
   }
 }
-
 
 const AuLib::AudioBase &AuLib::Envel::dsp() {
   bool linear = m_segs.isLinear();
@@ -106,7 +104,7 @@ const AuLib::AudioBase &AuLib::Envel::dsp() {
       if (m_rcnt == 0) {
         m_incr = linear ? 0. : 1.;
         m_y = 0;
-	m_done = true;
+        m_done = true;
       } else
         m_rcnt--;
     }

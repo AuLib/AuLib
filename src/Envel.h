@@ -46,7 +46,7 @@ public:
 
   /* reset segments */
   void reset(double start, const std::vector<double> endpts,
-	     const std::vector<double> times, double sr);
+             const std::vector<double> times, double sr);
 
   /** Get the increments array
    */
@@ -108,7 +108,8 @@ public:
         double sr = def_sr)
       : AudioBase(1, vframes, sr), m_y(segs.start()), m_cseg(0), m_rt(rel * sr),
         m_cnt(0), m_time(segs.durs()[0]), m_incr(segs.incrs()[0]),
-        m_trig(false), m_releasing(false), m_done(false), m_rcnt(rel * sr), m_segs(segs){};
+        m_trig(false), m_releasing(false), m_done(false), m_rcnt(rel * sr),
+        m_segs(segs){};
 
   /** Envel constructor \n\n
       rel - release time \n
