@@ -44,6 +44,10 @@ public:
       : m_start(0), m_nsegs(0), m_linear(true), m_frames(0), m_incrs(0),
         m_durs(0), m_endpts(0){};
 
+  /* reset segments */
+  void reset(double start, const std::vector<double> endpts,
+	     const std::vector<double> times, double sr);
+
   /** Get the increments array
    */
   const double *incrs() const { return m_incrs.data(); }
@@ -89,7 +93,8 @@ protected:
   double m_incr;
   bool m_trig;
   bool m_releasing;
-    int32_t m_rcnt;
+  bool m_done;
+  int32_t m_rcnt;
   Segments m_segs;
 
 public:
@@ -101,9 +106,9 @@ public:
   */
   Envel(const Segments &segs, double rel = 0.f, uint32_t vframes = def_vframes,
         double sr = def_sr)
-      : AudioBase(1, vframes, sr), m_y(segs.start()), m_cseg(0), m_rt(rel * sr), m_cnt(0),
-        m_time(segs.durs()[0]), m_incr(segs.incrs()[0]), m_trig(false), m_releasing(false), m_rcnt(rel * sr),
-        m_segs(segs){};
+      : AudioBase(1, vframes, sr), m_y(segs.start()), m_cseg(0), m_rt(rel * sr),
+        m_cnt(0), m_time(segs.durs()[0]), m_incr(segs.incrs()[0]),
+        m_trig(false), m_releasing(false), m_done(false), m_rcnt(rel * sr), m_segs(segs){};
 
   /** Envel constructor \n\n
       rel - release time \n
@@ -112,7 +117,8 @@ public:
   */
   Envel(double rel = 0.f, uint32_t vframes = def_vframes, double sr = def_sr)
       : AudioBase(1, vframes, sr), m_y(0.), m_cseg(0), m_rt(rel * sr), m_cnt(0),
-        m_time(0), m_incr(0), m_trig(false),  m_releasing(false), m_rcnt(rel * sr) {};
+        m_time(0), m_incr(0), m_trig(false), m_releasing(false), m_done(false),
+        m_rcnt(rel * sr){};
 
   /** process envelope
    */
@@ -128,6 +134,7 @@ public:
     m_rcnt = m_rt;
     m_trig = false;
     m_releasing = false;
+    m_done = false;
   }
 
   /** trigger release
@@ -150,6 +157,10 @@ public:
       (excluding release)
   */
   uint32_t frames() const { return m_segs.frames(); }
+
+  /** return the envelope status
+   */
+  bool is_finished() const { return m_done; }
 };
 
 /*! \class Envel Envel.h AuLib/Envel.h

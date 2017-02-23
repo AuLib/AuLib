@@ -104,10 +104,10 @@ public:
    */
   typedef std::vector<double>::iterator iterator;
 
-   /** const iterator for this class
-   */
+  /** const iterator for this class
+  */
   typedef std::vector<double>::const_iterator const_iterator;
-  
+
   /** returns an iterator to the beginning
    */
   iterator begin() { return m_vector.begin(); }
