@@ -19,11 +19,15 @@
 
 namespace AuLib {
 
+/** MIDI data structure
+ */
 struct MidiData {
   uint32_t msg, chn, byte1, byte2;
   uint64_t stamp;
 };
 
+/** This class implements a MIDI input listener
+*/  
 class MidiIn {
   void *m_mstream;
   std::vector<std::string> m_devs;
@@ -32,11 +36,23 @@ class MidiIn {
   uint32_t read();
 
 public:
+  /** Constructs an empty object */
   MidiIn();
+
+  /** Destructor */
   ~MidiIn();
+
+  /** Open MIDI input device dev
+   */
   uint32_t open(int dev);
+
+  /** Close MIDI connection
+   */
   void close();
 
+  /** Implements a listener for Instrument inst
+      dispatching any received data.
+   */
   template <typename T> void listen(Instrument<T> &inst) {
     uint32_t cnt = read();
     for (uint32_t i = 0; i < cnt; i++)
@@ -44,6 +60,8 @@ public:
                     m_mdata[i].byte2, m_mdata[i].stamp);
   }
 
+  /** Returns a list of devices names/numbers as strings
+   */
   const std::vector<std::string> &device_list() { return m_devs; }
 };
 }

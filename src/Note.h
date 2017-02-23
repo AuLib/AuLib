@@ -15,11 +15,25 @@
 
 namespace AuLib {
 
+/** Note class: \n
+    Base class for modelling synthesiser notes
+*/
 class Note : public AudioBase {
 
+  /** specialise this to contain your
+      signal processing objects
+  */
   virtual const Note &dsp() { return *this; }
-  virtual void on_note() {};
-  virtual void off_note() {};
+
+  /** specialise this to handle any
+      note onset processing (e.g. envelope resets etc)
+  */
+  virtual void on_note(){};
+
+  /** specialise this to handle any
+      note termination processing (e.g. envelope releases etc)
+  */
+  virtual void off_note(){};
 
 protected:
   uint64_t m_tstamp;
@@ -33,19 +47,40 @@ protected:
   void clear() { set(0.); }
 
 public:
+  /** Constructs a note for a given channel
+      (-1 means omni, channels are ignored; this is the default)
+  */
   Note(int32_t chn = -1)
       : m_tstamp(0), m_num(128), m_vel(128), m_chn(chn), m_on(false), m_cps(0.),
         m_amp(0.){};
 
+  /** processing method: call it to produce one vector of audio
+   */
   const Note &process() {
     return dsp();
     return *this;
   }
 
+  /** checks whether the note is on or off
+   */
   bool is_on() const { return m_on; }
+
+  /** onset time for this note
+   */
   uint64_t time_stamp() const { return m_tstamp; }
+
+  /** called to turn a note on
+   */
   bool note_on(uint32_t chn, uint32_t num, uint32_t vel, uint64_t tstamp);
+
+  /** called to turn a note off for a matching channel chn and
+      number num.
+   */
   bool note_off(uint32_t chn, uint32_t num, uint32_t vel);
+
+  /** called to turn this note off, regardless of channel or
+      note number.
+   */
   bool note_off();
 };
 
@@ -54,12 +89,20 @@ template <typename T> class Instrument : public AudioBase {
   static constexpr int note_off = 0x80;
 
   std::vector<T> m_voices;
-  virtual void poly(uint32_t msg, uint32_t chn, uint32_t num, uint32_t vel,
-                    uint64_t stamp);
 
+  /** specialise this to handle poliphony and
+      dispatched messages. The base implementation uses
+      last-note priority, parsing MIDI note on and note off
+      messages only.
+  */
+  virtual void msg_handler(uint32_t msg, uint32_t chn, uint32_t num,
+                           uint32_t vel, uint64_t stamp);
+
+  /** basic processing method, can be specialised.
+   */
   virtual const Instrument &dsp() {
     set(0.);
-    for(auto &note: m_voices) {
+    for (auto &note : m_voices) {
       note.process();
       *this += note;
     }
@@ -67,18 +110,37 @@ template <typename T> class Instrument : public AudioBase {
   }
 
 public:
+  /** Construct an instrument with nvoices polyphony
+   */
   Instrument(uint32_t nvoices) : m_voices(nvoices) {}
-  void dispatch(uint32_t msg, uint32_t chn, uint32_t note, uint32_t vel,
+
+  /** Dispatch a channel message using a MIDI-like format. \n
+     msg - message type \n
+     chn - channel \n
+     data1 - message data 1 \n
+     data2 - message data 2 \n
+     stamp - time stamp \n\n
+     Note that message types are not constrained to MIDI ones,
+     specialisations of this class might implement their own.
+     Channels and data are not limited to four and seven bits,
+     but can use the full unsigned 32-bit range.
+   */
+  void dispatch(uint32_t msg, uint32_t chn, uint32_t data1, uint32_t data2,
                 uint64_t stamp) {
-    poly(msg, chn, note, vel, stamp);
+    msg_handler(msg, chn, data1, data2, stamp);
   }
 
+  /** processing interface
+   */
   virtual const Instrument &process() { return dsp(); }
 };
 
+/** @private
+    msg_handler implementation.
+*/
 template <typename T>
-void Instrument<T>::poly(uint32_t msg, uint32_t chn, uint32_t num, uint32_t vel,
-                         uint64_t stamp) {
+void Instrument<T>::msg_handler(uint32_t msg, uint32_t chn, uint32_t num,
+                                uint32_t vel, uint64_t stamp) {
   if (vel == 0)
     msg = note_off;
   if (msg == note_on) {
