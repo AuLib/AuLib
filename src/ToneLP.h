@@ -82,6 +82,18 @@ public:
     }
     return process(obj);
   }
+
+  /** operator () convenience method
+   */
+  const ToneLP &operator()(const AudioBase &obj) {
+    return process(obj);
+  }
+
+  /** operator () convenience method
+   */
+  const ToneLP &operator()(const AudioBase &obj, double cf) {
+    return process(obj,cf);
+  }
 };
 
 /*! \class ToneLP ToneLP.h AuLib/ToneLP.h

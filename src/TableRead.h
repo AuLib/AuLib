@@ -84,6 +84,12 @@ public:
       m_error = AULIB_ERROR;
     return *this;
   }
+
+  /** operator () convenience
+   */
+  const TableRead &operator()(const AudioBase &obj) {
+    return process(obj);
+  }
 };
 
 /*! \class TableRead TableRead.h AuLib/TableRead.h

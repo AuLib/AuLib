@@ -50,14 +50,17 @@ public:
    */
   void close();
 
-  /** Implements a listener for Instrument inst
-      dispatching any received data.
+  /** Implements a listener for an obj inst
+      dispatching any received data. Classes implementing
+      the dispatch & process methods are valid types here.
    */
-  template <typename T> void listen(Instrument<T> &inst) {
+  template <typename T> T &listen(T &inst) {
     uint32_t cnt = read();
     for (uint32_t i = 0; i < cnt; i++)
       inst.dispatch(m_mdata[i].msg, m_mdata[i].chn, m_mdata[i].byte1,
                     m_mdata[i].byte2, m_mdata[i].stamp);
+    inst.process();
+    return inst;
   }
 
   /** Returns a list of devices names/numbers as strings

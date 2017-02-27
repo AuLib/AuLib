@@ -78,6 +78,14 @@ public:
     return *this;
   }
 
+  /** process a signal in obj with coefficient lists c as an iir or fir
+   */
+  const Iir &process(const AudioBase &obj, const double *c, bool iir=true) {
+    if(iir) std::copy(c, c + 2, m_b);
+    else std::copy(c, c + 3, m_a);
+    return process(obj);
+  }
+
   /** process a signal in obj with coefficients lists a and b
    */
   const Iir &process(const AudioBase &obj, const double *a, const double *b) {
@@ -85,6 +93,27 @@ public:
     std::copy(b, b + 3, m_a);
     return process(obj);
   }
+
+  /** operator(a) convenience 
+   */
+  const Iir &operator()(const AudioBase &obj) {
+    return process(obj);
+  }
+
+  /** operator(a, b) convenience 
+   */
+  template<typename T>
+  const Iir &operator()(const AudioBase &obj, T a) {
+    return process(obj, a);
+  }
+
+  /** operator(a, b, c) convenience 
+   */
+  template<typename T, typename U>
+  const Iir &operator()(const AudioBase &obj, T a, U b) {
+    return process(obj, a, b);
+  }
+
 };
 
 /*! \class Iir Iir.h AuLib/Iir.h

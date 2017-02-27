@@ -93,6 +93,19 @@ public:
     return *this;
   }
 
+  /** operator (a) convenience method
+   */
+  const SigBus &operator()(const AudioBase &obj) {
+     return process(obj);
+  }
+
+  /** operator (a,b,c,d) convenience method
+   */
+  const SigBus &operator()(const AudioBase &obj, double scal, double offs = 0.,
+                        bool overwrite = true) {
+    return process(obj,scal,offs,overwrite);
+  }
+  
   /** Clears the vector vector
    */
   void clear() { set(0.); }

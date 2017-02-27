@@ -61,9 +61,15 @@ public:
 
   /** process and return a reference to the object
    */
-  const AudioBase &process() {
+  const Line &process() {
     dsp();
     return *this;
+  }
+
+  /** operator () convenience method
+   */
+  const Line &operator()(){
+    return process();
   }
 
   /** retrigger

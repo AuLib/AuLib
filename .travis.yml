@@ -10,7 +10,7 @@ env:
 #       - sudo apt-get update
        
 install:
-       - sudo apt-get install -qq cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libc++-dev
+       - sudo apt-get install -qq cmake doxygen libsndfile1-dev libasound2-dev libjack-dev libportmidi-dev portaudio19-dev libc++-dev
       
 before_script:
        - mkdir -p build

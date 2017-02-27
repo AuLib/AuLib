@@ -22,32 +22,36 @@
 using namespace AuLib;
 
 class SineSyn : public Note {
+  // signal processing objects
   Adsr m_env;
   Oscili m_osc;
 
+  // DSP override
   virtual const SineSyn &dsp() {
-    if (!m_env.is_finished()) {
-    m_env.process();
-    m_osc.process(m_env, m_cps);
-    std::copy(m_osc.begin(),m_osc.end(),begin());
-    } else
+    if (!m_env.is_finished()) 
+      set(m_osc(m_env(), m_cps));
+    else
      clear();
     return *this;
   }
 
+  // note off processing
   virtual void off_note() {
     m_env.release();
   }
 
+  // note on processing
   virtual void on_note() {
     m_env.reset(m_amp, 0.01, 0.5, 0.25 * m_amp, 0.01);
   }
 
 public:
-  SineSyn() : Note(), m_env(0., 0.01, 0.01, 0., 0.1), m_osc() {};
+  SineSyn() : Note(), m_env(0., 0.01, 0.01, 0., 0.01), m_osc() {
+    m_env.release();
+  };
 };
 
-
+// handle ctrl-c
 static std::atomic_bool running(true);
 void signal_handler(int signal) {
   running = false;
@@ -70,10 +74,9 @@ int main() {
   
   if (midi.open(dev) == AULIB_NOERROR) {
     std::cout << "running... (use ctrl-c to close)\n";
-    while (running) {
-      midi.listen(synth);
-      out.write(synth.process());
-    }
+    while (running) 
+      out(midi.listen(synth)); // listen to midi on behalf of synth
+    
   } else
     std::cout << "error opening device...\n";
   std::cout << "...finished \n";

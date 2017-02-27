@@ -86,6 +86,12 @@ public:
     return *this;
   }
 
+  /** operator (a) convenience method
+   */
+  const Stft &operator()(const AudioBase &obj) {
+    return process(obj);
+  }
+  
   /** return data format (fft::polar or fft::rectang)
    */
   bool repr() const { return m_repr; }

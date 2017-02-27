@@ -47,16 +47,29 @@ public:
 
   /** Process one vector of audio
    */
-  virtual const Phasor &process() { return dsp(); }
+  const Phasor &process() { return dsp(); }
 
   /** Process one vector of audio with
       frequency freq
   */
-  virtual const Phasor &process(double freq) {
+  const Phasor &process(double freq) {
     m_freq = freq;
     m_incr = m_freq / m_sr;
     return process();
   }
+
+  /** operator () convenience 
+   */
+  const Phasor &operator()(){
+    return process();
+  }
+
+  /** operator () convenience 
+   */  
+  const Phasor &operator()(double freq){
+    return process(freq);
+  }
+  
 };
 
 /*! \class Phasor Phasor.h AuLib/Phasor.h

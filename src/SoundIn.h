@@ -76,6 +76,13 @@ public:
     else
       return aulib_error[m_error].c_str();
   }
+
+  /** operator () convenience method
+   */
+  const double *operator()(uint32_t frames = def_vframes){
+    return read(frames);
+  }
+  
 };
 
 /*! \class SoundIn SoundIn.h AuLib/SoundIn.h

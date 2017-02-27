@@ -82,7 +82,7 @@ public:
  */
 class Envel : public AudioBase {
 
-  virtual const AudioBase &dsp();
+  virtual const Envel &dsp();
 
 protected:
   double m_y;
@@ -123,7 +123,11 @@ public:
 
   /** process envelope
    */
-  virtual const AudioBase &process() { return dsp(); }
+  const Envel &process() { return dsp(); }
+
+  /** operator() convenience method, same as process()
+   */
+  const Envel &operator()() { return dsp(); }
 
   /** retrigger envelope
    */
