@@ -15,7 +15,7 @@
 #include <Adsr.h>
 #include <AudioBase.h>
 #include <Oscili.h>
-#include <Soundout.h>
+#include <SoundOut.h>
 #include <atomic>
 #include <csignal>
 
