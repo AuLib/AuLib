@@ -35,7 +35,8 @@ add_executable(pvoctest pvoctest.cpp)
 target_link_libraries(pvoctest AuLib ${LIBSNDFILE} ${PORTAUDIO})
 if(PORTMIDI)
 add_executable(msynth midisynth.cpp)
-target_link_libraries(msynth AuLib ${LIBSNDFILE} ${PORTAUDIO} ${PORTMIDI})
+target_link_libraries(msynth AuLib ${LIBSNDFILE} ${PORTAUDIO}
+${PORTMIDI} ${PORTIME})
 endif()
 
 # installation targets
