@@ -71,12 +71,12 @@ public:
 
   /** called to turn a note on
    */
-  bool note_on(uint32_t chn, uint32_t num, uint32_t vel, uint64_t tstamp);
+  bool note_on(int32_t chn, uint32_t num, uint32_t vel, uint64_t tstamp);
 
   /** called to turn a note off for a matching channel chn and
       number num.
    */
-  bool note_off(uint32_t chn, uint32_t num, uint32_t vel);
+  bool note_off(int32_t chn, uint32_t num, uint32_t vel);
 
   /** called to turn this note off, regardless of channel or
       note number.

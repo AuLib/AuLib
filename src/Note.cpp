@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <Note.h>
 
-bool AuLib::Note::note_on(uint32_t chn, uint32_t num, uint32_t vel,
+bool AuLib::Note::note_on(int32_t chn, uint32_t num, uint32_t vel,
                           uint64_t tstamp) {
   if (m_chn < 0 || m_chn == chn) {
     if (!m_on) {
@@ -26,7 +26,7 @@ bool AuLib::Note::note_on(uint32_t chn, uint32_t num, uint32_t vel,
   return m_on;
 }
 
-bool AuLib::Note::note_off(uint32_t chn, uint32_t num, uint32_t vel) {
+bool AuLib::Note::note_off(int32_t chn, uint32_t num, uint32_t vel) {
   if (m_chn < 0 || m_chn == chn) {
     if (m_num == num && m_on) {
       m_on = false;
