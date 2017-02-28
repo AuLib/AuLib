@@ -95,11 +95,11 @@ const uint32_t def_decim = 4;
 
 /** the pi definition.
  */
-const double pi = 4. * atan(1.);
+const double pi = 3.141592653589793;
 
 /** the two pi definition.
  */
-const double twopi = 8. * atan(1.);
+const double twopi = 6.283185307179586;
 
 /** the min. pos. double
  */

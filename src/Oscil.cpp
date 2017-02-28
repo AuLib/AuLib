@@ -13,19 +13,21 @@
 #include "Oscilic.h"
 #include "SamplePlayer.h"
 
+const AuLib::FourierTable AuLib::Oscil::m_sine;
+
 AuLib::Oscil::Oscil(double amp, double freq, double phase, uint32_t vframes,
                     double sr)
-    : AudioBase(1, vframes, sr), m_sine(new AuLib::FourierTable),
-      m_table(*m_sine), m_phs(phase), m_amp(amp), m_freq(freq), m_am(nullptr),
-      m_fm(nullptr), m_tframes(m_sine->tframes()) {
+    : AudioBase(1, vframes, sr), m_table(Oscil::m_sine), m_phs(phase),
+      m_amp(amp), m_freq(freq), m_am(nullptr), m_fm(nullptr),
+      m_tframes(Oscil::m_sine.tframes()) {
   m_incr = m_freq * m_tframes / m_sr;
   mod();
 }
 
 AuLib::Oscil::Oscil(double amp, double freq, const FuncTable &ftable,
                     double phase, uint32_t vframes, double sr)
-    : AudioBase(1, vframes, sr), m_sine(nullptr), m_table(ftable.vector()),
-      m_phs(phase), m_amp(amp), m_freq(freq), m_am(nullptr), m_fm(nullptr),
+    : AudioBase(1, vframes, sr), m_table(ftable.vector()), m_phs(phase),
+      m_amp(amp), m_freq(freq), m_am(nullptr), m_fm(nullptr),
       m_tframes(ftable.tframes()) {
   if (m_table == nullptr) {
     m_vframes = 0;

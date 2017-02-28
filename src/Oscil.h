@@ -23,7 +23,7 @@ namespace AuLib {
 class Oscil : public AudioBase {
 
 protected:
-  std::unique_ptr<FourierTable> m_sine;
+  const static FourierTable m_sine;
   const double *m_table;
   double m_phs;
   double m_amp;

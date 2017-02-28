@@ -12,7 +12,7 @@
 #define __NOTE_H__
 
 #include <AudioBase.h>
-#include <list>
+#include <vector>
 
 namespace AuLib {
 
@@ -38,7 +38,7 @@ class Note : public AudioBase {
 
   /** specialise this to handle any incoming msg
   */
-  virtual void on_msg(uint32_t msg, const std::list<double> &data,
+  virtual void on_msg(uint32_t msg, const std::vector<double> &data,
                       uint64_t tstamp){};
 
 protected:
@@ -92,11 +92,13 @@ public:
   /** called to pass a msg with a list of
       data items
    */
-  void ctrl_msg(int32_t chn, uint32_t msg, const std::list<double> &data,
+  void ctrl_msg(int32_t chn, uint32_t msg, const std::vector<double> &data,
                 uint64_t tstamp) {
     if (m_chn < 0 || m_chn == chn)
       on_msg(msg, data, tstamp);
   }
+
+  void set_chn(uint32_t chn) { m_chn = chn; }
 };
 
 /** Instrument template class: \n
@@ -106,15 +108,17 @@ public:
 template <typename T> class Instrument : public AudioBase {
 
   std::vector<T> m_voices;
-  std::list<double> m_msgdata;
+  std::vector<double> m_msgdata;
+  uint32_t m_msg;
+  uint32_t m_chn;
+  uint64_t m_stamp;
 
   /** specialise this to handle poliphony and
       dispatched messages. The base implementation uses
       last-note priority, parsing MIDI note on and note off
       messages only.
   */
-  virtual void msg_handler(uint32_t msg, uint32_t chn, double data1,
-                           double data2, uint64_t stamp);
+  virtual void msg_handler();
 
   /** basic processing method, can be specialised.
    */
@@ -130,7 +134,9 @@ template <typename T> class Instrument : public AudioBase {
 public:
   /** Construct an instrument with nvoices polyphony
    */
-  Instrument(uint32_t nvoices) : m_voices(nvoices), m_msgdata(2) {}
+  Instrument(uint32_t nvoices, uint32_t chn = 0)
+      : m_voices(nvoices, T(chn)), m_msgdata(256), m_msg(0), m_chn(chn),
+        m_stamp(0) {}
 
   /** Dispatch a channel message using a MIDI-like format. \n
      msg - message type \n
@@ -143,7 +149,20 @@ public:
    */
   void dispatch(uint32_t msg, uint32_t chn, double data1, double data2,
                 uint64_t stamp) {
-    msg_handler(msg, chn, data1, data2, stamp);
+    m_stamp = stamp;
+    m_chn = chn;
+    m_msg = msg;
+    m_msgdata.assign({data1, data2});
+    msg_handler();
+  }
+
+  void dispatch(uint32_t msg, uint32_t chn, const std::vector<double> &data,
+                uint64_t stamp) {
+    m_stamp = stamp;
+    m_chn = chn;
+    m_msg = msg;
+    m_msgdata = data;
+    msg_handler();
   }
 
   /** processing interface
@@ -154,15 +173,14 @@ public:
 /** @private
     msg_handler implementation.
 */
-template <typename T>
-void Instrument<T>::msg_handler(uint32_t msg, uint32_t chn, double data1,
-                                double data2, uint64_t stamp) {
-  if (data2 == 0)
-    msg = midi::note_off;
-  if (msg == midi::note_on) {
+template <typename T> void Instrument<T>::msg_handler() {
+
+  if (m_msg == midi::note_on && m_msgdata[1] == 0)
+    m_msg = midi::note_off;
+  if (m_msg == midi::note_on) {
     for (auto &note : m_voices) {
       if (!note.is_on()) {
-        note.note_on(chn, data1, data2, stamp);
+        note.note_on(m_chn, m_msgdata[0], m_msgdata[1], m_stamp);
         return;
       }
     }
@@ -175,15 +193,14 @@ void Instrument<T>::msg_handler(uint32_t msg, uint32_t chn, double data1,
       }
     }
     oldest->note_off();
-    oldest->note_on(chn, data1, data2, stamp);
-  } else if (msg == midi::note_off) {
+    oldest->note_on(m_chn, m_msgdata[0], m_msgdata[1], m_stamp);
+  } else if (m_msg == midi::note_off) {
     for (auto &note : m_voices) {
-      note.note_off(chn, data1, data2);
+      note.note_off(m_chn, m_msgdata[0], m_msgdata[1]);
     }
   } else {
-    m_msgdata.assign({data1, data2});
     for (auto &note : m_voices) {
-      note.ctrl_msg(chn, msg, m_msgdata, stamp);
+      note.ctrl_msg(m_chn, m_msg, m_msgdata, m_stamp);
     }
   }
 }

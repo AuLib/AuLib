@@ -53,13 +53,13 @@ class SineSyn : public Note {
   }
 
   // msg processing
-  virtual void on_msg(uint32_t msg, const std::list<double> &data,
+  virtual void on_msg(uint32_t msg, const std::vector<double> &data,
                       uint64_t tstamp){
 
     // pitchbend;
     if(msg == midi::pitchbend) {
-      int32_t bnd = (int32_t) data.back();
-      bnd = (bnd << 7) | (int32_t) data.front();
+      int32_t bnd = (int32_t) data[1];
+      bnd = (bnd << 7) | (int32_t) data[0];
       double amnt = (bnd-8192.)/16384.;
       m_bend =  std::pow(2.,amnt/12.);  
     }
@@ -67,16 +67,16 @@ class SineSyn : public Note {
     else if(msg == midi::ctrl_msg) {   
       switch((uint32_t) data.front()){
       case 71:
-	m_att = data.back()/128.;
+	m_att = data[1]/128.;
         break;
       case 74:
-        m_dec = 2.*data.back()/128.;
+        m_dec = 2.*data[1]/128.;
         break;
       case 52:
- 	m_sus = data.back()/128.;
+ 	m_sus = data[1]/128.;
         break;
       case 83:
-       	m_rel = 2.*data.back()/128.;
+       	m_rel = 2.*data[1]/128.;
         break;
       }
     }
@@ -84,7 +84,7 @@ class SineSyn : public Note {
   };
 
 public:
-  SineSyn() : Note(), m_bend(1.), m_att(.01), m_dec(.1), m_sus(0.25), m_rel(.01),
+  SineSyn(int32_t chn = -1) : Note(chn), m_bend(1.), m_att(.01), m_dec(.1), m_sus(0.25), m_rel(.01),
 	      m_env(0., m_att, m_dec, m_sus ,m_rel), m_osc()  {
     m_env.release();
   };
