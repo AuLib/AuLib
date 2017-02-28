@@ -96,6 +96,24 @@ public:
   }
 };
 
+namespace waveset {
+
+/** 
+   Sawtooth table set 
+*/
+static const TableSet saw(SAW);
+
+/** 
+   Triangle table set 
+*/
+static const TableSet triangle(TRIANGLE);
+
+/** 
+   Square table set 
+*/
+static const TableSet square(SQUARE);
+}
+  
 /*! \class BlOsc BlOsc.h AuLib/BlOsc.h
  */
 }

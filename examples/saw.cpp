@@ -16,8 +16,7 @@ using namespace std;
 
 int main() {
 
-  TableSet saw(SAW);
-  BlOsc sig(0.5, 440., saw);
+  BlOsc sig(0.5, 440., waveset::square);
   SoundOut output("dac");
 
   cout << Info::version();
