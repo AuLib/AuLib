@@ -103,9 +103,7 @@ public:
 
   /** operator() overload convenience method
    */
-  uint64_t operator()(const AudioBase &obj) {
-    return write(obj);
-  }
+  uint64_t operator()(const AudioBase &obj) { return write(obj); }
 };
 
 /*! \class SoundOut SoundOut.h AuLib/SoundOut.h

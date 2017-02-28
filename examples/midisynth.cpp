@@ -18,18 +18,25 @@
 #include <SoundOut.h>
 #include <atomic>
 #include <csignal>
+#include <cmath>
 
 using namespace AuLib;
 
 class SineSyn : public Note {
   // signal processing objects
+  double m_bend;
+  double m_att;
+  double m_dec;
+  double m_sus;
+  double m_rel;
   Adsr m_env;
   Oscili m_osc;
+
 
   // DSP override
   virtual const SineSyn &dsp() {
     if (!m_env.is_finished()) 
-      set(m_osc(m_env(), m_cps));
+      set(m_osc(m_env(), m_cps*m_bend));
     else
      clear();
     return *this;
@@ -42,11 +49,43 @@ class SineSyn : public Note {
 
   // note on processing
   virtual void on_note() {
-    m_env.reset(m_amp, 0.01, 0.5, 0.25 * m_amp, 0.01);
+    m_env.reset(m_amp, m_att, m_dec,m_sus * m_amp, m_rel);
   }
 
+  // msg processing
+  virtual void on_msg(uint32_t msg, const std::list<double> &data,
+                      uint64_t tstamp){
+
+    // pitchbend;
+    if(msg == midi::pitchbend) {
+      int32_t bnd = (int32_t) data.back();
+      bnd = (bnd << 7) | (int32_t) data.front();
+      double amnt = (bnd-8192.)/16384.;
+      m_bend =  std::pow(2.,amnt/12.);  
+    }
+    // ctrls: att, dec, sus, rel
+    else if(msg == midi::ctrl_msg) {   
+      switch((uint32_t) data.front()){
+      case 71:
+	m_att = data.back()/128.;
+        break;
+      case 74:
+        m_dec = 2.*data.back()/128.;
+        break;
+      case 52:
+ 	m_sus = data.back()/128.;
+        break;
+      case 83:
+       	m_rel = 2.*data.back()/128.;
+        break;
+      }
+    }
+
+  };
+
 public:
-  SineSyn() : Note(), m_env(0., 0.01, 0.01, 0., 0.01), m_osc() {
+  SineSyn() : Note(), m_bend(1.), m_att(.01), m_dec(.1), m_sus(0.25), m_rel(.01),
+	      m_env(0., m_att, m_dec, m_sus ,m_rel), m_osc()  {
     m_env.release();
   };
 };

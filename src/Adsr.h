@@ -41,6 +41,7 @@ public:
   */
   void reset(double amp, double att, double dec, double sus, double rel) {
     m_segs.reset(m_y, {amp, sus}, {att, dec}, m_sr);
+    m_rt = rel * m_sr;
     retrig();
   }
 };

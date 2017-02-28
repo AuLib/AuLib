@@ -105,9 +105,43 @@ const double twopi = 8. * atan(1.);
  */
 const double db_min = std::numeric_limits<double>::min();
 
+/** the max uint64_t
+ */
+const uint64_t ui64_max = std::numeric_limits<uint64_t>::max();
+
 /** -120dBfs
  */
 const double m120dBfs = 0.000001;
+
+namespace midi {
+/** MIDI note on
+ */
+const uint32_t note_on = 0x90;
+
+/** MIDI note off
+*/
+const uint32_t note_off = 0x80;
+
+/** MIDI control change
+*/
+const uint32_t ctrl_msg = 0xB0;
+
+/** MIDI aftertouch
+*/
+const uint32_t aftouch = 0xD0;
+
+/** MIDI poly aftertouch
+*/
+const uint32_t poly_aftouch = 0xA0;
+
+/** MIDI program change
+*/
+const uint32_t prg_msg = 0xC0;
+
+/** MIDI pitchbend
+*/
+const uint32_t pitchbend = 0xE0;
+}
 
 /** General error xodes
  */

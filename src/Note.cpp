@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <Note.h>
 
-bool AuLib::Note::note_on(int32_t chn, uint32_t num, uint32_t vel,
+bool AuLib::Note::note_on(int32_t chn, double num, double vel,
                           uint64_t tstamp) {
   if (m_chn < 0 || m_chn == chn) {
     if (!m_on) {
@@ -18,15 +18,15 @@ bool AuLib::Note::note_on(int32_t chn, uint32_t num, uint32_t vel,
       m_num = num;
       m_vel = vel;
       m_tstamp = tstamp;
-      m_amp = m_vel / 128.;
-      m_cps = 440. * pow(2., (m_num - 69.) / 12.);
+      m_amp = vel / 128.;
+      m_cps = 440. * pow(2., (num - 69.) / 12.);
       on_note();
     }
   }
   return m_on;
 }
 
-bool AuLib::Note::note_off(int32_t chn, uint32_t num, uint32_t vel) {
+bool AuLib::Note::note_off(int32_t chn, double num, double vel) {
   if (m_chn < 0 || m_chn == chn) {
     if (m_num == num && m_on) {
       m_on = false;

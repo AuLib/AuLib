@@ -12,6 +12,7 @@
 #define __NOTE_H__
 
 #include <AudioBase.h>
+#include <list>
 
 namespace AuLib {
 
@@ -35,10 +36,15 @@ class Note : public AudioBase {
   */
   virtual void off_note(){};
 
+  /** specialise this to handle any incoming msg
+  */
+  virtual void on_msg(uint32_t msg, const std::list<double> &data,
+                      uint64_t tstamp){};
+
 protected:
   uint64_t m_tstamp;
-  uint32_t m_num;
-  uint32_t m_vel;
+  double m_num;
+  double m_vel;
   int32_t m_chn;
   bool m_on;
   double m_cps;
@@ -71,32 +77,44 @@ public:
 
   /** called to turn a note on
    */
-  bool note_on(int32_t chn, uint32_t num, uint32_t vel, uint64_t tstamp);
+  bool note_on(int32_t chn, double num, double vel, uint64_t tstamp);
 
   /** called to turn a note off for a matching channel chn and
       number num.
    */
-  bool note_off(int32_t chn, uint32_t num, uint32_t vel);
+  bool note_off(int32_t chn, double num, double vel);
 
   /** called to turn this note off, regardless of channel or
       note number.
    */
   bool note_off();
+
+  /** called to pass a msg with a list of
+      data items
+   */
+  void ctrl_msg(int32_t chn, uint32_t msg, const std::list<double> &data,
+                uint64_t tstamp) {
+    if (m_chn < 0 || m_chn == chn)
+      on_msg(msg, data, tstamp);
+  }
 };
 
+/** Instrument template class: \n
+    Creates an instrument with n voices when instantiated with a
+    Note class.
+*/
 template <typename T> class Instrument : public AudioBase {
-  static constexpr int note_on = 0x90;
-  static constexpr int note_off = 0x80;
 
   std::vector<T> m_voices;
+  std::list<double> m_msgdata;
 
   /** specialise this to handle poliphony and
       dispatched messages. The base implementation uses
       last-note priority, parsing MIDI note on and note off
       messages only.
   */
-  virtual void msg_handler(uint32_t msg, uint32_t chn, uint32_t num,
-                           uint32_t vel, uint64_t stamp);
+  virtual void msg_handler(uint32_t msg, uint32_t chn, double data1,
+                           double data2, uint64_t stamp);
 
   /** basic processing method, can be specialised.
    */
@@ -112,7 +130,7 @@ template <typename T> class Instrument : public AudioBase {
 public:
   /** Construct an instrument with nvoices polyphony
    */
-  Instrument(uint32_t nvoices) : m_voices(nvoices) {}
+  Instrument(uint32_t nvoices) : m_voices(nvoices), m_msgdata(2) {}
 
   /** Dispatch a channel message using a MIDI-like format. \n
      msg - message type \n
@@ -120,12 +138,10 @@ public:
      data1 - message data 1 \n
      data2 - message data 2 \n
      stamp - time stamp \n\n
-     Note that message types are not constrained to MIDI ones,
-     specialisations of this class might implement their own.
-     Channels and data are not limited to four and seven bits,
-     but can use the full unsigned 32-bit range.
+     Note that message types are not constrained to MIDI ones; the
+     Note class can be specialised to handle any pre-defined messages.
    */
-  void dispatch(uint32_t msg, uint32_t chn, uint32_t data1, uint32_t data2,
+  void dispatch(uint32_t msg, uint32_t chn, double data1, double data2,
                 uint64_t stamp) {
     msg_handler(msg, chn, data1, data2, stamp);
   }
@@ -139,14 +155,14 @@ public:
     msg_handler implementation.
 */
 template <typename T>
-void Instrument<T>::msg_handler(uint32_t msg, uint32_t chn, uint32_t num,
-                                uint32_t vel, uint64_t stamp) {
-  if (vel == 0)
-    msg = note_off;
-  if (msg == note_on) {
+void Instrument<T>::msg_handler(uint32_t msg, uint32_t chn, double data1,
+                                double data2, uint64_t stamp) {
+  if (data2 == 0)
+    msg = midi::note_off;
+  if (msg == midi::note_on) {
     for (auto &note : m_voices) {
       if (!note.is_on()) {
-        note.note_on(chn, num, vel, stamp);
+        note.note_on(chn, data1, data2, stamp);
         return;
       }
     }
@@ -159,10 +175,15 @@ void Instrument<T>::msg_handler(uint32_t msg, uint32_t chn, uint32_t num,
       }
     }
     oldest->note_off();
-    oldest->note_on(chn, num, vel, stamp);
-  } else if (msg == note_off) {
+    oldest->note_on(chn, data1, data2, stamp);
+  } else if (msg == midi::note_off) {
     for (auto &note : m_voices) {
-      note.note_off(chn, num, vel);
+      note.note_off(chn, data1, data2);
+    }
+  } else {
+    m_msgdata.assign({data1, data2});
+    for (auto &note : m_voices) {
+      note.ctrl_msg(chn, msg, m_msgdata, stamp);
     }
   }
 }

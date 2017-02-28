@@ -200,42 +200,35 @@ public:
     return *this;
   }
 
-  /** operator(a,b) convenience method 
+  /** operator(a,b) convenience method
    */
-  const Oscil &operator()(const AudioBase &a, const AudioBase &b){
-      return process(a,b);
+  const Oscil &operator()(const AudioBase &a, const AudioBase &b) {
+    return process(a, b);
   }
 
-  /** operator(a,b) convenience method 
+  /** operator(a,b) convenience method
    */
-  const Oscil &operator()(double a, const AudioBase &b){
-      return process(a,b);
+  const Oscil &operator()(double a, const AudioBase &b) {
+    return process(a, b);
   }
 
-  /** operator(a) convenience method 
+  /** operator(a) convenience method
    */
-   const Oscil &operator()(const AudioBase &a){
-      return process(a);
+  const Oscil &operator()(const AudioBase &a) { return process(a); }
+
+  /** operator(a,b) convenience method
+ */
+  const Oscil &operator()(const AudioBase &a, double b) {
+    return process(a, b);
   }
 
-    /** operator(a,b) convenience method 
+  /** operator(a) convenience method
    */
-  const Oscil &operator()(const AudioBase &a, double b){
-      return process(a,b);
-  }
+  const Oscil &operator()(double a) { return process(a); }
 
-  /** operator(a) convenience method 
+  /** operator() convenience method
    */
-   const Oscil &operator()(double a){
-      return process(a);
-  }
-
-  /** operator() convenience method 
-   */
-  const Oscil &operator()(){
-      return process();
-  }
-  
+  const Oscil &operator()() { return process(); }
 };
 
 /*! \class Oscil Oscil.h AuLib/Oscil.h

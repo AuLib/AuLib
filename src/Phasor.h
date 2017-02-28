@@ -58,18 +58,13 @@ public:
     return process();
   }
 
-  /** operator () convenience 
+  /** operator () convenience
    */
-  const Phasor &operator()(){
-    return process();
-  }
+  const Phasor &operator()() { return process(); }
 
-  /** operator () convenience 
-   */  
-  const Phasor &operator()(double freq){
-    return process(freq);
-  }
-  
+  /** operator () convenience
+   */
+  const Phasor &operator()(double freq) { return process(freq); }
 };
 
 /*! \class Phasor Phasor.h AuLib/Phasor.h

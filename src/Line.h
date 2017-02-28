@@ -68,9 +68,7 @@ public:
 
   /** operator () convenience method
    */
-  const Line &operator()(){
-    return process();
-  }
+  const Line &operator()() { return process(); }
 
   /** retrigger
    */

@@ -38,17 +38,18 @@ uint32_t AuLib::MidiIn::read() {
     uint32_t cnt = 0;
     std::array<PmEvent, 32> msg{};
     do {
-    cnt = Pm_Read(m_mstream, msg.data(), 32);
-    for (uint32_t i = 0; i < cnt; i++, n++) {
-      if(n < 1024) {
-      m_mdata[n].msg = Pm_MessageStatus(msg[i].message) & 0xF0;
-      m_mdata[n].chn = Pm_MessageStatus(msg[i].message) & 0x0F;
-      m_mdata[n].byte1 = Pm_MessageData1(msg[i].message);
-      m_mdata[n].byte2 = Pm_MessageData2(msg[i].message);
-      m_mdata[n].stamp = msg[i].timestamp;
-      } else break;
-    }
-    } while(cnt > 0 && n < 1024);
+      cnt = Pm_Read(m_mstream, msg.data(), 32);
+      for (uint32_t i = 0; i < cnt; i++, n++) {
+        if (n < 1024) {
+          m_mdata[n].msg = Pm_MessageStatus(msg[i].message) & 0xF0;
+          m_mdata[n].chn = Pm_MessageStatus(msg[i].message) & 0x0F;
+          m_mdata[n].byte1 = Pm_MessageData1(msg[i].message);
+          m_mdata[n].byte2 = Pm_MessageData2(msg[i].message);
+          m_mdata[n].stamp = msg[i].timestamp;
+        } else
+          break;
+      }
+    } while (cnt > 0 && n < 1024);
     return n;
   }
   return 0;

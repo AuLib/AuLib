@@ -63,17 +63,13 @@ public:
 
   /** operator(a) convenience method
    */
-  const Pan &operator()(const AudioBase &obj) {
-    return process(obj);
-  }
+  const Pan &operator()(const AudioBase &obj) { return process(obj); }
 
   /** operator(a,b) convenience method
    */
   const Pan &operator()(const AudioBase &obj, double pos) {
-    return process(obj,pos);
+    return process(obj, pos);
   }
-
-  
 };
 
 /*! \class Pan Pan.h AuLib/Pan.h

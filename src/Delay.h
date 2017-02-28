@@ -119,36 +119,33 @@ public:
     return process(obj, dt);
   }
 
-  /** operator(a,b,c) convenience method 
+  /** operator(a,b,c) convenience method
    */
-  const Delay &operator()(const AudioBase &a, const AudioBase &b, double c){
-    return process(a,b,c);
+  const Delay &operator()(const AudioBase &a, const AudioBase &b, double c) {
+    return process(a, b, c);
   }
 
-  /** operator(a,b) convenience method 
+  /** operator(a,b) convenience method
    */
-  const Delay &operator()(const AudioBase &a, const AudioBase &b){
-      return process(a,b);
+  const Delay &operator()(const AudioBase &a, const AudioBase &b) {
+    return process(a, b);
   }
 
-    /** operator(a,b,c) convenience method 
-   */
-  const Delay &operator()(const AudioBase &a, const double b, double c){
-    return process(a,b,c);
+  /** operator(a,b,c) convenience method
+ */
+  const Delay &operator()(const AudioBase &a, const double b, double c) {
+    return process(a, b, c);
   }
 
-  /** operator(a,b) convenience method 
+  /** operator(a,b) convenience method
    */
-  const Delay &operator()(const AudioBase &a, double b){
-      return process(a,b);
+  const Delay &operator()(const AudioBase &a, double b) {
+    return process(a, b);
   }
 
-  /** operator(a) convenience method 
+  /** operator(a) convenience method
    */
-  const Delay &operator()(const AudioBase &a){
-      return process(a);
-  }
-
+  const Delay &operator()(const AudioBase &a) { return process(a); }
 
   /** get the current write position
    */

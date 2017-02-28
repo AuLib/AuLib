@@ -27,7 +27,7 @@ struct MidiData {
 };
 
 /** This class implements a MIDI input listener
-*/  
+*/
 class MidiIn {
   void *m_mstream;
   std::vector<std::string> m_devs;
@@ -57,8 +57,8 @@ public:
   template <typename T> T &listen(T &inst) {
     uint32_t cnt = read();
     for (uint32_t i = 0; i < cnt; i++)
-      inst.dispatch(m_mdata[i].msg, m_mdata[i].chn, m_mdata[i].byte1,
-                    m_mdata[i].byte2, m_mdata[i].stamp);
+      inst.dispatch(m_mdata[i].msg, m_mdata[i].chn, (double)m_mdata[i].byte1,
+                    (double)m_mdata[i].byte2, m_mdata[i].stamp);
     inst.process();
     return inst;
   }

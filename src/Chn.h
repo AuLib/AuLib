@@ -71,20 +71,15 @@ public:
     return *this;
   }
 
-  /** operator(a) convenience method 
+  /** operator(a) convenience method
    */
-   const Chn &operator()(const AudioBase &obj){
-      return process(obj);
-  }
+  const Chn &operator()(const AudioBase &obj) { return process(obj); }
 
-  /** operator(a,b) convenience method 
+  /** operator(a,b) convenience method
    */
-  const Chn &operator()(const AudioBase &obj, uint32_t chn){
+  const Chn &operator()(const AudioBase &obj, uint32_t chn) {
     return process(obj, chn);
   }
-
-
-  
 };
 
 /*! \class Chn Chn.h AuLib/Chn.h

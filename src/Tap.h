@@ -55,17 +55,13 @@ public:
 
   /** operator () convenience method
    */
-  const Tap &operator()(const Delay &del, const AudioBase &b){
-    return process(del,b);
+  const Tap &operator()(const Delay &del, const AudioBase &b) {
+    return process(del, b);
   }
 
   /** operator () convenience method
    */
-  const Tap &operator()(const Delay &del, double b){
-    return process(del,b);
-  }
-
-  
+  const Tap &operator()(const Delay &del, double b) { return process(del, b); }
 };
 
 /*! \class Tap Tap.h AuLib/Tap.h

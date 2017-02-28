@@ -54,10 +54,10 @@ public:
     return *this;
   }
 
-  /** operator(a,b) convenience method, same as process() 
+  /** operator(a,b) convenience method, same as process()
    */
-  const Balance &operator()(const AudioBase &obj, const AudioBase &cmp){
-      return process(obj,cmp);
+  const Balance &operator()(const AudioBase &obj, const AudioBase &cmp) {
+    return process(obj, cmp);
   }
 };
 

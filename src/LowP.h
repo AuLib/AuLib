@@ -62,11 +62,9 @@ public:
     return *this;
   }
 
-  const LowP &operator()(const AudioBase &obj, double cf){
+  const LowP &operator()(const AudioBase &obj, double cf) {
     return process(obj, cf);
   }
-
-  
 };
 
 /*! \class LowP LowP.h AuLib/LowP.h

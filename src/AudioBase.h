@@ -124,12 +124,12 @@ public:
    */
   const_iterator cend() const { return m_vector.cend(); }
 
-   /** set the data vector to an input obj vector
-       return the AudioBase obj reference
-   */
+  /** set the data vector to an input obj vector
+      return the AudioBase obj reference
+  */
   const AudioBase &set(const AudioBase &obj) {
-    if(obj.vsamps() <= m_vector.size())
-      std::copy(obj.cbegin(),obj.cend(),begin());
+    if (obj.vsamps() <= m_vector.size())
+      std::copy(obj.cbegin(), obj.cend(), begin());
     return *this;
   }
 
@@ -198,7 +198,7 @@ public:
       return m_vector[frndx * m_nchnls + chn];
     else
       return 0.;
-  } 
+  }
 
   /** Set the current vector size in frames. Clears
       the vector and returns the updated vector

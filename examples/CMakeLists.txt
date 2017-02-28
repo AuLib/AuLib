@@ -39,8 +39,10 @@ target_link_libraries(msynth AuLib ${LIBSNDFILE} ${PORTAUDIO}
   ${PORTMIDI} ${PORTIME})
 INSTALL(TARGETS msynth RUNTIME DESTINATION bin)
 endif()
+add_executable(ssynth scoresynth.cpp)
+target_link_libraries(ssynth AuLib ${LIBSNDFILE} ${PORTAUDIO})
 
 # installation targets
 INSTALL(TARGETS sampleplay saw readtable sine fm panning ringmod ping
-  envelope adsr glide filterex play echoex stftest pvoctest RUNTIME DESTINATION bin
+  envelope adsr glide filterex play echoex stftest pvoctest ssynth RUNTIME DESTINATION bin
   )
