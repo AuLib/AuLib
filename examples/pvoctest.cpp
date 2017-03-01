@@ -9,8 +9,8 @@
 /////////////////////////////////////////////////////////////////////
 #include <Oscili.h>
 #include <Pvoc.h>
-#include <Wintabs.h>
 #include <SoundOut.h>
+#include <Wintabs.h>
 #include <iostream>
 
 using namespace AuLib;
@@ -20,16 +20,16 @@ int main(int argc, const char **argv) {
   if (argc > 1) {
     Oscil sig;
     Hann win;
-    Pvoc anal(win,fft::forward), syn(win,fft::inverse);
+    Pvoc anal(win, fft::forward), syn(win, fft::inverse);
     SoundOut output(argv[1]);
     cout << Info::version();
     if (sig.error() == AULIB_NOERROR) {
       if (output.error() == AULIB_NOERROR) {
         for (int i = 0; i < def_sr * 2; i += def_vframes) {
           sig.process(0.5, 440.);
-	  anal.process(sig);
-	  cout << anal.bin(10) << "\n";
-	  syn.process(anal);
+          anal.process(sig);
+          cout << anal.bin(10) << "\n";
+          syn.process(anal);
           output.write(syn);
         }
       } else

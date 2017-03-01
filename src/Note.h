@@ -103,14 +103,14 @@ public:
 
 /** Instrument template class: \n
     Creates an instrument with n voices when instantiated with a
-    Note class.
+    Note-derived class with optional extra parameters.
 */
-template <typename T> class Instrument : public AudioBase {
+template <typename T, typename... Targs> class Instrument : public AudioBase {
 
   std::vector<T> m_voices;
   std::vector<double> m_msgdata;
   uint32_t m_msg;
-  uint32_t m_chn;
+  int32_t m_chn;
   uint64_t m_stamp;
 
   /** specialise this to handle poliphony and
@@ -134,9 +134,9 @@ template <typename T> class Instrument : public AudioBase {
 public:
   /** Construct an instrument with nvoices polyphony
    */
-  Instrument(uint32_t nvoices, uint32_t chn = 0)
-      : m_voices(nvoices, T(chn)), m_msgdata(256), m_msg(0), m_chn(chn),
-        m_stamp(0) {}
+  Instrument(uint32_t nvoices, int32_t chn = -1, Targs... args)
+      : m_voices(nvoices, T(chn, args...)), m_msgdata(256), m_msg(0),
+        m_chn(chn), m_stamp(0) {}
 
   /** Dispatch a channel message using a MIDI-like format. \n
      msg - message type \n
@@ -156,6 +156,12 @@ public:
     msg_handler();
   }
 
+  /** Dispatch a channel message of unspecified length \n
+     msg - type \n
+     chn - chn \n
+     data - message data \n
+     tstamp - time stamp \n
+   */
   void dispatch(uint32_t msg, uint32_t chn, const std::vector<double> &data,
                 uint64_t stamp) {
     m_stamp = stamp;
@@ -173,7 +179,8 @@ public:
 /** @private
     msg_handler implementation.
 */
-template <typename T> void Instrument<T>::msg_handler() {
+template <typename T, typename... Targs>
+void Instrument<T, Targs...>::msg_handler() {
 
   if (m_msg == midi::note_on && m_msgdata[1] == 0)
     m_msg = midi::note_off;

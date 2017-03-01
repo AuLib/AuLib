@@ -8,15 +8,15 @@
 //
 /////////////////////////////////////////////////////////////////////
 #include <Chn.h>
-#include <Tapi.h>
 #include <Delay.h>
 #include <Pan.h>
 #include <SigBus.h>
 #include <SoundIn.h>
 #include <SoundOut.h>
+#include <Tapi.h>
 #include <iostream>
-#include <vector>
 #include <numeric>
+#include <vector>
 
 using namespace AuLib;
 using namespace std;
@@ -28,11 +28,11 @@ int main(int argc, const char **argv) {
     SoundIn input(argv[1]);
     std::vector<Chn> chn(input.nchnls());
     std::vector<Delay> echo(input.nchnls(),
-     Delay(0.5, 0.5, def_vframes, input.sr()));
+                            Delay(0.5, 0.5, def_vframes, input.sr()));
     std::vector<Pan> pan(input.nchnls());
     SigBus mix(1. / input.nchnls(), 0., false, 2);
     SoundOut output(argv[2], 2, def_vframes, input.sr());
-    uint64_t end = input.dur() + 5*input.sr();
+    uint64_t end = input.dur() + 5 * input.sr();
 
     std::vector<uint32_t> channels(input.nchnls());
     std::iota(channels.begin(), channels.end(), 0);
@@ -41,12 +41,12 @@ int main(int argc, const char **argv) {
 
     while ((end -= def_vframes) > def_vframes) {
       input();
-      for(uint32_t channel : channels) {
-       chn[channel](input, channel + 1);
-       echo[channel](chn[channel]);
-       pan[channel](echo[channel] += chn[channel],
-		    (1 + channel) * input.nchnls() / 2.);
-       mix(pan[channel]);
+      for (uint32_t channel : channels) {
+        chn[channel](input, channel + 1);
+        echo[channel](chn[channel]);
+        pan[channel](echo[channel] += chn[channel],
+                     (1 + channel) * input.nchnls() / 2.);
+        mix(pan[channel]);
       }
       output(mix);
       mix.clear();

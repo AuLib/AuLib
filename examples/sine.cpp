@@ -16,7 +16,7 @@ using namespace std;
 
 int main(int argc, const char **argv) {
   if (argc > 1) {
-    Oscil sig(0.5,440);
+    Oscil sig(0.5, 440);
     SoundOut output(argv[1]);
     cout << Info::version();
     if (sig.error() == AULIB_NOERROR) {

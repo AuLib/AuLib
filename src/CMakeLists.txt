@@ -23,7 +23,9 @@ MidiIn.cpp
 
 if(CLANG_FORMAT)
  message(STATUS "formatting source files")
- add_custom_target(format ${CLANG_FORMAT}  -i  ${PROJECT_SOURCE_DIR}/src/*.h ${PROJECT_SOURCE_DIR}/src/*.cpp )
+ add_custom_target(format ${CLANG_FORMAT}  -i
+ ${PROJECT_SOURCE_DIR}/src/*.h ${PROJECT_SOURCE_DIR}/src/*.cpp
+ ${PROJECT_SOURCE_DIR}/examples/*.cpp  )
  else()
 message(STATUS "clang-format not found: not formatting source files")
 endif()
