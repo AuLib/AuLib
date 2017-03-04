@@ -134,7 +134,7 @@ template <typename T, typename... Targs> class Instrument : public AudioBase {
 public:
   /** Construct an instrument with nvoices polyphony
    */
-  Instrument(uint32_t nvoices, int32_t chn = -1, Targs... args)
+  Instrument(uint32_t nvoices, int32_t chn, Targs... args)
       : m_voices(nvoices, T(chn, args...)), m_msgdata(256), m_msg(0),
         m_chn(chn), m_stamp(0) {}
 
