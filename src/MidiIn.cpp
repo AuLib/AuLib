@@ -13,7 +13,7 @@
 #include <portmidi.h>
 #include <porttime.h>
 
-AuLib::MidiIn::MidiIn() : m_mstream(nullptr), m_devs() {
+AuLib::MidiIn::MidiIn() : m_mstream(nullptr), m_devs(), m_mdata({}) {
   Pm_Initialize();
   list_devices();
 };

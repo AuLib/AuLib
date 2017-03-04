@@ -64,7 +64,6 @@ public:
    */
   const Note &process() {
     return dsp();
-    return *this;
   }
 
   /** checks whether the note is on or off
