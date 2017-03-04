@@ -56,9 +56,7 @@ class Score : public AudioBase {
     auto it = m_events.begin();
     for (auto &ev : m_events) {
       if (m_time > ev.time){
-	auto d = it;
-	std::advance(it, 1);
-        m_events.erase(d);
+        it = m_events.erase(it);
       }else std::advance(it, 1);
     }
   }
@@ -156,7 +154,6 @@ public:
   template <typename... Targs> const Score &process(Targs &... args) {
     if (!m_done) {
       auto it = m_events.begin();
-      auto d = it;
       for (auto &ev : m_events) {
         if (m_is_sorted && ev.time >= m_time)
           break;
@@ -166,9 +163,7 @@ public:
             break;
           }
           dispatch(ev, args...);
-	  d = it;
-	  std::advance(it, 1);
-          m_events.erase(d);
+          it = m_events.erase(it);
         } else std::advance(it, 1);
       }
     }
