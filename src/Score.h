@@ -57,9 +57,9 @@ class Score : public AudioBase {
     for (auto &ev : m_events) {
       if (m_time > ev.time){
 	auto d = it;
+	std::advance(it, 1);
         m_events.erase(d);
-      }
-      std::advance(it, 1);
+      }else std::advance(it, 1);
     }
   }
 
@@ -85,9 +85,8 @@ protected:
     double time;
     Event ev;
     while (input >> cmd) {
-      if(!cmd.empty()) 
       for (auto &c : m_cmds) {
-        if (cmd == c.cmd) {
+        if (c.cmd == cmd) {
           ev.msg = c.msg;
           ev.data.resize(c.len);
           if (c.mode != Cmd::omni)
@@ -167,9 +166,9 @@ public:
           }
           dispatch(ev, args...);
 	  auto d = it;
+	  std::advance(it, 1);
           m_events.erase(d);
-        }
-        std::advance(it, 1);
+        } else std::advance(it, 1);
       }
     }
     set(0.);
