@@ -12,6 +12,7 @@
 
 #include <Adsr.h>
 #include <AudioBase.h>
+#include <BlOsc.h>
 #include <MidiIn.h>
 #include <Note.h>
 #include <Oscili.h>
@@ -24,12 +25,12 @@
 using namespace AuLib;
 
 class SineSyn : public Note {
-  
+
   // control list
   uint32_t m_atn, m_dcn, m_ssn, m_rln;
   std::map<uint32_t, double> m_ctl;
   double m_bend;
-  
+
   // signal processing objects
   Adsr m_env;
   Oscili m_osc;
@@ -48,8 +49,8 @@ class SineSyn : public Note {
 
   // note on processing
   virtual void on_note() {
-    m_env.reset(m_amp, m_ctl[m_atn] + 0.001, m_ctl[m_dcn] + 0.001, m_ctl[m_ssn] * m_amp,
-                m_ctl[m_rln] + 0.001);
+    m_env.reset(m_amp, m_ctl[m_atn] + 0.001, m_ctl[m_dcn] + 0.001,
+                m_ctl[m_ssn] * m_amp, m_ctl[m_rln] + 0.001);
   }
 
   // msg processing
@@ -73,14 +74,20 @@ class SineSyn : public Note {
 public:
   typedef std::array<int, 4> ctl_list;
 
-  SineSyn(int32_t chn, SineSyn::ctl_list lst)
+  SineSyn(int32_t chn, SineSyn::ctl_list lst, Oscili osc = Oscili())
       : Note(chn), m_atn(lst[0]), m_dcn(lst[1]), m_ssn(lst[2]), m_rln(lst[3]),
         m_ctl({{m_atn, 0.01}, {m_dcn, 0.01}, {m_ssn, 0.25}, {m_rln, 0.01}}),
         m_bend(1.),
         m_env(0., m_ctl[m_atn], m_ctl[m_dcn], m_ctl[m_ssn], m_ctl[m_rln]),
-        m_osc() {
+        m_osc(osc) {
     m_env.release();
   };
+};
+
+// sawtooth note
+struct SawSyn : SineSyn {
+  SawSyn(int chn, SineSyn::ctl_list lst)
+      : SineSyn(chn, lst, (Oscili)SawOsc()){};
 };
 
 // handle ctrl-c
@@ -94,9 +101,12 @@ int main() {
   int dev;
 
   // Sinewave Synthesizer -
-  // 8 voices, OMNI (all channels)
+  // 8 voices, channel 0
   // control numbers: 71 - att, 74 - dec, 52 - sus, 83 - rel
-  Instrument<SineSyn, SineSyn::ctl_list> synth(8, -1, {{71, 74, 52, 83}});
+  Instrument<SineSyn, SineSyn::ctl_list> sinsynth(8, 1, {{71, 74, 52, 83}});
+  // Sawtooh Synthesizer -
+  // 8 voices, channel 0
+  Instrument<SawSyn, SineSyn::ctl_list> sawsynth(8, 0, {{71, 74, 52, 83}});
 
   SoundOut out("dac");
   MidiIn midi;
@@ -110,9 +120,10 @@ int main() {
 
   if (midi.open(dev) == AULIB_NOERROR) {
     std::cout << "running... (use ctrl-c to close)\n";
-    while (running)
-      out(midi.listen(synth)); // listen to midi on behalf of synth
-
+    while (running) {
+      out(midi.listen(sinsynth,
+                      sawsynth)); // listen to midi on behalf of sinsynth
+    }
   } else
     std::cout << "error opening device...\n";
   std::cout << "...finished \n";

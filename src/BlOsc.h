@@ -114,6 +114,24 @@ static const TableSet triangle(TRIANGLE);
 static const TableSet square(SQUARE);
 }
 
+struct SqOsc : BlOsc {
+  SqOsc(double amp = 0.f, double freq = 440.f, double phase = 0.,
+        uint32_t vframes = def_vframes, double sr = def_sr)
+      : BlOsc(amp, freq, waveset::square, phase, vframes, sr){};
+};
+
+struct TriOsc : BlOsc {
+  TriOsc(double amp = 0.f, double freq = 440.f, double phase = 0.,
+         uint32_t vframes = def_vframes, double sr = def_sr)
+      : BlOsc(amp, freq, waveset::triangle, phase, vframes, sr){};
+};
+
+struct SawOsc : BlOsc {
+  SawOsc(double amp = 0.f, double freq = 440.f, double phase = 0.,
+         uint32_t vframes = def_vframes, double sr = def_sr)
+      : BlOsc(amp, freq, waveset::saw, phase, vframes, sr){};
+};
+
 /*! \class BlOsc BlOsc.h AuLib/BlOsc.h
  */
 }

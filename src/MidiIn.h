@@ -19,21 +19,37 @@
 
 namespace AuLib {
 
-/** MIDI data structure
- */
-struct MidiData {
-  uint32_t msg, chn, byte1, byte2;
-  uint64_t stamp;
-};
-
 /** This class implements a MIDI input listener
 */
-class MidiIn {
+class MidiIn : public AudioBase {
+
+  struct MidiData {
+    uint32_t msg, chn, byte1, byte2;
+    uint64_t stamp;
+  };
+
   void *m_mstream;
   std::vector<std::string> m_devs;
   std::array<MidiData, 1024> m_mdata;
   void list_devices();
   uint32_t read();
+
+  void dispatch(uint32_t msg, int32_t chn, uint32_t byte1, uint32_t byte2,
+                uint64_t stamp){};
+
+  template <typename T, typename... Targs>
+  void dispatch(uint32_t msg, int32_t chn, uint32_t byte1, uint32_t byte2,
+                uint64_t stamp, T &inst, Targs &... args) {
+    inst.dispatch(msg, chn, (double)byte1, (double)byte2, stamp);
+    dispatch(msg, chn, byte1, byte2, stamp, args...);
+  };
+
+  void dsp(){};
+
+  template <typename T, typename... Targs> void dsp(T &inst, Targs &... args) {
+    *this += inst.process();
+    dsp(args...);
+  }
 
 public:
   /** Constructs an empty object */
@@ -52,15 +68,17 @@ public:
 
   /** Implements a listener for an obj inst
       dispatching any received data. Classes implementing
-      the dispatch & process methods are valid types here.
+      the dispatch & process methods are valid types
+      for arguments here.
    */
-  template <typename T> T &listen(T &inst) {
+  template <typename... Targs> const MidiIn &listen(Targs &... args) {
     uint32_t cnt = read();
+    set(0.);
     for (uint32_t i = 0; i < cnt; i++)
-      inst.dispatch(m_mdata[i].msg, m_mdata[i].chn, (double)m_mdata[i].byte1,
-                    (double)m_mdata[i].byte2, m_mdata[i].stamp);
-    inst.process();
-    return inst;
+      dispatch(m_mdata[i].msg, m_mdata[i].chn, m_mdata[i].byte1,
+               m_mdata[i].byte2, m_mdata[i].stamp, args...);
+    dsp(args...);
+    return *this;
   }
 
   /** Returns a list of devices names/numbers as strings
