@@ -156,6 +156,7 @@ public:
   template <typename... Targs> const Score &process(Targs &... args) {
     if (!m_done) {
       auto it = m_events.begin();
+      auto d = it;
       for (auto &ev : m_events) {
         if (m_is_sorted && ev.time >= m_time)
           break;
@@ -165,7 +166,7 @@ public:
             break;
           }
           dispatch(ev, args...);
-	  auto d = it;
+	  d = it;
 	  std::advance(it, 1);
           m_events.erase(d);
         } else std::advance(it, 1);
