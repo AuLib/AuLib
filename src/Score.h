@@ -112,4 +112,7 @@ public:
 };
 }
 
+/*! \class Score Score.h AuLib/Score.h
+ */
+
 #endif

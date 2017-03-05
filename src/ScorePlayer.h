@@ -184,4 +184,7 @@ const ScorePlayer &ScorePlayer::process(Targs &... args) {
 }
 }
 
+/*! \class ScorePlayer ScorePlayer.h AuLib/ScorePlayer.h
+ */
+
 #endif

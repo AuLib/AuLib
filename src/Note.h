@@ -209,4 +209,11 @@ void Instrument<T, Targs...>::msg_handler() {
   }
 }
 }
+
+/*! \class Note Note.h AuLib/Note.h
+ */
+
+/*! \class Instrument<T> Note.h AuLib/Note.h
+ */
+
 #endif
