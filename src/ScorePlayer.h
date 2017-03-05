@@ -115,7 +115,8 @@ public:
   /** set current score time in secs
    */
   void score_time(double t) {
-    if (t  <  0.) return; 
+    if (t < 0.)
+      return;
     if (m_time > t * m_sr)
       m_events = m_score.score();
     m_time = t * m_sr;
