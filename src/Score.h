@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Copyright (C) 2016-7 V Lazzarini
-//  Score.h: Basic score building and playback class
+//  Score.h: Basic score-building class
 //
 // This software is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
@@ -12,54 +12,26 @@
 #ifndef __SCORE_H__
 #define __SCORE_H__
 
-#include <Note.h>
 #include <fstream>
 #include <list>
 #include <sstream>
 
 namespace AuLib {
 
+/** single score event
+ */
+struct Event {
+  uint32_t chn;
+  uint32_t msg;
+  std::vector<double> data;
+  double time;
+};
+
 /** Basic score model
  */
-class Score : public AudioBase {
+class Score {
 
-  struct Event {
-    uint32_t chn;
-    uint32_t msg;
-    std::vector<double> data;
-    uint64_t time;
-  };
-
-  void add_event(const Event &e) {
-    m_score.push_back(e);
-    m_events.push_back(e);
-    m_is_sorted = false;
-    m_done = false;
-  }
-
-  void dispatch(Event &ev){};
-
-  template <typename T, typename... Targs>
-  void dispatch(Event &ev, T &obj, Targs &... args) {
-    obj.dispatch(ev.msg, ev.chn, ev.data, ev.time);
-    dispatch(ev, args...);
-  }
-
-  void dsp(){};
-
-  template <typename T, typename... Targs> void dsp(T &obj, Targs &... args) {
-    *this += obj.process();
-    dsp(args...);
-  }
-
-  void strip() {
-    auto it = m_events.begin();
-    for (auto &ev : m_events) {
-      if (m_time > ev.time){
-        it = m_events.erase(it);
-      }else std::advance(it, 1);
-    }
-  }
+  void add_event(const Event &e) { m_score.push_back(e); }
 
 public:
   struct Cmd {
@@ -72,13 +44,10 @@ public:
   };
 
 protected:
-  std::list<Event> m_events, m_score;
+  std::list<Event> m_score;
   std::list<Cmd> m_cmds;
-  uint64_t m_time;
-  bool m_is_sorted;
-  bool m_done;
 
-  virtual void parse_stream(std::istream &input, uint64_t offset = 0) {
+  virtual void parse_stream(std::istream &input, double offset = 0.) {
     std::string cmd;
     double time;
     Event ev;
@@ -90,7 +59,7 @@ protected:
           if (c.mode != Cmd::omni)
             input >> ev.chn;
           input >> time;
-          ev.time = (uint64_t)((time + offset) * m_sr);
+          ev.time = (time + offset);
           for (auto &d : ev.data)
             input >> d;
           add_event(ev);
@@ -106,10 +75,7 @@ public:
 
   /** create a score
    */
-  Score(uint32_t nchnls = def_nchnls, uint32_t vframes = def_vframes,
-        double sr = def_sr)
-      : AudioBase(nchnls, vframes, sr), m_events(), m_score(), m_cmds(),
-        m_time(0), m_is_sorted(false), m_done(true){};
+  Score() : m_score(), m_cmds(){};
 
   /** Add command with the following format \n
       { name,  // string \n
@@ -136,115 +102,13 @@ public:
    */
   void read(std::istream &input) { parse_stream(input); }
 
-  /** insert stream with commands
-      at the current running time
-  */
-  void insert(std::istream &input) { parse_stream(input, m_time); }
-
-  /** insert stream with commands
-      with time offset
-  */
-  void insert(std::istream &input, uint64_t offset) {
-    parse_stream(input, offset);
-  }
-
-  /** process instruments obj ... dispatching score commands, for
-      one vector of audio, returning the mixed score audio
-   */
-  template <typename... Targs> const Score &process(Targs &... args) {
-    if (!m_done) {
-      auto it = m_events.begin();
-      for (auto &ev : m_events) {
-        if (m_is_sorted && ev.time >= m_time)
-          break;
-        if (m_time > ev.time) {
-          if (ev.msg == 0) {
-            m_done = true;
-            break;
-          }
-          dispatch(ev, args...);
-          it = m_events.erase(it);
-        } else std::advance(it, 1);
-      }
-    }
-    set(0.);
-    dsp(args...);
-    m_time += vframes();
-    return *this;
-  }
-
-  /** check score for termination msg
-   */
-  bool check_score() const {
-    for (auto &ev : m_events) {
-      if (ev.msg == 0)
-        return true;
-    }
-    return false;
-  }
-
-  /** get current score time in frames
-   */
-  uint64_t score_time() const { return m_time; }
-
-  /** set current score time in frames
-   */
-  void score_time(uint64_t t) {
-    if (m_time > t)
-      m_events = m_score;
-    m_time = t;
-    m_done = false;
-    strip();
-  }
-
-  /** set current score time in secs
-   */
-  void score_time(double t) {
-    if (m_time > t * m_sr)
-      m_events = m_score;
-    m_time = t * m_sr;
-    m_done = false;
-    strip();
-  }
-
-  /** rewind score
-   */
-  void rewind() {
-    m_time = 0;
-    m_events = m_score;
-    m_done = false;
-  }
-
   /** clear the stored score
    */
   void clear() { m_score.clear(); }
 
-  /** play score from start position to end
-      into dest object.
+  /** get the score
    */
-  template <typename T, typename... Targs> bool play(T &dest, Targs... args) {
-    sort();
-    if (check_score()) {
-      while (!m_done)
-        dest(process(args...));
-      return true;
-    } else
-      return false;
-  }
-
-  /** sorts the score in ascending time order
-      for 'sorted' playback.
-   */
-  void sort() {
-    auto cmp = [](const Event &a, const Event &b) -> bool {
-      if (a.time < b.time)
-        return true;
-      else
-        return false;
-    };
-    m_events.sort(cmp);
-    m_is_sorted = true;
-  }
+  const std::list<Event> &score() const { return m_score; }
 };
 }
 

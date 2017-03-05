@@ -31,6 +31,7 @@
 #include <Note.h>
 #include <Oscili.h>
 #include <Score.h>
+#include <ScorePlayer.h>
 #include <SoundOut.h>
 
 using namespace AuLib;
@@ -96,6 +97,7 @@ int main(int argc, const char **argv) {
     Instrument<SawSyn> sawsynth(8, 1);   // 8 voices, channel 1
     SoundOut out("dac");
     Score score;
+    ScorePlayer player(score);
     std::ifstream input(argv[1]);
 
     score.add_cmd({"$on", !Score::Cmd::omni, midi::note_on, 2});
@@ -104,15 +106,17 @@ int main(int argc, const char **argv) {
     score.add_cmd({"$end", Score::Cmd::omni, Score::end, 0});
 
     score.read(input);
-    if (score.play(out, sinesynth, sawsynth) == false) {
+    player.prepare(); // prepare playback
+    if (player.play(out, sinesynth, sawsynth) == false) {
       std::cout << "score parse error: "
                 << "no termination message found\n";
       return 1;
     }
-    score.score_time(1.);
-    score.play(out, sinesynth, sawsynth);
-    score.rewind();
-    score.play(out, sinesynth, sawsynth);
+    player.score_time(1.); // play from 1. sec
+    player.play(out, sinesynth, sawsynth);
+    player.prepare();           // rewind
+    player.insert(score, 0.75); // add another score at 0.75 secs.
+    player.play(out, sinesynth, sawsynth);
     return 0;
   } else
     std::cout << "usage:\n" << argv[0] << " score.txt\n";

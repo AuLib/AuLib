@@ -62,9 +62,7 @@ public:
 
   /** processing method: call it to produce one vector of audio
    */
-  const Note &process() {
-    return dsp();
-  }
+  const Note &process() { return dsp(); }
 
   /** checks whether the note is on or off
    */
