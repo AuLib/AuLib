@@ -115,6 +115,7 @@ public:
   /** set current score time in secs
    */
   void score_time(double t) {
+    if (t  <  0.) return; 
     if (m_time > t * m_sr)
       m_events = m_score.score();
     m_time = t * m_sr;
@@ -161,7 +162,7 @@ const ScorePlayer &ScorePlayer::process(Targs &... args) {
   if (!m_done) {
     auto it = m_events.begin();
     for (auto &ev : m_events) {
-      uint64_t stime = ev.time * m_sr;
+      uint64_t stime = (ev.time >= 0. ? ev.time : 0.) * m_sr;
       if (stime >= m_time)
         break;
       if (m_time > stime) {
