@@ -20,6 +20,11 @@ namespace AuLib {
 
 class ScorePlayer : public AudioBase {
 
+  const Score &m_score;
+  std::list<Event> m_events;
+  uint64_t m_time;
+  bool m_done;
+
   void sort() {
     auto cmp = [](const Event &a, const Event &b) -> bool {
       if (a.time < b.time)
@@ -47,25 +52,15 @@ class ScorePlayer : public AudioBase {
 
   void strip() {
     auto it = m_events.begin();
-    for (auto &ev : m_events) {
-      if (m_time > ev.time * m_sr) {
+    while (it != m_events.end()) {
+      if (m_time > it->time * m_sr) {
         it = m_events.erase(it);
       } else
         std::advance(it, 1);
     }
   }
 
-protected:
-  const Score &m_score;
-  std::list<Event> m_events;
-  uint64_t m_time;
-  bool m_done;
-
 public:
-  /** end command message
-   */
-  static constexpr uint32_t end = 0;
-
   /** create a score
    */
   ScorePlayer(const Score &sc, uint32_t nchnls = def_nchnls,

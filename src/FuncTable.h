@@ -33,6 +33,9 @@ protected:
   }
 
 public:
+  /** define normalisation (rescaling) */
+  static constexpr bool normalised = true;
+
   /** FuncTable constructor \n\n
       tframes - table size \n
       nchnls - number of channels \n

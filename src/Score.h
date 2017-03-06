@@ -30,10 +30,9 @@ struct Event {
 /** Basic score model
  */
 class Score {
-
-  void add_event(const Event &e) { m_score.push_back(e); }
-
 public:
+  /** score command
+   */
   struct Cmd {
     std::string cmd;
     bool mode;
@@ -43,11 +42,11 @@ public:
     static constexpr uint32_t chn = false;
   };
 
-protected:
+private:
   std::list<Event> m_score;
   std::list<Cmd> m_cmds;
 
-  virtual void parse_stream(std::istream &input, double offset = 0.) {
+  void parse_stream(std::istream &input, double offset = 0.) {
     std::string cmd;
     double time;
     Event ev;
@@ -67,6 +66,8 @@ protected:
       }
     }
   }
+
+  void add_event(const Event &e) { m_score.push_back(e); }
 
 public:
   /** end command message

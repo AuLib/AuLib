@@ -17,9 +17,9 @@ using namespace AuLib;
 using namespace std;
 
 int main() {
-  Segments segs(1., {2., 1.5, 1.}, {.25, 1.25, .5}, false);
+  Segments segs(1., {2., 1.5, 1.}, {.25, 1.25, .5}, Segments::exponential);
   Adsr amp(1., 0.01, 1., 0.7, 0.1);
-  EnvelTable etab(segs, false);
+  EnvelTable etab(segs, !FuncTable::normalised);
   Oscili freq(440., 1., etab);
   Oscili sig;
   SoundOut output("dac");

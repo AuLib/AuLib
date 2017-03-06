@@ -28,6 +28,11 @@ class Segments {
   std::vector<double> m_endpts;
 
 public:
+  /** define linear segments */
+  static constexpr bool linear = true;
+  /** define exponential segments */
+  static constexpr bool exponential = false;
+
   /* Segments constructor \n\n
      start - start value \n
      endpts - array of segment endpoints \n
