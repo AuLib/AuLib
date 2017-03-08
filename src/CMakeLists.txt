@@ -19,6 +19,7 @@ SoundOut.cpp
 Tap.cpp
 Note.cpp
 MidiIn.cpp
+PConv.cpp
 )
 
 if(CLANG_FORMAT)
