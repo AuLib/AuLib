@@ -36,7 +36,7 @@ AuLib::PConv::PConv(const FuncTable &ir, uint32_t psize, uint32_t vframes,
 
 const double *AuLib::PConv::dsp(const double *sig) {
 
-  for (int n = 0; n < m_vframes; n++) {
+  for (uint32_t n = 0; n < m_vframes; n++) {
     m_in[m_count] = sig[n];
     m_vector[n] = m_out[m_count] + m_saved[m_count];
     m_saved[m_count] = m_out[m_count + m_psize];
