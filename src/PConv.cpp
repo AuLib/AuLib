@@ -11,13 +11,6 @@
 
 #include <PConv.h>
 
-static uint32_t npow2(uint32_t n) {
-  uint32_t v = 2;
-  while (v < n)
-    v *= 2;
-  return v >> 1;
-}
-
 AuLib::PConv::PConv(const FuncTable &ir, uint32_t psize, uint32_t vframes,
                     double sr)
     : AudioBase(1, vframes, sr), m_count(0), m_p(0), m_psize(npow2(psize)),

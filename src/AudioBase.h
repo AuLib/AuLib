@@ -35,7 +35,7 @@ public:
   */
   AudioBase(uint32_t nchnls = def_nchnls, uint32_t vframes = def_vframes,
             double sr = def_sr)
-      : m_nchnls(nchnls), m_vframes(vframes), m_vector(vframes * nchnls, 0.0),
+    : m_nchnls(nchnls), m_vframes(npow2(vframes)), m_vector(m_vframes * nchnls, 0.0),
         m_sr(sr), m_error(0){};
 
   /** Scale the data vector
@@ -206,7 +206,7 @@ public:
       frame size cannot be accommodated.
    */
   uint32_t vframes(uint32_t frames) {
-    m_vframes = frames;
+    m_vframes = npow2(frames);
     if (m_vframes * m_nchnls > vsamps())
       m_vector.resize(m_vframes * m_nchnls);
     set(0.);
