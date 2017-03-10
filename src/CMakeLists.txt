@@ -20,6 +20,7 @@ Tap.cpp
 Note.cpp
 MidiIn.cpp
 PConv.cpp
+Circular.cpp
 )
 
 if(CLANG_FORMAT)

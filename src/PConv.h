@@ -53,4 +53,7 @@ public:
    */
   const PConv &operator()(const AudioBase &obj) { return process(obj); }
 };
+
+  /*! \class PConv PConv.h AuLib/PConv.h
+ */
 }

@@ -53,13 +53,12 @@ public:
       sr - sampling rate \n
   */
   SamplePlayer(const FuncTable &ftable, double amp = 0., double pitch = 0.,
-               double phase = 0., uint32_t vframes = def_vframes,
+               double phase = 0., uint32_t vframs = def_vframes,
                double sr = def_sr)
-      : Oscili(amp, 0., ftable, phase, vframes, sr) {
+      : Oscili(amp, 0., ftable, phase, vframs, sr) {
     m_incr = pitch;
     m_nchnls = ftable.nchnls();
-    if (m_nchnls > 1)
-      m_vector.resize(m_vframes * m_nchnls);
+    vframes(m_vframes);
   }
 };
 

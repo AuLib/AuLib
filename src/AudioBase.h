@@ -30,7 +30,8 @@ protected:
 public:
   /** AudioBase constructor  \n
      nchnls - number of channels \n
-     vframes - number of frames in vector \n
+     vframes - number of frames in vector. This set to next power-of-two no 
+      greater than the requested number of frames. \n
      sr - sampling rate
   */
   AudioBase(uint32_t nchnls = def_nchnls, uint32_t vframes = def_vframes,
@@ -204,13 +205,28 @@ public:
       the vector and returns the updated vector
       frame size. Vector is resized if the requested
       frame size cannot be accommodated.
+      Size is set to next power-of-two no greater
+      than the requested number of frames.
    */
   uint32_t vframes(uint32_t frames) {
     m_vframes = npow2(frames);
-    if (m_vframes * m_nchnls > vsamps())
-      m_vector.resize(m_vframes * m_nchnls);
+    m_vector.resize(m_vframes * m_nchnls);
     set(0.);
     return m_vframes;
+  }
+
+  /** Resize the vector to given number of frames,
+      exactly. This is used to set the vector size
+      to values other than power-of-two, for 
+      dedicated applications where this is required.
+      Clearsthe vector and returns the updated vector
+      frame size
+  */
+   uint32_t resize_exact(uint32_t frames) {
+     m_vector.resize(frames*m_nchnls);
+     m_vframes = frames;
+     set(0.);
+     return m_vframes;
   }
 
   /** Get current vector size in frames
