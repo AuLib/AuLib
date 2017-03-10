@@ -14,6 +14,9 @@
 
 namespace AuLib {
 
+  /** Circular buffer: implements a buffer 
+      with atomic access
+  */
 class Circular : public AudioBase {
 
   std::atomic<uint32_t> m_samps;
@@ -25,31 +28,53 @@ class Circular : public AudioBase {
   const double *dsp();
   
 public:
+  /** Constructs a circular buffer with a given size in samples 
+   */
   Circular(uint32_t size, uint32_t vframes = def_vframes, double sr = def_sr) :
     AudioBase(1,vframes,sr), m_samps(0), m_buffer(npow2(size)), m_wpos(m_buffer.begin()),
     m_rpos(m_buffer.begin()) { };
 
+
+  /** Writes a block of vframes() samples into the circular buffer.
+      There should be at least vframes() samples in sig. If the
+      buffer is full, nothing is written and the function returns false.
+      Returns true on success.
+   */
   bool writes(const double *sig) {
     return dsp(sig);
   }
 
+   /** Reads a block of vframes() samples from the circular buffer.
+      If the buffer is empty, nothing is written and the function returns a
+      nullptr. Otherwise, it returns a pointer to the data it read.
+   */
   const double *reads() {
     return dsp();
   }
 
+  /** Writes a block of samples from obj into the circular buffer 
+   */  
   void write(const AudioBase &obj) {
-    while(!dsp(obj.vector()));
+    if(m_vframes == obj.vframes())
+      while(!dsp(obj.vector()));
   }
 
+  /** Reads a block of samples from the circular buffer, returns
+      a reference to this object, which contains the output. 
+   */ 
   const AudioBase &read() {
     while(!dsp());
     return *this;
   }
 
+  /** Convenience operator(), same as write() 
+   */
   void operator()(const AudioBase &obj) {
     dsp(obj.vector());
   }
 
+  /** Convenience operator(), same as read() 
+   */
   const AudioBase &operator()() {
     dsp();
     return *this;
