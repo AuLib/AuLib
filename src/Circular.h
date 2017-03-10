@@ -28,10 +28,10 @@ class Circular : public AudioBase {
   const double *dsp();
   
 public:
-  /** Constructs a circular buffer with a given size in samples 
+  /** Constructs a circular buffer with a given size in frames
    */
-  Circular(uint32_t size, uint32_t vframes = def_vframes, double sr = def_sr) :
-    AudioBase(1,vframes,sr), m_samps(0), m_buffer(npow2(size)), m_wpos(m_buffer.begin()),
+  Circular(uint32_t size, uint32_t nchnls = def_nchnls, uint32_t vframes = def_vframes, double sr = def_sr) :
+    AudioBase(nchnls,vframes,sr), m_samps(0), m_buffer(npow2(size*nchnls)), m_wpos(m_buffer.begin()),
     m_rpos(m_buffer.begin()) { };
 
 
@@ -52,14 +52,15 @@ public:
     return dsp();
   }
 
-  /** Writes a block of samples from obj into the circular buffer 
+  /** Writes a block of frames from obj into the circular buffer 
    */  
   void write(const AudioBase &obj) {
-    if(m_vframes == obj.vframes())
+    if(m_vframes == obj.vframes() &&
+       m_nchnls == obj.nchnls())
       while(!dsp(obj.vector()));
   }
 
-  /** Reads a block of samples from the circular buffer, returns
+  /** Reads a block of frames from the circular buffer, returns
       a reference to this object, which contains the output. 
    */ 
   const AudioBase &read() {
@@ -70,15 +71,18 @@ public:
   /** Convenience operator(), same as write() 
    */
   void operator()(const AudioBase &obj) {
-    dsp(obj.vector());
+    write(obj);
   }
 
   /** Convenience operator(), same as read() 
    */
   const AudioBase &operator()() {
-    dsp();
-    return *this;
+    return read();
   }
+
+  uint32_t samps() const { return m_samps; }
+
+  uint32_t size() const { return m_buffer.size(); }
 };
 
 /*! \class Circular Circular.h AuLib/Circular.h
