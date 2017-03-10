@@ -61,8 +61,8 @@ static inline const std::string copyright() {
 }
 }
 
-/** return the next power-of-two <= n 
-*/  
+/** return the next power-of-two <= n
+*/
 static inline uint32_t npow2(uint32_t n) {
   uint32_t v = 2;
   while (v <= n)
@@ -70,7 +70,6 @@ static inline uint32_t npow2(uint32_t n) {
   return v >> 1;
 }
 
-  
 /** default signal vectorsize.
  */
 const uint32_t def_vframes = 64;

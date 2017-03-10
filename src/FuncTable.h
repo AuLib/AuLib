@@ -43,7 +43,9 @@ public:
   */
   FuncTable(uint32_t tframes = def_tframes, uint32_t nchnls = def_nchnls,
             uint32_t sr = def_sr)
-    : AudioBase(nchnls, 0, sr), m_tframes(tframes){ resize_exact(tframes + 2); };
+      : AudioBase(nchnls, 0, sr), m_tframes(tframes) {
+    resize_exact(tframes + 2);
+  };
 
   /** FuncTable constructor from vector \n\n
       src - source vector \n

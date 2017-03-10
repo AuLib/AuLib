@@ -12,22 +12,25 @@
 #include "Circular.h"
 
 bool AuLib::Circular::dsp(const double *sig) {
-  if(m_samps < m_buffer.size()) {
-  std::copy(sig,sig+m_vframes*m_nchnls,m_wpos);
-  m_wpos = m_wpos == m_buffer.end() ? m_buffer.begin() : m_wpos+m_vframes*m_nchnls;
-  m_samps += m_vframes;
-  return true;
+  if (m_samps < m_buffer.size()) {
+    if (m_wpos == m_buffer.end())
+      m_wpos = m_buffer.begin();
+    std::copy(sig, sig + m_vframes * m_nchnls, m_wpos);
+    m_wpos += m_vframes * m_nchnls;
+    m_samps += m_vframes * m_nchnls;
+    return true;
   }
   return false;
 }
 
 const double *AuLib::Circular::dsp() {
-  if(m_samps) {
-  std::copy(m_rpos,m_rpos+m_vframes*m_nchnls, m_vector.begin());
-  m_rpos = m_rpos == m_buffer.end() ? m_buffer.begin() : m_rpos+m_vframes*m_nchnls; 
-  m_samps -= m_vframes;
-  return vector();
-  } else return nullptr;
+  if (m_samps) {
+    if (m_rpos == m_buffer.end())
+      m_rpos = m_buffer.begin();
+    std::copy(m_rpos, m_rpos + m_vframes * m_nchnls, m_vector.begin());
+    m_rpos += m_vframes * m_nchnls;
+    m_samps -= m_vframes * m_nchnls;
+    return vector();
+  } else
+    return nullptr;
 }
-
-

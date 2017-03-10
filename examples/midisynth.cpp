@@ -62,7 +62,7 @@ class SineSyn : public Note {
       int32_t bnd = (int32_t)data[1];
       bnd = (bnd << 7) | (int32_t)data[0];
       double amnt = (bnd - 8192.) / 16384.;
-      m_bend = std::pow(2., (4.*amnt) / 12.);
+      m_bend = std::pow(2., (4. * amnt) / 12.);
     }
     // ctrls: att, dec, sus, rel
     else if (msg == midi::ctrl_msg) {
@@ -108,7 +108,7 @@ int main() {
   // 8 voices, channel 0
   Instrument<SawSyn, SineSyn::ctl_list> sawsynth(8, 0, {{71, 74, 52, 83}});
 
-  SoundOut out("dac",1,128);
+  SoundOut out("dac", 1, 128);
   MidiIn midi;
   std::signal(SIGINT, signal_handler);
 

@@ -31,15 +31,15 @@ int main(int argc, const char **argv) {
                             Delay(0.5, 0.5, def_vframes, input.sr()));
     std::vector<Pan> pan(input.nchnls());
     SigBus mix(1. / input.nchnls(), 0., false, 2);
-    SoundOut output(argv[2], 2, def_vframes, input.sr());
-    uint64_t end = input.dur() + 5 * input.sr();
+    SoundOut output(argv[2], 2, def_bframes, input.sr());
+    uint64_t end = input.dur() + 5 * input.sr(), t = 0;
 
     std::vector<uint32_t> channels(input.nchnls());
     std::iota(channels.begin(), channels.end(), 0);
 
     cout << Info::version();
 
-    while ((end -= def_vframes) > def_vframes) {
+    while (t < end) {
       input();
       for (uint32_t channel : channels) {
         chn[channel](input, channel + 1);
@@ -48,7 +48,7 @@ int main(int argc, const char **argv) {
                      (1 + channel) * input.nchnls() / 2.);
         mix(pan[channel]);
       }
-      output(mix);
+      t = output(mix);
       mix.clear();
     }
 

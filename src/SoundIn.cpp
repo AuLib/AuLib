@@ -23,8 +23,9 @@
 AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
                         uint64_t bframes, double sr)
     : AudioBase(nchnls, vframes, sr), m_src(src), m_mode(0),
-      m_cnt(npow2(bframes) * nchnls), m_dur(std::numeric_limits<uint64_t>::max()),
-      m_framecnt(0), m_inbuf(npow2(bframes) * nchnls), m_handle(NULL) {
+      m_cnt(npow2(bframes) * nchnls),
+      m_dur(std::numeric_limits<uint64_t>::max()), m_framecnt(0),
+      m_inbuf(npow2(bframes) * nchnls), m_handle(NULL) {
 #ifdef HAVE_PORTAUDIO
   if (m_src == "adc") {
     // RT audio

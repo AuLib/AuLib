@@ -13,6 +13,7 @@
 
 #include "AudioBase.h"
 #include "Circular.h"
+#include <thread>
 
 namespace AuLib {
 
@@ -46,18 +47,20 @@ class SoundOut final : public AudioBase {
 
   std::string m_dest;
   uint32_t m_mode;
-  uint32_t m_cnt;
+  std::vector<double>::iterator m_cnt;
   std::atomic<uint64_t> m_framecnt;
+  std::atomic<bool> m_run;
   void *m_handle;
   Circular m_cbuf;
+  std::thread thread;
 
   NONCOPYABLE(SoundOut);
 
-  friend int audio(const float *input, float *output,
-               unsigned long frameCount,
-               const void *timeInfo,
-               unsigned long statusFlags,
-	       SoundOut *userData);
+  friend int rt_audio(const float *input, float *output,
+                      unsigned long frameCount, const void *timeInfo,
+                      unsigned long statusFlags, SoundOut *userData);
+
+  friend void audio(AuLib::SoundOut &obj);
 
 public:
   /** SoundOut constructor \n\n
@@ -114,7 +117,6 @@ public:
   uint64_t operator()(const AudioBase &obj) { return write(obj); }
 };
 
-  
 /*! \class SoundOut SoundOut.h AuLib/SoundOut.h
  */
 }
