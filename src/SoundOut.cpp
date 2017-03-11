@@ -143,7 +143,7 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls, uint32_t vframes,
 }
 
 AuLib::SoundOut::~SoundOut() {
-  while (m_cbuf.samps() != 0) /* wait for cbuf to be consumed */
+  while (!m_cbuf.is_empty()) /* wait for cbuf to be consumed */
     ;
 #ifdef HAVE_PORTAUDIO
   if (m_mode == SOUNDOUT_RT && m_handle != NULL) {

@@ -12,6 +12,8 @@
 #define _SOUNDIN_H
 
 #include "AudioBase.h"
+#include "Circular.h"
+#include <thread>
 
 namespace AuLib {
 
@@ -30,13 +32,22 @@ class SoundIn final : public AudioBase {
 
   std::string m_src;
   uint32_t m_mode;
-  uint32_t m_cnt;
   uint64_t m_dur;
-  uint64_t m_framecnt;
-  std::vector<double> m_inbuf;
+  std::atomic<uint64_t> m_framecnt;
+  std::atomic<bool> m_run;
+  Circular m_cbuf;
+  std::vector<double> m_buffer;
+  AudioBase::const_iterator m_cnt;
   void *m_handle;
+  std::thread thread;
 
   NONCOPYABLE(SoundIn);
+
+  friend int rt_audio(const float *input, float *output,
+                      unsigned long frameCount, const void *timeInfo,
+                      unsigned long statusFlags, SoundIn *userData);
+
+  friend void audio(AuLib::SoundIn &obj);
 
 public:
   /** SoundIn constructor \n\n

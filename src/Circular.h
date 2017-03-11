@@ -12,6 +12,8 @@
 #include <AudioBase.h>
 #include <atomic>
 
+#ifndef __CIRCULAR_H__
+#define __CIRCULAR_H__
 namespace AuLib {
 
 /** Circular buffer: implements a buffer
@@ -33,7 +35,7 @@ public:
   Circular(uint32_t size, uint32_t nchnls = def_nchnls,
            uint32_t vframes = def_vframes, double sr = def_sr)
       : AudioBase(nchnls, vframes, sr), m_samps(0),
-        m_buffer(npow2(size * nchnls)), m_wpos(m_buffer.begin()),
+        m_buffer(npow2(size) * nchnls), m_wpos(m_buffer.begin()),
         m_rpos(m_buffer.begin()){};
 
   /** Writes a block of vframes() samples into the circular buffer.
@@ -74,11 +76,16 @@ public:
    */
   const AudioBase &operator()() { return read(); }
 
-  uint32_t samps() const { return m_samps; }
+  /** Circular buffer size in frames
+   */
+  uint32_t size() const { return m_buffer.size() / m_nchnls; }
 
-  uint32_t size() const { return m_buffer.size(); }
+  /** check if buffer is empty
+   */
+  bool is_empty() const { return m_samps == 0 ? true : false; }
 };
 
 /*! \class Circular Circular.h AuLib/Circular.h
  */
 }
+#endif

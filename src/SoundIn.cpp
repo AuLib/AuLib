@@ -12,6 +12,7 @@
 #include "SoundIn.h"
 #include "SoundOut.h"
 #include <cstring>
+#include <functional>
 #include <iostream>
 #ifdef HAVE_PORTAUDIO
 #include <portaudio.h>
@@ -20,12 +21,53 @@
 #include <sndfile.h>
 #endif
 
+int AuLib::rt_audio(const float *input, float *output, unsigned long frameCount,
+                    const void *timeInfo, unsigned long statusFlags,
+                    AuLib::SoundIn *userData) {
+  AuLib::SoundIn &obj = *userData;
+  for (auto &v : obj.m_buffer)
+    v = *input++;
+  while (!obj.m_cbuf.writes(obj.m_buffer.data()))
+    ;
+  return 0;
+}
+
+void AuLib::audio(AuLib::SoundIn &obj) {
+  bool written = true;
+  while (obj.m_run) {
+    if (obj.m_mode == SOUNDIN_STDIN) {
+      for (auto &v : obj.m_buffer)
+        std::cin >> v;
+      written = obj.m_cbuf.writes(obj.m_buffer.data());
+    }
+#ifdef HAVE_LIBSNDFILE
+    else if (obj.m_mode == SOUNDIN_SNDFILE) {
+      SNDFILE *p = (SNDFILE *)obj.m_handle;
+      if (p != NULL) {
+        uint32_t n = obj.m_buffer.size() / obj.m_nchnls;
+        if (written) {
+          sf_readf_double(p, obj.m_buffer.data(), n);
+        }
+        written = obj.m_cbuf.writes(obj.m_buffer.data());
+      }
+    }
+#endif
+  }
+}
+
+namespace AuLib {
+typedef int (*pa_callback_t)(const void *, void *, unsigned long,
+                             const PaStreamCallbackTimeInfo *, unsigned long,
+                             void *);
+}
+
 AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
                         uint64_t bframes, double sr)
     : AudioBase(nchnls, vframes, sr), m_src(src), m_mode(0),
-      m_cnt(npow2(bframes) * nchnls),
-      m_dur(std::numeric_limits<uint64_t>::max()), m_framecnt(0),
-      m_inbuf(npow2(bframes) * nchnls), m_handle(NULL) {
+      m_dur(std::numeric_limits<int64_t>::max()), m_framecnt(0), m_run(false),
+      m_cbuf(4 * bframes, m_nchnls, bframes),
+      m_buffer(npow2(bframes) * m_nchnls), m_cnt(m_cbuf.cend()), m_handle(NULL),
+      thread() {
 #ifdef HAVE_PORTAUDIO
   if (m_src == "adc") {
     // RT audio
@@ -37,9 +79,9 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
       inparam.device = (PaDeviceIndex)Pa_GetDefaultInputDevice();
       inparam.channelCount = m_nchnls;
       inparam.sampleFormat = paFloat32;
-      inparam.suggestedLatency = (PaTime)(bframes / m_sr);
+      inparam.suggestedLatency = (PaTime)(m_vframes / m_sr);
       err = Pa_OpenStream(&stream, &inparam, NULL, m_sr, bframes, paNoFlag,
-                          NULL, NULL);
+                          (pa_callback_t)rt_audio, this);
       if (err == paNoError) {
         err = Pa_StartStream(stream);
         if (err == paNoError) {
@@ -63,7 +105,8 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
     // stdout
     m_mode = SOUNDIN_STDIN;
     m_handle = nullptr;
-    m_cnt = 0;
+    m_run = true;
+    thread = std::thread(audio, std::ref(*this));
   }
 #ifdef HAVE_LIBSNDFILE
   else {
@@ -79,6 +122,8 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
         m_vector.resize(m_nchnls * m_vframes);
       }
       m_dur = (uint64_t)info.frames;
+      m_run = true;
+      thread = std::thread(audio, std::ref(*this));
     } else {
       m_error = AULIB_FOPEN_ERROR;
       m_vframes = 0;
@@ -98,8 +143,11 @@ AuLib::SoundIn::~SoundIn() {
     Pa_StopStream((PaStream *)m_handle);
     Pa_CloseStream((PaStream *)m_handle);
     Pa_Terminate();
+    return;
   }
 #endif
+  m_run = false;
+  thread.join();
 #ifdef HAVE_LIBSNDFILE
   if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
     sf_close((SNDFILE *)m_handle);
@@ -109,45 +157,12 @@ AuLib::SoundIn::~SoundIn() {
 
 const double *AuLib::SoundIn::read(uint32_t frames) {
   uint32_t samples = frames * m_nchnls;
-#ifdef HAVE_PORTAUDIO
-  if (m_mode == SOUNDIN_RT && m_handle != NULL) {
-    PaError err;
-    uint32_t bsamples = m_inbuf.size();
-    float *buffer = (float *)m_inbuf.data();
-    for (uint32_t i = 0; i < samples; i++) {
-      if (m_cnt == bsamples) {
-        err = Pa_ReadStream((PaStream *)m_handle, buffer, bsamples / m_nchnls);
-        if (err == paNoError) {
-          m_framecnt += m_cnt / m_nchnls;
-        }
-        m_cnt = 0;
-      }
-      m_vector[i] = (double)buffer[m_cnt++];
-    }
-  } else
-#endif
-      if (m_mode == SOUNDIN_STDIN) {
-    uint32_t sample_cnt = 0;
-    for (uint32_t i = 0; i < samples; i++) {
-      std::cin >> m_vector[i];
-      sample_cnt++;
-    }
-    m_framecnt += sample_cnt / m_nchnls;
+  if (m_cnt == m_cbuf.cend()) {
+    m_cbuf.read();
+    m_cnt = m_cbuf.cbegin();
   }
-#ifdef HAVE_LIBSNDFILE
-  else if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
-    uint32_t bsamples = m_inbuf.size();
-    for (uint32_t i = 0; i < samples; i++) {
-      if (m_cnt == bsamples) {
-        m_framecnt += sf_readf_double((SNDFILE *)m_handle, m_inbuf.data(),
-                                      bsamples / m_nchnls);
-        m_cnt = 0;
-      }
-      m_vector[i] = m_inbuf[m_cnt++];
-    }
-  }
-#endif
-  else
-    return nullptr;
+  std::copy(m_cnt, m_cnt + samples, m_vector.begin());
+  m_framecnt += frames;
+  m_cnt += samples;
   return vector();
 }
