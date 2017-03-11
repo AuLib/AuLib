@@ -63,6 +63,7 @@ else()
  message(STATUS "Portmidi not found, not building MIDI input support")
 endif(PORTMIDI)
 
+find_package (Threads)
 
 find_program(CLANG_FORMAT clang-format)
 

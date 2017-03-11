@@ -21,7 +21,7 @@ namespace AuLib {
 
 /** This class implements a MIDI input listener
 */
-class MidiIn : public AudioBase {
+class MidiIn final : public AudioBase {
 
   struct MidiData {
     uint32_t msg, chn, byte1, byte2;

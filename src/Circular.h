@@ -19,7 +19,7 @@ namespace AuLib {
 /** Circular buffer: implements a buffer
     with atomic access
 */
-class Circular : public AudioBase {
+class Circular final : public AudioBase {
 
   std::atomic<uint32_t> m_samps;
   std::vector<double> m_buffer;
@@ -45,9 +45,10 @@ public:
    */
   bool writes(const double *sig) { return dsp(sig); }
 
-  /** Reads a block of vframes() samples from the circular buffer.
-     If the buffer is empty, nothing is written and the function returns a
-     nullptr. Otherwise, it returns a pointer to the data it read.
+  /** Reads a block of vframes() samples from the circular buffer into
+     the object vector. If the buffer is empty, nothing is written and the 
+     function returns a nullptr. Otherwise, it returns a pointer to 
+      the vector.
   */
   const double *reads() { return dsp(); }
 
