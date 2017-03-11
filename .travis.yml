@@ -4,10 +4,11 @@ compiler: clang
 sudo: required
 env:
        global:
-                 - secure: "Zv3mLtv-ZLdss1qGSRF9mg"
+                 - secure: "rtRi41yQISrhd+C5DINfgvd0BtDP46p4tOp/r+ypxnAiQn7Z8EIPKUZNQyVGF0uuP/o7203mLiWrgFmXMqmQjVi/2ub6sLCWkB6CWpF4hKtTCKtpOqUJCijhT+OpKu7ULLsuj1ROCjrjxbgO9SOk/DZxtBACzI7FdBpfYqoIC8EpqdP76v/x8aePdm0k/DLP9sSDmG4oT3NrmA6RjciA8VAvB3QR10bpKLPw7+UO2hRMSfhHY6jnOn21uaB/bQsNhcCj92EIpwFtB5racV8GBE9gRmNbrnPt2h84E0pPcNkErCOAvt0EIuNIw9BOrqc1lbEBQmQwsM3UvXLgNLg8f1JiO1a5EHCOIQu5bGy79yaxXQjD0r681fJhVb4JCFlhJsWQo5HYfp6WMYEmMoADfnmp3dm4Tw/LuqjZwY9WIFylNfVB+vmQfRqvv/OYccuFlSb7uQbs1tNqSRCIFqpoB0xaoOt31NzttxpbW/LC1f9KBfZiqrkNURFZE/Qe3l7uuV4amfH2YtXFYZDbuBksZggmBVuhkUaR0JkEivrIAdLPQQ/E2RJ/wd3frWJg8CCpaCAay4W0Bm1Gj2CQ2XovLw0SXikjPZeehSrST5jkpyZ9li3k9w8PlJPbjN8kr3UbRMZDOAZlU/BcVM1wZsENPD11etoPHEzOO6P0rAdwMgc="
 
-#before_install:
-#       - sudo apt-get update
+before_install:
+       - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
        
 install:
        - sudo apt-get install -qq cmake doxygen libsndfile1-dev libasound2-dev libjack-dev libportmidi-dev portaudio19-dev libc++-dev
