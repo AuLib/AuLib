@@ -1,9 +1,9 @@
 set(LIBS AuLib ${LIBSNDFILE} ${PORTAUDIO} ${CMAKE_THREAD_LIBS_INIT})
 
 function(build_example NAME SRC)
-add_executable(${NAME} ${SRC})
-target_link_libraries(${NAME} ${LIBS})
-install(TARGETS ${NAME} RUNTIME DESTINATION bin)
+  add_executable(${NAME} ${SRC})
+  target_link_libraries(${NAME} ${LIBS})
+  install(TARGETS ${NAME} RUNTIME DESTINATION bin)
 endfunction(build_example)
 
 # example programs

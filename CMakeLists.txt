@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.0.1)
 
 # set CMAKE_BUILD_TYPE (DEBUG or RELEASE)
 set(CMAKE_BUILD_TYPE "DEBUG")
+set(CMAKE_VERBOSE_MAKEFILE  ON)
 
 # Project target and version 
 project(AuLibProject)
