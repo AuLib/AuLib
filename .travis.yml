@@ -16,7 +16,7 @@ before_script:
        - mkdir -p build
 
 script:
-       - "[ ${COVERITY_SCAN_BRANCH} == 1 ] || (cd $TRAVIS_BUILD_DIR/build && cmake .. && make)"
+       - "[ ${COVERITY_SCAN_BRANCH} == 1 ] || (cd $TRAVIS_BUILD_DIR/build && cmake .. -DCMAKE_VERBOSE_MAKEFILE=1 && make)"
 
 addons:
       coverity_scan:
