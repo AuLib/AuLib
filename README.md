@@ -10,7 +10,7 @@ Build
 ===========================================
  
   The library and example programs are built with CMake. The only
-  optional dependencies are libsndfile and portaudio.
+  optional dependencies are libsndfile, portaudio, and portmidi.
  
   The code can be used within any audio processing context and it can
   be incorporated in plugins and other programs with their own IO.
@@ -64,35 +64,42 @@ Using
 #include <SigBus.h>
 #include <SoundIn.h>
 #include <SoundOut.h>
+#include <Tapi.h>
 #include <iostream>
+#include <numeric>
 #include <vector>
 
 using namespace AuLib;
 using namespace std;
 
-int main(int argc, const char argv) {
+int main(int argc, const char **argv) {
 
   if (argc > 2) {
 
     SoundIn input(argv[1]);
     std::vector<Chn> chn(input.nchnls());
     std::vector<Delay> echo(input.nchnls(),
-                            Delay(0.5, 0.75, def_vframes, input.sr()));
+                            Delay(0.5, 0.5, def_vframes, input.sr()));
     std::vector<Pan> pan(input.nchnls());
     SigBus mix(1. / input.nchnls(), 0., false, 2);
-    SoundOut output(argv[2], 2, def_vframes, input.sr());
+    SoundOut output(argv[2], 2, def_bframes, input.sr());
+    uint64_t end = input.dur() + 5 * input.sr(), t = 0;
+
+    std::vector<uint32_t> channels(input.nchnls());
+    std::iota(channels.begin(), channels.end(), 0);
 
     cout << Info::version();
 
-    for (uint64_t i = 0; i < input.dur(); i += def_vframes) {
-      input.read();
-      for (uint32_t j = 0; j < input.nchnls(); j++) {
-        chn[j].process(input, j + 1);
-        echo[j].process(chn[j]);
-        pan[j].process(echo[j] += chn[j], (1 + j)  input.nchnls() / 2.);
-        mix.process(pan[j]);
+    while (t < end) {
+      input();
+      for (uint32_t channel : channels) {
+        chn[channel](input, channel + 1);
+        echo[channel](chn[channel]);
+        pan[channel](echo[channel] += chn[channel],
+                     (1 + channel) * input.nchnls() / 2.);
+        mix(pan[channel]);
       }
-      output.write(mix);
+      t = output(mix);
       mix.clear();
     }
 
@@ -102,6 +109,7 @@ int main(int argc, const char argv) {
     std::cout << "usage: " << argv[0] << " <source> <dest>\n";
   return 1;
 }
+
 ```
  
 Extending
@@ -117,7 +125,7 @@ Extending
   from an AudioObj& is the minimum necessary to allow full
   integration. The recommended approach is to separate
   interface from implementation, and to provide a means for
-  overriding this.
+  overriding this. 
  
   The following example is a skeleton of an AudioBase-derived
   class that demonstrates these ideas:
@@ -159,6 +167,14 @@ public:
     m_par = par;
     process(obj);
     return this;
+	}
+
+  const NewClass &operator()(const AudioBase &obj) {
+     return process(obj);
+  } 
+
+  const NewClass &operator()(const AudioBase &obj, double par) {
+     return process(obj, par);
   }
 };
 }
