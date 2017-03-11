@@ -4,7 +4,7 @@ compiler: clang
 sudo: required
 env:
        global:
-                 - secure: "cwr1nyJ9WPPGEBzlDUJ5PY/Hkdb6Ut0ZOwH811gW+9evit0rzH8N2QuUn5j2KSotWteK5iBUNF1sxZQzOLItRbb47FXOToA8ajgN58xxeL8BEd/ZgjMBvlBWKsCseIJs7uizbaIayrrRfLFM1hkVj7RtTOApgMEURFyj5VnZix6dqZuD2D2ndxSiUAzuXYbGgnvx72aTYdACpzbNfTufe+ABeE27jBTxFbTcz6F96LQMEv6Dt4rNqbCrD6vtklINIdZVmdSRbbC6fvsxsPqDPE5bgLtsMTC8QXiMTbpYsb27ICtgDzGGI7jZTIzA0EHtgIX+3FBSkHP9nkVFdy/jm62Mf3U3JucEmDuOXjPRzP1pbDvOG67nOYGFijNZSlo5WH1Pcr2QTQ/+PDOdfuM9CRyHksipLJSKms4eio0VYegYgi/H/WECTTld7UxGLk8CAWaQdMrk2Nc7r0nLgO3NCTFEplVmGSSsN8WjMO0zjp8wT8qRHhgoOLhZNrzxOpF3j6JRVoXmXcw+ifF9fSlpcaFR09i1oL6QLEewapZRwyKyk7zNLFo0wmVcEGo21RQneFXHg06tUv436hgz9mPXEAfn8W2WJTXijad/CTH9DZbhwg+i43TQDfDhKIxN4t0w1SpC2i9WT+Wzq5FrSV1igqRatGFmpwIr4fEipHsB2HE="
+                 - secure: "Zv3mLtv-ZLdss1qGSRF9mg"
 
 #before_install:
 #       - sudo apt-get update
@@ -21,7 +21,7 @@ script:
 addons:
       coverity_scan:
              project:
-                  name: "vlazzarini/aulib"
+                  name: "vlazzarini/AuLib"
                   notification_email: vlazzarini@nuim.ie
              build_command_prepend: "cov-configure --comptype clang --compiler clang-3.5 --template && mkdir -p $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build && cmake .."
              build_command: "make -C $TRAVIS_BUILD_DIR/build"
