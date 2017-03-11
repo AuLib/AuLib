@@ -21,7 +21,7 @@ script:
 addons:
       coverity_scan:
              project:
-               name: "vlazzarini/AuLib"
+               name: "vlazzarini/aulib"
                notification_email: vlazzarini@nuim.ie
                build_command_prepend: "cov-configure --comptype clang --compiler clang-3.5 --template && mkdir -p $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build && cmake .."
                build_command: "make -C $TRAVIS_BUILD_DIR/build"
