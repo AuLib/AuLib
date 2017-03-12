@@ -20,8 +20,8 @@ AuLib::PConv::PConv(const FuncTable &ir, uint32_t psize, uint32_t vframes,
       m_del(m_nparts, std::vector<std::complex<double>>(m_psize)),
       m_mix(m_psize) {
   auto src = ir.cbegin();
-  for (auto part : m_part) {
-    for (auto in = m_in.begin(); in != m_in.end(); in++)
+  for (auto &part : m_part) {
+    for (auto in = m_in.begin(); in != m_in.begin() + m_psize; in++)
       *in = src != ir.cend() ? *src++ : 0.;
     fft::transform(part, m_in.data());
   }
@@ -36,16 +36,18 @@ const double *AuLib::PConv::dsp(const double *sig) {
     if (++m_count == m_psize) {
       fft::transform(m_del[m_p], m_in.data());
       std::fill(m_mix.begin(), m_mix.end(), 0.);
-      m_p = m_p == m_nparts - 1 ? 0 : m_p;
+      m_p = m_p == m_nparts - 1 ? 0 : m_p + 1;
       auto del = m_del.begin() + m_p;
       for (auto part = m_part.rbegin(); part != m_part.rend(); part++, del++) {
         auto psamp = part->begin();
         if (del == m_del.end())
-          del = m_del.begin();
+         del = m_del.begin();
         auto dsamp = del->begin();
-        for (auto &mix : m_mix)
-          mix += (*psamp++) * (*dsamp++);
-      }
+	for (auto &mix : m_mix){
+          mix += (*psamp++) *  (*dsamp++);
+	}
+           
+       }
       fft::transform(m_out.data(), m_mix);
       m_count = 0;
     }

@@ -25,6 +25,7 @@ build_example(echoex echoex.cpp)
 build_example(stftest stftest.cpp)
 build_example(pvoctest pvoctest.cpp)
 build_example(ssynth scoresynth.cpp)
+build_example(reverb reverb.cpp)
 
 if(PORTMIDI)
 build_example(msynth midisynth.cpp)

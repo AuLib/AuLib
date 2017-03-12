@@ -64,7 +64,6 @@ Using
 #include <SigBus.h>
 #include <SoundIn.h>
 #include <SoundOut.h>
-#include <Tapi.h>
 #include <iostream>
 #include <numeric>
 #include <vector>
