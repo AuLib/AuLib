@@ -178,9 +178,8 @@ const ScorePlayer &ScorePlayer::process(Targs &... args) {
   m_time += vframes();
   return *this;
 }
-}
 
 /*! \class ScorePlayer ScorePlayer.h AuLib/ScorePlayer.h
  */
-
+}
 #endif

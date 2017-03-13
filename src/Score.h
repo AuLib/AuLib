@@ -111,9 +111,9 @@ public:
    */
   const std::list<Event> &score() const { return m_score; }
 };
-}
 
 /*! \class Score Score.h AuLib/Score.h
  */
+}
 
 #endif

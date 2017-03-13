@@ -13,6 +13,7 @@
 #include <Adsr.h>
 #include <AudioBase.h>
 #include <BlOsc.h>
+#include <Instrument.h>
 #include <MidiIn.h>
 #include <Note.h>
 #include <Oscili.h>
