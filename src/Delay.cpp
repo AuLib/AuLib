@@ -76,12 +76,12 @@ const double *AuLib::Fir::dsp(const double *sig) {
   for (uint32_t i = 0; i < m_vframes; i++) {
     m_delay[m_pos] = sig[i];
     m_pos = m_pos != N - 1 ? m_pos + 1 : 0;
-    for (uint32_t j = 0, rp = m_pos; j < N; j += nchnls ) {
+    for (uint32_t j = 0, rp = m_pos; j < N; j += nchnls) {
       out += m_delay[rp] * m_ir[N - 1 - j + m_chn];
-      rp = rp != N - 1  ? rp + 1 : 0;
-      }
+      rp = rp != N - 1 ? rp + 1 : 0;
+    }
     m_vector[i] = out;
     out = 0.;
-    }
+  }
   return vector();
 }

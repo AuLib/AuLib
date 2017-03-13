@@ -227,7 +227,7 @@ public:
   uint32_t resize_exact(uint32_t frames) {
     m_vector.resize(frames * m_nchnls);
     m_vframes = frames;
-    set(0.); 
+    set(0.);
     return m_vframes;
   }
 

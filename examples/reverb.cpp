@@ -8,6 +8,7 @@
 //
 /////////////////////////////////////////////////////////////////////
 #include <Chn.h>
+#include <Fir.h>
 #include <PConv.h>
 #include <SampleTable.h>
 #include <SoundIn.h>
@@ -16,7 +17,6 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
-#include <Fir.h>
 
 using namespace AuLib;
 using namespace std;
@@ -24,38 +24,39 @@ using namespace std;
 int main(int argc, const char **argv) {
 
   if (argc > 4) {
+    const uint32_t dfrms = 32;
+    const uint32_t part = 1024;
     SoundIn input(argv[1]);
     SampleTable ir(argv[2], 0);
     ir.rescale(std::atof(argv[3]));
     std::vector<Chn> chn(input.nchnls());
-    std::vector<Fir>  early(input.nchnls(), Fir(ir,0,32)); 
-    std::vector<PConv> mid(input.nchnls(), PConv(ir,32,0,32,1024));
-    std::vector<PConv> tail(input.nchnls(), PConv(ir,1024,0,1024));
-    SoundOut output(argv[4], input.nchnls());
+    std::vector<Fir> early(input.nchnls(),
+                           Fir(ir, 0, dfrms, def_vframes, input.sr()));
+    std::vector<PConv> mid(input.nchnls(), PConv(ir, dfrms, 0, dfrms, part,
+                                                 def_vframes, input.sr()));
+    std::vector<PConv> tail(
+        input.nchnls(), PConv(ir, part, 0, part, 0, def_vframes, input.sr()));
+    SoundOut output(argv[4], input.nchnls(), def_bframes, input.sr());
     uint64_t end = input.dur() + 3 * input.sr(), t = 0;
+    std::vector<uint32_t> channels(input.nchnls());
+    std::iota(channels.begin(), channels.end(), 0);
 
     // if the impulse response is multichannel
     // and matches the number of input channels
     // re-init the PConv/Fir objects to take advantage of this
-    if(ir.nchnls() == input.nchnls()){
-      uint32_t c = 0;
-      for(auto &obj : early)
-	obj = Fir(ir,c++,32);
-       c = 0;
-       for(auto &obj : mid)
-	 obj = PConv(ir,32,c++,32,1024);
-       c = 0;
-       for(auto &obj : tail)
-         obj = PConv(ir,1024,c++,1024);
-     }
-    
+    if (ir.nchnls() == input.nchnls())
+      for (auto c : channels) {
+        early[c] = Fir(ir, c, dfrms, def_vframes, input.sr());
+        mid[c] = PConv(ir, dfrms, c, dfrms, part, def_vframes, input.sr());
+        tail[c] = PConv(ir, part, c, part, 0, def_vframes, input.sr());
+      }
+
     while (t < end) {
       input();
-      
-      for (uint32_t i = 0; i < input.nchnls(); i++) {
-	early[i](chn[i](input));
-	mid[i](chn[i]);
-        output(i, early[i] += mid[i] += tail[i](chn[i]));
+      for (auto c : channels) {
+        early[c](chn[c](input));
+        mid[c](chn[c]);
+        output(c, early[c] += mid[c] += tail[c](chn[c]));
       }
       t = output.timestamp();
     }

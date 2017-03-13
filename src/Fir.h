@@ -34,13 +34,15 @@ protected:
 public:
   /** Fir constructor \n\n
       ir - impulse response
-      len - if > 0, set the FIR length 
+      len - if > 0, set the FIR length
       vframes - vector size \n
       sr - sampling rate
   */
-  Fir(const FuncTable &ir, uint32_t chn = 0, uint32_t len = 0, uint32_t vframes = def_vframes, double sr = def_sr)
-    : Delay((len > 0 && len <= ir.vframes() ? len  : ir.vframes())/sr, 0,
-	    vframes, sr), m_ir(ir.vector()), m_ir_nchnls(ir.nchnls()), m_chn(chn){ };
+  Fir(const FuncTable &ir, uint32_t chn = 0, uint32_t len = 0,
+      uint32_t vframes = def_vframes, double sr = def_sr)
+      : Delay((len > 0 && len <= ir.vframes() ? len : ir.vframes()) / sr, 0,
+              vframes, sr),
+        m_ir(ir.vector()), m_ir_nchnls(ir.nchnls()), m_chn(chn){};
 };
 
 /*! \class Fir Fir.h AuLib/Fir.h
