@@ -68,8 +68,8 @@ typedef int (*pa_callback_t)(const void *, void *, unsigned long,
 
 AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls, uint32_t vframes,
                           double sr)
-    : AudioBase(nchnls, vframes, sr), m_dest(dest), m_mode(0),
-      m_cnt(m_vector.begin()), m_framecnt(0), m_run(false), m_handle(NULL),
+    : AudioBase(nchnls, vframes, sr), m_dest(dest), m_mode(0), m_cnt(begin()),
+      m_pos(m_cnt), m_framecnt(0), m_run(false), m_handle(NULL),
       m_cbuf(m_vframes * 4, m_nchnls, m_vframes), thread() {
 #ifdef HAVE_PORTAUDIO
   if (m_dest == "dac") {
@@ -143,8 +143,8 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls, uint32_t vframes,
 }
 
 AuLib::SoundOut::~SoundOut() {
-  // wait for cbuf to be consumed 
-  while (!m_cbuf.is_empty()) 
+  // wait for cbuf to be consumed
+  while (!m_cbuf.is_empty())
     ;
 #ifdef HAVE_PORTAUDIO
   if (m_mode == SOUNDOUT_RT && m_handle != NULL) {
@@ -163,14 +163,22 @@ AuLib::SoundOut::~SoundOut() {
 #endif
 }
 
-uint64_t AuLib::SoundOut::write(const double *sig, uint32_t frames) {
-  uint32_t samples = frames * m_nchnls;
-  std::copy(sig, sig + samples, m_cnt);
-  m_cnt += samples;
-  if (m_cnt == m_vector.end()) {
-    m_cbuf.write(*this);
-    set(0.);
-    m_cnt = m_vector.begin();
+uint64_t AuLib::SoundOut::write(uint32_t frames, uint32_t chn, uint32_t nchnls,
+                                const double *sig) {
+  uint32_t samps = frames * nchnls;
+  if (chn < nchnls) {
+    auto p = m_pos + chn;
+    for (uint32_t i = 0; i < frames; i++, p += nchnls) {
+      *p = sig[i];
+    }
+    m_cnt += frames;
+    if (m_cnt == m_vector.end()) {
+      m_cbuf.write(*this);
+      set(0.);
+      m_cnt = m_vector.begin();
+      m_pos = m_cnt;
+    } else if (m_cnt == m_pos + samps)
+      m_pos += samps;
   }
   return m_framecnt;
 }

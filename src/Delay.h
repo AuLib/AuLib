@@ -37,7 +37,7 @@ public:
   Delay(double dtime, double fdb, uint32_t vframes = def_vframes,
         double sr = def_sr)
       : AudioBase(1, vframes, sr), m_fdb(fdb), m_pos(0), m_delay(1, 1, sr) {
-    m_delay.resize_exact(std::floor(dtime >= 0. ? dtime * sr : 1));
+    m_delay.resize_exact(dtime >= 0. ? dtime * sr : 1);
   };
 
   /** delay a signal sig for a fixed time

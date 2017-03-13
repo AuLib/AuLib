@@ -48,6 +48,7 @@ class SoundOut final : public AudioBase {
   std::string m_dest;
   uint32_t m_mode;
   std::vector<double>::iterator m_cnt;
+  std::vector<double>::iterator m_pos;
   std::atomic<uint64_t> m_framecnt;
   std::atomic<bool> m_run;
   void *m_handle;
@@ -61,6 +62,9 @@ class SoundOut final : public AudioBase {
                       unsigned long statusFlags, SoundOut *userData);
 
   friend void audio(AuLib::SoundOut &obj);
+
+  uint64_t write(uint32_t frames, uint32_t chn, uint32_t nchnls,
+                 const double *sig);
 
 public:
   /** SoundOut constructor \n\n
@@ -77,11 +81,13 @@ public:
    */
   ~SoundOut();
 
-  /** Writes sig to the vector
+  /** Writes sig containing samples to the vector
       destination, returning the vector current
       framecount.
   */
-  uint64_t write(const double *sig, uint32_t frames = def_vframes);
+  uint64_t write(const double *sig, uint32_t samples) {
+    return write(samples, 0, 1, sig);
+  }
 
   /** Writes the audio vector in obj to the vector
       destination, returning the vector current
@@ -89,15 +95,31 @@ public:
   */
   uint64_t write(const AudioBase &obj) {
     if (obj.nchnls() == m_nchnls)
-      return write(obj.vector(), (uint32_t)obj.vframes());
+      return write(obj.vector(), (uint32_t)obj.vsamps());
     else
       m_error = AULIB_ERROR;
     return 0;
   }
 
-  /** Get the current vector stream time
+  /** Writes the audio vector in obj to chn of
+      destination, returning the vector current
+      framecount.
+  */
+  uint64_t write(uint32_t chn, const AudioBase &obj) {
+    if (chn < m_nchnls)
+      return write((uint32_t)obj.vframes(), chn, m_nchnls, obj.vector());
+    else
+      m_error = AULIB_ERROR;
+    return 0;
+  }
+
+  /** Get the current output stream time
    */
   double time() const { return m_framecnt / m_sr; }
+
+  /** Get the current output stream time in frames
+   */
+  uint64_t timestamp() const { return m_framecnt; }
 
   /** Get the destination name
    */
@@ -115,6 +137,12 @@ public:
   /** operator() overload convenience method
    */
   uint64_t operator()(const AudioBase &obj) { return write(obj); }
+
+  /** operator() overload convenience method
+  */
+  uint64_t operator()(uint32_t chn, const AudioBase &obj) {
+    return write(chn, obj);
+  }
 };
 
 /*! \class SoundOut SoundOut.h AuLib/SoundOut.h

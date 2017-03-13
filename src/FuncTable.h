@@ -23,13 +23,13 @@ protected:
 
   /** Normalise the table
    */
-  void normalise_table() {
+  void normalise_table(double s = 1.0) {
     double max = 0.;
     for (uint64_t n = 0; n < tframes() + 2; n++)
       max = m_vector[n] > max ? m_vector[n] : max;
     if (max)
       for (uint64_t n = 0; n < vsamps(); n++)
-        m_vector[n] /= max;
+        m_vector[n] *= s / max;
   }
 
 public:
@@ -67,6 +67,10 @@ public:
       two guard points.
    */
   uint64_t tframes() const { return m_tframes; }
+
+  /** rescale the table for an absolute max
+   */
+  void rescale(double max) { normalise_table(max); }
 };
 
 /*! \class FuncTable FuncTable.h AuLib/FuncTable.h

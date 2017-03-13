@@ -71,16 +71,17 @@ const double *AuLib::AllPass::dsp(const double *sig) {
 
 const double *AuLib::Fir::dsp(const double *sig) {
   double out = 0;
-  uint32_t N = m_ir.tframes();
+  uint32_t N = m_delay.vframes();
+  uint32_t nchnls = m_ir_nchnls;
   for (uint32_t i = 0; i < m_vframes; i++) {
     m_delay[m_pos] = sig[i];
     m_pos = m_pos != N - 1 ? m_pos + 1 : 0;
-    for (uint32_t j = 0, rp = m_pos; j < N; j++) {
-      out += m_delay[rp] * m_ir[N - 1 - j];
-      rp = rp != N ? rp + 1 : 0;
-    }
+    for (uint32_t j = 0, rp = m_pos; j < N; j += nchnls ) {
+      out += m_delay[rp] * m_ir[N - 1 - j + m_chn];
+      rp = rp != N - 1  ? rp + 1 : 0;
+      }
     m_vector[i] = out;
     out = 0.;
-  }
+    }
   return vector();
 }

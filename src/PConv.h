@@ -32,10 +32,11 @@ class PConv : public AudioBase {
 
 public:
   /* PConv constructor, takes a function table containing an
-     impulse response, the partition size and the usual standard parameters
+     impulse response, the partition size, a channel to read from the
+     table, and the usual standard parameters
   */
-  PConv(const FuncTable &ir, uint32_t psize = 256,
-        uint32_t vframes = def_vframes, double sr = def_sr);
+  PConv(const FuncTable &ir, uint32_t psize = 256, uint32_t chn = 0, uint32_t begin = 0,
+	uint32_t end = 0, uint32_t vframes = def_vframes, double sr = def_sr);
 
   /** Apply partitioned convolution to an input signal sig
    */

@@ -27,16 +27,20 @@ class Fir : public Delay {
   virtual const double *dsp(const double *sig);
 
 protected:
-  const FuncTable &m_ir;
+  const double *m_ir;
+  uint32_t m_ir_nchnls;
+  uint32_t m_chn;
 
 public:
   /** Fir constructor \n\n
       ir - impulse response
+      len - if > 0, set the FIR length 
       vframes - vector size \n
       sr - sampling rate
   */
-  Fir(const FuncTable &ir, uint32_t vframes = def_vframes, double sr = def_sr)
-      : Delay(ir.tframes() * sr, 0., vframes, sr), m_ir(ir){};
+  Fir(const FuncTable &ir, uint32_t chn = 0, uint32_t len = 0, uint32_t vframes = def_vframes, double sr = def_sr)
+    : Delay((len > 0 && len <= ir.vframes() ? len  : ir.vframes())/sr, 0,
+	    vframes, sr), m_ir(ir.vector()), m_ir_nchnls(ir.nchnls()), m_chn(chn){ };
 };
 
 /*! \class Fir Fir.h AuLib/Fir.h
