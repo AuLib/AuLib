@@ -52,14 +52,15 @@ void AuLib::fft::transform(std::vector<std::complex<double>> &s, bool dir) {
       s[n] /= N;
 }
 
-void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r) {
+void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r, bool pckd) {
   using namespace std::complex_literals;
-  uint32_t N = c.size();
+  uint32_t N = c.size() - (pckd ? 0 : 1);
   std::complex<double> wp, w = 1., even, odd;
   double o, zro, nyq;
   double *s = reinterpret_cast<double *>(c.data());
   if (s != r)
     std::copy(r, r + 2 * N, s);
+  if(!pckd) c.resize(N);
   transform(c, forward);
   zro = c[0].real() + c[0].imag();
   nyq = c[0].real() - c[0].imag();
@@ -75,15 +76,24 @@ void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r) {
     c[j] = conj(even - w * odd);
     w *= wp;
   }
+  if(!pckd) {
+    c.resize(N+1);
+    c[N].real(c[0].imag());
+    c[0].imag(0.);
+    c[N].imag(0.);
+  }
 }
 
-void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c) {
+void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c, bool pckd) {
   using namespace std::complex_literals;
-  uint32_t N = c.size();
+  uint32_t N = c.size() - (pckd ? 0 : 1);
   std::complex<double> wp, w = 1., even, odd;
   double o, zro, nyq;
   double *s = reinterpret_cast<double *>(c.data());
-  zro = c[0].real()*2., nyq = c[0].imag()*2.;
+  if(pckd)
+    zro = c[0].real()*2., nyq = c[0].imag()*2.;
+  else
+    zro = c[0].real()*2., nyq = c[N].real()*2.;
   c[0].real(zro + nyq), c[0].imag(zro - nyq);
   o = pi / N;
   wp.real(cos(o)), wp.imag(sin(o));
@@ -97,7 +107,9 @@ void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c) {
     c[j] = conj(even - w * odd);
     w *= wp;
   }
+  if(!pckd) c.resize(N);
   transform(c, inverse);
   if (s != r)
     std::copy(s, s + 2 * N, r);
+  if(!pckd) c.resize(N+1);
 }
