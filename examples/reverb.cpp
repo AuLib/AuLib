@@ -25,13 +25,13 @@ int main(int argc, const char **argv) {
 
   if (argc > 4) {
     SoundIn input(argv[1]);
-    SampleTable ir(argv[2], 1);
+    SampleTable ir(argv[2], 0);
     ir.rescale(std::atof(argv[3]));
     std::vector<Chn> chn(input.nchnls());
     std::vector<Fir>  early(input.nchnls(), Fir(ir,0,32)); 
-    std::vector<PConv> mid(input.nchnls(), PConv(ir,32,0,32,256));
-    std::vector<PConv> tail(input.nchnls(), PConv(ir,256,0,256,1024));
-    SoundOut output(argv[4], 1);
+    std::vector<PConv> mid(input.nchnls(), PConv(ir,32,0,32,1024));
+    std::vector<PConv> tail(input.nchnls(), PConv(ir,1024,0,1024));
+    SoundOut output(argv[4], input.nchnls());
     uint64_t end = input.dur() + 3 * input.sr(), t = 0;
 
     // if the impulse response is multichannel
@@ -43,19 +43,19 @@ int main(int argc, const char **argv) {
 	obj = Fir(ir,c++,32);
        c = 0;
        for(auto &obj : mid)
-	 obj = PConv(ir,32,c++,32,256);
+	 obj = PConv(ir,32,c++,32,1024);
        c = 0;
        for(auto &obj : tail)
-         obj = PConv(ir,256,c++,256);
-      }
+         obj = PConv(ir,1024,c++,1024);
+     }
     
     while (t < end) {
       input();
       
-      for (uint32_t i = 1; i < 2; i++) {
+      for (uint32_t i = 0; i < input.nchnls(); i++) {
 	early[i](chn[i](input));
 	mid[i](chn[i]);
-        output(1, early[i] += mid[i] += tail[i](chn[i]));
+        output(i, early[i] += mid[i] += tail[i](chn[i]));
       }
       t = output.timestamp();
     }

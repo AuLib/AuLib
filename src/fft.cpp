@@ -63,7 +63,7 @@ void AuLib::fft::transform(std::vector<std::complex<double>> &c, double *r) {
   transform(c, forward);
   zro = c[0].real() + c[0].imag();
   nyq = c[0].real() - c[0].imag();
-  c[0].real(zro * .5), c[0].imag(nyq * .5);
+  c[0].real(zro *.5), c[0].imag(nyq *.5);
   o = -pi / N;
   wp.real(cos(o)), wp.imag(sin(o));
   w *= wp;
@@ -83,7 +83,7 @@ void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c) {
   std::complex<double> wp, w = 1., even, odd;
   double o, zro, nyq;
   double *s = reinterpret_cast<double *>(c.data());
-  zro = c[0].real(), nyq = c[0].imag();
+  zro = c[0].real()*2., nyq = c[0].imag()*2.;
   c[0].real(zro + nyq), c[0].imag(zro - nyq);
   o = pi / N;
   wp.real(cos(o)), wp.imag(sin(o));

@@ -24,8 +24,9 @@ AuLib::PConv::PConv(const FuncTable &ir, uint32_t psize, uint32_t chn, uint32_t 
   auto src = ir.cbegin() + chn + begin*nchnls;
   auto fin = ir.cend() - (ir.vframes() - (end > 0 ? end : ir.vframes()))*nchnls;
   for (auto &part : m_part) {
-    for (auto in = m_in.begin(); in != m_in.begin() + m_psize; in++, src+=nchnls)
+    for (auto in = m_in.begin(); in != m_in.begin() + m_psize; in++, src+=nchnls){
       *in = (src < fin ? *src : 0.)*m_psize;
+    }
     fft::transform(part, m_in.data());
   }
 }
@@ -42,15 +43,17 @@ const double *AuLib::PConv::dsp(const double *sig) {
       m_p = m_p == m_nparts - 1 ? 0 : m_p + 1;
       auto del = m_del.begin() + m_p;
       for (auto part = m_part.rbegin(); part != m_part.rend(); part++, del++) {
-        auto psamp = part->begin();
+	auto psamp = part->data();
         if (del == m_del.end())
           del = m_del.begin();
-        auto dsamp = del->begin();
-        for (auto &mix : m_mix) {
-          mix += (*psamp++) * (*dsamp++);
-        }
+        auto dsamp = del->data();
+        m_mix[0].real(m_mix[0].real() + dsamp[0].real()*psamp[0].real());
+	m_mix[0].imag(m_mix[0].imag() + dsamp[0].imag()*psamp[0].imag());
+	for(uint32_t i=1; i < m_mix.size(); i++)
+	  m_mix[i] += psamp[i]*dsamp[i];
       }
-      fft::transform(m_out.data(), m_mix);
+      fft::transform(m_out.data(),m_mix);
+      *(m_out.end()-1) = 0.;
       m_count = 0;
     }
   }
