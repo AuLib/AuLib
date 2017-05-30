@@ -40,7 +40,7 @@ const std::string soundout_error[] = {"SoundOut: file open error",
                                       "SoundOut: RT stream start error",
                                       "SoundOut: destination not available",
                                       "SoundOut: general error"};
-
+  
 /** Audio output class
  */
 class SoundOut final : public AudioBase {
@@ -61,7 +61,7 @@ class SoundOut final : public AudioBase {
                       unsigned long frameCount, const void *timeInfo,
                       unsigned long statusFlags, SoundOut *userData);
 
-  friend void audio(AuLib::SoundOut &obj);
+  friend void audio(SoundOut &obj);
 
   uint64_t write(uint32_t frames, uint32_t chn, uint32_t nchnls,
                  const double *sig);

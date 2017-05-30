@@ -26,6 +26,7 @@ const std::string soundin_error[] = {
     "SoundIn: RT open error",         "SoundIn: RT stream start error",
     "SoundOut: source not available", "SoundIn: general error"};
 
+  
 /** Audio input class
  */
 class SoundIn final : public AudioBase {
@@ -47,7 +48,7 @@ class SoundIn final : public AudioBase {
                       unsigned long frameCount, const void *timeInfo,
                       unsigned long statusFlags, SoundIn *userData);
 
-  friend void audio(AuLib::SoundIn &obj);
+  friend void audio(SoundIn &obj);
 
 public:
   /** SoundIn constructor \n\n

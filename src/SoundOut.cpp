@@ -20,9 +20,10 @@
 #include <sndfile.h>
 #endif
 
-int AuLib::rt_audio(const float *input, float *output, unsigned long frameCount,
+namespace AuLib {
+int rt_audio(const float *input, float *output, unsigned long frameCount,
                     const void *timeInfo, unsigned long statusFlags,
-                    AuLib::SoundOut *userData) {
+                    SoundOut *userData) {
   AuLib::SoundOut &obj = *userData;
   const double *s = obj.m_cbuf.reads();
 
@@ -35,7 +36,7 @@ int AuLib::rt_audio(const float *input, float *output, unsigned long frameCount,
   return 0;
 }
 
-void AuLib::audio(AuLib::SoundOut &obj) {
+void audio(SoundOut &obj) {
   if (obj.m_mode == SOUNDOUT_STDOUT) {
     while (obj.m_run) {
       const AuLib::AudioBase &sig = obj.m_cbuf();
@@ -60,7 +61,6 @@ void AuLib::audio(AuLib::SoundOut &obj) {
 #endif
 }
 
-namespace AuLib {
 typedef int (*pa_callback_t)(const void *, void *, unsigned long,
                              const PaStreamCallbackTimeInfo *, unsigned long,
                              void *);
