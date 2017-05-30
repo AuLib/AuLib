@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/vlazzarini/AuLib.svg?branch=master)](https://travis-ci.org/vlazzarini/AuLib)
+[![Build Status](https://travis-ci.org/AuLib/AuLib.svg?branch=master)](https://travis-ci.org/AuLib/AuLib)
 <a href="https://scan.coverity.com/projects/vlazzarini-aulib">
   <img alt="Coverity Scan Build Status"
        src="https://scan.coverity.com/projects/11643/badge.svg"/>
