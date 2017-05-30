@@ -84,6 +84,12 @@ public:
         msg,   // uint32_t message code  \n
         len    // uint32_t number of data items (doubles) in cmd \n
        } \n
+      \n
+      Scores are required to define the termination command:\n\n
+
+      {name, Score::Cmd::omni, Score::end, 0}, \n\n
+
+      where name is a user-defined name (std::string) for the command
    **/
   void add_cmd(const Cmd &c) { m_cmds.push_back(c); }
 

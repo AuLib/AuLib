@@ -142,7 +142,7 @@ public:
       return false;
   }
 
-  /** check score for termination msg
+  /** check score for termination msg (Score::end)
    */
   bool check_score() const {
     for (auto &ev : m_events) {

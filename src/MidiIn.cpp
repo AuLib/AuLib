@@ -13,7 +13,9 @@
 #include <portmidi.h>
 #include <porttime.h>
 
-AuLib::MidiIn::MidiIn() : m_mstream(nullptr), m_devs(), m_mdata({}) {
+AuLib::MidiIn::MidiIn()
+    : m_mstream(nullptr), m_devs(), m_mdata({}), m_val({}), m_aval({}),
+      m_tval({}), m_pval({}), m_cnt(0) {
   Pm_Initialize();
   list_devices();
 };
@@ -50,6 +52,7 @@ uint32_t AuLib::MidiIn::read() {
           break;
       }
     } while (cnt > 0 && n < 1024);
+    m_cnt = n;
     return n;
   }
   return 0;

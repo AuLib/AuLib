@@ -104,13 +104,15 @@ int main(int argc, const char **argv) {
     score.add_cmd({"$on", !Score::Cmd::omni, midi::note_on, 2});
     score.add_cmd({"$off", !Score::Cmd::omni, midi::note_off, 2});
     score.add_cmd({"$adsr", !Score::Cmd::omni, SineSyn::adsr, 4});
+
+    // termination command (mandatory)
     score.add_cmd({"$end", Score::Cmd::omni, Score::end, 0});
 
     score.read(input);
     player.prepare(); // prepare playback
     if (player.play(out, sinesynth, sawsynth) == false) {
       std::cout << "score parse error: "
-                << "no termination message found\n";
+                << "no termination command found\n";
       return 1;
     }
     player.score_time(1.); // play from 1. sec
