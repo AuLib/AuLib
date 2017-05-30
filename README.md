@@ -10,7 +10,8 @@ Build
 ===========================================
  
   The library and example programs are built with CMake. The only
-  optional dependencies are libsndfile, portaudio, and portmidi.
+  optional dependencies are libsndfile, portaudio, and portmidi, but
+  these are not strictly needed to build and use AuLib.
  
   The code can be used within any audio processing context and it can
   be incorporated in plugins and other programs with their own IO.
