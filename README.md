@@ -28,7 +28,7 @@ Build
 Documentation
 ----------------------------------------------
 
-Documenation can be built using
+Documentation can be built using
 
 ```
  $ make doc

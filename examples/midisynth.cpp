@@ -145,7 +145,7 @@ int main() {
   // Sawtooh Synthesizer - channel 1 (MIDI 2), 8 voices
   Instrument<SawSyn, SineSyn::ctl_list> sawsynth(8, 1, {{71, 74, 84, 7}});
 
-  Reverb reverb("/Users/victor/audio/church.wav");
+  Reverb reverb("../audio/church.wav");
 
   SoundOut out("dac", 1, 128);
   MidiIn midi;
