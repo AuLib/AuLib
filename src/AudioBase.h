@@ -237,7 +237,7 @@ public:
 
   /** Get (max/allocated) vector size in samples
     */
-  uint32_t vsamps() const { return m_vector.size(); }
+  uint32_t vsamps() const { return (uint32_t) m_vector.size(); }
 
   /** Get number of channels
    */

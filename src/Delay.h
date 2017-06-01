@@ -25,7 +25,7 @@ class Delay : public AudioBase {
 
 protected:
   double m_fdb;
-  uint64_t m_pos;
+  uint32_t m_pos;
   AudioBase m_delay;
 
 public:
