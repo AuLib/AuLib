@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5734263D1EE1BC5700CFE5B2 /* aulib-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 5734263C1EE1BC5700CFE5B2 /* aulib-1024.png */; };
 		5797CFBC1EE07A8D0088A25F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5797CFBB1EE07A8D0088A25F /* CoreFoundation.framework */; };
 		5797CFBE1EE07A970088A25F /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5797CFBD1EE07A970088A25F /* CoreAudio.framework */; };
 		5797CFC61EE07B330088A25F /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5797CFBF1EE07B330088A25F /* libFLAC.a */; };
@@ -43,6 +44,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5734263C1EE1BC5700CFE5B2 /* aulib-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "aulib-1024.png"; path = "../../aulib-1024.png"; sourceTree = "<group>"; };
 		5797CFBB1EE07A8D0088A25F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		5797CFBD1EE07A970088A25F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		5797CFBF1EE07B330088A25F /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = ../../lib/libFLAC.a; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		57EE076F1EDEAA290061F62A = {
 			isa = PBXGroup;
 			children = (
+				5734263C1EE1BC5700CFE5B2 /* aulib-1024.png */,
 				57EE07BB1EDED0DF0061F62A /* church.wav */,
 				5797CFBF1EE07B330088A25F /* libFLAC.a */,
 				5797CFC01EE07B330088A25F /* libogg.a */,
@@ -213,6 +216,7 @@
 			files = (
 				57EE07851EDEAA290061F62A /* Assets.xcassets in Resources */,
 				57EE07881EDEAA290061F62A /* Main.storyboard in Resources */,
+				5734263D1EE1BC5700CFE5B2 /* aulib-1024.png in Resources */,
 				57EE07BC1EDED0DF0061F62A /* church.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

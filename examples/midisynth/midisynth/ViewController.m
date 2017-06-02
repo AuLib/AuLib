@@ -27,6 +27,14 @@ extern double get_level();
     midi_synth([resource UTF8String], self.dev, self.attn, self.decn, self.susn, self.reln, self.revn);
 }
 
+- (void) devs_list {
+    [self.mididev removeAllItems];
+    int n = midi_num_devs();
+    for(int i = 0; i < n; i++){
+        [self.mididev addItemWithTitle:[NSString stringWithUTF8String:midi_dev(i)]];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.attn = 71;
@@ -60,25 +68,18 @@ extern double get_level();
     [self.RelNum selectItemAtIndex:self.reln];
     [self.RevNum selectItemAtIndex:self.revn];
     
-    
-    [self.mididev removeAllItems];
-    int n = midi_num_devs();
-    for(int i = 0; i < n; i++){
-        [self.mididev addItemWithTitle:[NSString stringWithUTF8String:midi_dev(i)]];
-    }
-    // Do any additional setup after loading the view.
+    [self devs_list];
+        // Do any additional setup after loading the view.
     [self.level setDoubleValue:-120.0];
     [self.level2 setDoubleValue:-120.0];
     self.running = false;
     self.sbutton.title = @"start";
-    
     
 }
 
 
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
-    
     // Update the view, if already loaded.
 }
 
