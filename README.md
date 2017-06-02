@@ -34,10 +34,10 @@ Documentation can be built from the build directory using
  $ make doc
 ```
 
-HTML, latex and manual files are placed in the `docs' subdirectory under
+HTML, latex and manual files are placed in the `docs` subdirectory under
 the build directory.
 
-A recently-generated PDF manual is found in the toplevel `./docs'
+A recently-generated PDF manual is found in the toplevel `./docs`
 directory, along with other aulib-related documents. The HTML manual
 can also be found in [https://aulib.github.io](aulib.github.io).
 
