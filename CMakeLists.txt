@@ -81,8 +81,11 @@ if(DOXYGEN_FOUND)
           ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
     add_custom_target(doc ${DOXYGEN_EXECUTABLE}
             ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-     )
+     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+   add_custom_target(pdf COMMAND make 
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs/latex)
+    add_dependencies(pdf doc)
+   INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/docs/latex/refman.pdf DESTINATION docs)
  else()
    message(STATUS "Not building documentation")
 endif(DOXYGEN_FOUND)
