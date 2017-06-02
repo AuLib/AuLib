@@ -24,7 +24,6 @@ extern double get_level();
 - (void) play {
     NSBundle* mainBundle = [NSBundle mainBundle];
     NSString *resource = [[mainBundle resourcePath] stringByAppendingString:@"/church.wav"];
-    NSLog(@"%d", self.dev);
     midi_synth([resource UTF8String], self.dev, self.attn, self.decn, self.susn, self.reln, self.revn);
 }
 
@@ -86,7 +85,6 @@ extern double get_level();
 
 - (IBAction)MidiDevVal:(id)sender {
     self.dev = (int)[sender indexOfSelectedItem];
-    NSLog(@"%d", self.dev);
 }
 
 - (IBAction)AttNumValue:(id)sender {

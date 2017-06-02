@@ -12,7 +12,7 @@
 #ifndef __MIDIIN_H__
 #define __MIDIIN_H__
 
-#include <Note.h>
+#include "Note.h"
 #include <array>
 #include <string>
 #include <vector>

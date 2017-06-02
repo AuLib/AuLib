@@ -11,7 +11,7 @@
 #ifndef __NOTE_H__
 #define __NOTE_H__
 
-#include <AudioBase.h>
+#include "AudioBase.h"
 #include <vector>
 
 namespace AuLib {

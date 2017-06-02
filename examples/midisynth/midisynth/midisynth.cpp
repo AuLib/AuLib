@@ -10,17 +10,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <Adsr.h>
-#include <AudioBase.h>
-#include <BlOsc.h>
-#include <Fir.h>
-#include <Instrument.h>
-#include <MidiIn.h>
-#include <Note.h>
-#include <Oscili.h>
-#include <PConv.h>
-#include <SampleTable.h>
-#include <SoundOut.h>
+#include <AuLib/Adsr.h>
+#include <AuLib/AudioBase.h>
+#include <AuLib/BlOsc.h>
+#include <AuLib/Fir.h>
+#include <AuLib/Instrument.h>
+#include <AuLib/MidiIn.h>
+#include <AuLib/Note.h>
+#include <AuLib/Oscili.h>
+#include <AuLib/PConv.h>
+#include <AuLib/SampleTable.h>
+#include <AuLib/SoundOut.h>
 #include <atomic>
 #include <cmath>
 #include <csignal>

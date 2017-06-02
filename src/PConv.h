@@ -9,9 +9,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <AudioBase.h>
-#include <FuncTable.h>
-#include <fft.h>
+#include "AudioBase.h"
+#include "FuncTable.h"
+#include "fft.h"
 
 namespace AuLib {
 

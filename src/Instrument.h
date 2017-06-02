@@ -11,8 +11,8 @@
 #ifndef __INSTRUMENT_H__
 #define __INSTRUMENT_H__
 
-#include <AudioBase.h>
-#include <Note.h>
+#include "AudioBase.h"
+#include "Note.h"
 #include <vector>
 
 namespace AuLib {
