@@ -41,7 +41,7 @@ the build directory.
 
 A recently-generated PDF manual is found in the toplevel `./docs`
 directory, along with other aulib-related documents. The HTML manual
-can also be found in [https://aulib.github.io](aulib.github.io).
+can also be found in [https://aulib.github.io](https://aulib.github.io).
 
 Using
 =====================================
