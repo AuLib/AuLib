@@ -4,7 +4,7 @@
        src="https://scan.coverity.com/projects/11643/badge.svg"/>
 </a>
 
-![logo](aulib-spiral.png)
+![logo](aulib-spiral.png=128x)
 
 [AuLib](http://github.com/AuLib/AuLib) is a simple lightweight C++ (ISO C++14) class library for audio DSP.
 
