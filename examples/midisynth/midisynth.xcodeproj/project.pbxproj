@@ -68,6 +68,7 @@
 		57EE07AF1EDEAC970061F62A /* midisynth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = midisynth.cpp; sourceTree = "<group>"; };
 		57EE07B11EDEACE50061F62A /* libAuLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAuLib.a; path = ../../lib/libAuLib.a; sourceTree = "<group>"; };
 		57EE07BB1EDED0DF0061F62A /* church.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = church.wav; path = ../../audio/church.wav; sourceTree = "<group>"; };
+		57FF68EF1EE4B95B005F8E90 /* midisynth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = midisynth.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +144,7 @@
 				57EE07861EDEAA290061F62A /* Main.storyboard */,
 				57EE07891EDEAA290061F62A /* Info.plist */,
 				57EE077E1EDEAA290061F62A /* Supporting Files */,
+				57FF68EF1EE4B95B005F8E90 /* midisynth.h */,
 			);
 			path = midisynth;
 			sourceTree = "<group>";

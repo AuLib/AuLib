@@ -20,7 +20,10 @@ AuLib::MidiIn::MidiIn()
   list_devices();
 };
 
-AuLib::MidiIn::~MidiIn() { Pm_Terminate(); }
+AuLib::MidiIn::~MidiIn() {
+  if(m_mstream != nullptr) close();
+  Pm_Terminate();
+}
 
 uint32_t AuLib::MidiIn::open(int dev) {
   PmError ret = Pm_OpenInput(((PortMidiStream **)&m_mstream), dev, NULL, 512L,

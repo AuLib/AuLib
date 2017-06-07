@@ -156,9 +156,7 @@ int main() {
     std::cout << devs << std::endl;
   std::cout << "choose a device: ";
   std::cin >> dev;
-
- 
-
+  
   if (midi.open(dev) == AULIB_NOERROR) {
     std::cout << "running... (use ctrl-c to close)\n";
     // listen to midi on behalf of sinsynth & sawsynth

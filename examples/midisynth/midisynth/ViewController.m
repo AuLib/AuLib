@@ -7,12 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "midisynth.h"
 
-extern int midi_synth(const char*, int, int, int, int, int, int);
-extern void stop_synth();
-extern int midi_num_devs();
-extern const char *midi_dev(int);
-extern double get_level();
 @implementation ViewController
 
 - (void) update_level {
@@ -30,6 +26,7 @@ extern double get_level();
 - (void) devs_list {
     [self.mididev removeAllItems];
     int n = midi_num_devs();
+    NSLog(@"num devs: %d", n);
     for(int i = 0; i < n; i++){
         [self.mididev addItemWithTitle:[NSString stringWithUTF8String:midi_dev(i)]];
     }
@@ -69,7 +66,7 @@ extern double get_level();
     [self.RevNum selectItemAtIndex:self.revn];
     
     [self devs_list];
-        // Do any additional setup after loading the view.
+    // Do any additional setup after loading the view.
     [self.level setDoubleValue:-120.0];
     [self.level2 setDoubleValue:-120.0];
     self.running = false;

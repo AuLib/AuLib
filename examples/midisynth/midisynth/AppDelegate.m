@@ -7,21 +7,22 @@
 //
 
 #import "AppDelegate.h"
+#import "midisynth.h"
 
 @interface AppDelegate ()
 
 @end
 
-
-extern void stop_synth();
-
 @implementation AppDelegate
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+    return YES;
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
     
 }
-
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application

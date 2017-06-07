@@ -10,6 +10,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "midisynth.h"
 #include <AuLib/Adsr.h>
 #include <AuLib/AudioBase.h>
 #include <AuLib/BlOsc.h>
@@ -81,7 +82,7 @@ protected:
     // note on processing
     virtual void on_note() {
         m_env.reset(m_amp * 0.2, m_ctl[m_atn] + 0.001, m_ctl[m_dcn] + 0.001,
-                    m_ctl[m_ssn] * m_amp, m_ctl[m_rln] + 0.001);
+                    m_ctl[m_ssn] * m_amp * 0.2, m_ctl[m_rln] + 0.001);
     }
     
     // msg processing
@@ -132,14 +133,15 @@ public:
     SawSyn(int chn, SineSyn::ctl_list lst) : SineSyn(chn, lst){};
 };
 
-extern "C" int midi_num_devs() {
+
+int midi_num_devs() {
     MidiIn midi;
     auto devs = midi.device_list();
     return (int) devs.size();
 }
 
 static char name[128];
-extern "C" const char *midi_dev(int num) {
+const char *midi_dev(int num) {
     MidiIn midi;
     strncpy(name, midi.device_list()[num].c_str(), 128);
     return name;
@@ -147,18 +149,18 @@ extern "C" const char *midi_dev(int num) {
 
 
 static std::atomic_int meter(0);
-extern "C" double get_level() {
+double get_level() {
     return (double) meter/std::numeric_limits<int>::max();
 }
 
 static std::atomic_bool running(true);
-extern "C" void stop_synth() {
+void stop_synth() {
     running = false;
 }
 
-extern "C" int midi_synth(const char *ir, int dev,
-                          int attn, int decn, int susn, int reln,
-                          int revn) {
+int midi_synth(const char *ir, int dev,
+               int attn, int decn, int susn, int reln,
+               int revn) {
     
     // Sinewave Synthesizer - channel 0 (MIDI 1), 8 voices
     Instrument<SineSyn, SineSyn::ctl_list> sinsynth(8, 0, {{attn, decn, susn, reln}});
@@ -178,6 +180,6 @@ extern "C" int midi_synth(const char *ir, int dev,
             meter = (int) (reverb.getOutput()*std::numeric_limits<int>::max());
         }
     } else running = false;
-    
+
     return 0;
 }
