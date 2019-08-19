@@ -94,7 +94,7 @@ public:
       chn = 16;
     for (uint32_t i = 0; i < m_cnt; i++)
       if (m_mdata[i].msg == midi::ctrl_msg && m_mdata[i].byte1 == num &&
-          (chn == 16 || (int32_t) m_mdata[i].chn == chn)) {
+          (chn == 16 || (int32_t)m_mdata[i].chn == chn)) {
         m_val[chn][num] = m_mdata[i].byte2;
       }
     return m_val[chn][num] / 128.;
@@ -122,7 +122,7 @@ public:
       chn = 16;
     for (uint32_t i = 0; i < m_cnt; i++)
       if (m_mdata[i].msg == midi::aftouch &&
-          (chn == 16 || (int32_t) m_mdata[i].chn == chn)) {
+          (chn == 16 || (int32_t)m_mdata[i].chn == chn)) {
         m_tval[chn] = m_mdata[i].byte1;
       }
     return m_tval[chn] / 128.;
@@ -136,7 +136,7 @@ public:
       chn = 16;
     for (uint32_t i = 0; i < m_cnt; i++)
       if (m_mdata[i].msg == midi::aftouch &&
-          (chn == 16 || (int32_t) m_mdata[i].chn == chn)) {
+          (chn == 16 || (int32_t)m_mdata[i].chn == chn)) {
         m_pval[chn] = m_mdata[i].byte1;
       }
     return m_pval[chn];

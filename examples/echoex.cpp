@@ -13,48 +13,74 @@
 #include <SigBus.h>
 #include <SoundIn.h>
 #include <SoundOut.h>
-#include <Tapi.h>
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <cstdlib>
+#include <atomic>
+#include <cmath>
+#include <csignal>
 
 using namespace AuLib;
 using namespace std;
 
+// handle ctrl-c
+static atomic_bool running(true);
+void signal_handler(int signal) {
+  running = false;
+  cout << "\nexiting...\n";
+}
+
 int main(int argc, const char **argv) {
 
-  if (argc > 2) {
-
+  if (argc > 4) {
+    // audio input
     SoundIn input(argv[1]);
-    std::vector<Chn> chn(input.nchnls());
-    std::vector<Delay> echo(input.nchnls(),
-                            Delay(0.5, 0.5, def_vframes, input.sr()));
-    std::vector<Pan> pan(input.nchnls());
-    SigBus mix(1. / input.nchnls(), 0., false, 2);
-    SoundOut output(argv[2], 2, def_bframes, input.sr());
-    uint64_t end = input.dur() + 5 * input.sr(), t = 0;
-
-    std::vector<uint32_t> channels(input.nchnls());
-    std::iota(channels.begin(), channels.end(), 0);
+    if(input.error() != AULIB_NOERROR) {
+      cout << "error opening input\n";
+      return -1;
+    }
+    // input channels
+    vector<Chn> chn(input.nchnls()); 
+    // delay lines
+    double fdb = fabs(atof(argv[4]));
+    vector<Delay> delay(input.nchnls(),
+	   Delay(atof(argv[3]), fdb < 1.0 ? fdb : 0.99,
+		 def_vframes, input.sr())); 
+    // stereo panning
+    vector<Pan> pan(input.nchnls()); 
+    // mixing bus
+    SigBus mix(1./input.nchnls(), 0., false, 2);
+    // audio output
+    SoundOut output(argv[2], 2, def_vframes,
+		    input.sr());
+    if(output.error() != AULIB_NOERROR) {
+      cout << "error opening output\n";
+      return -1;
+    }
+    uint64_t end = input.dur() + 5*output.sr(), t = 0;
+    // list of channels
+    vector<uint32_t> channels(input.nchnls());
+    iota(channels.begin(), channels.end(), 0);
+    signal(SIGINT, signal_handler);
 
     cout << Info::version();
 
-    while (t < end) {
+    while (t < end && running) {
       input();
-      for (uint32_t channel : channels) {
-        chn[channel](input, channel + 1);
-        echo[channel](chn[channel]);
-        pan[channel](echo[channel] += chn[channel],
-                     (1 + channel) * input.nchnls() / 2.);
-        mix(pan[channel]);
+      for(uint32_t channel : channels) {
+	chn[channel](input, channel + 1);
+	delay[channel](chn[channel]);
+	pan[channel](delay[channel] += chn[channel],
+		     (1 + channel)*input.nchnls()/2.);
+	mix(pan[channel]);
       }
       t = output(mix);
       mix.clear();
     }
-
     return 0;
-
   } else
-    std::cout << "usage: " << argv[0] << " <source> <dest>\n";
+    cout << "usage: " << argv[0] 
+         <<  " <source> <dest> <delay> <feedback>\n";   
   return 1;
 }

@@ -22,15 +22,15 @@
 #endif
 
 namespace AuLib {
-  
+
 int rt_audio(const float *input, float *output, unsigned long frameCount,
-                    const void *timeInfo, unsigned long statusFlags,
-                    SoundIn *userData) {
+             const void *timeInfo, unsigned long statusFlags,
+             SoundIn *userData) {
   AuLib::SoundIn &obj = *userData;
+  
   for (auto &v : obj.m_buffer)
     v = *input++;
-  while (!obj.m_cbuf.writes(obj.m_buffer.data()))
-    ;
+  while (!obj.m_cbuf.writes(obj.m_buffer.data()));
   return 0;
 }
 
@@ -56,7 +56,6 @@ void audio(SoundIn &obj) {
 #endif
   }
 }
-
 
 typedef int (*pa_callback_t)(const void *, void *, unsigned long,
                              const PaStreamCallbackTimeInfo *, unsigned long,
@@ -103,8 +102,8 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
     }
   } else
 #endif
-      if (m_src == "stdin") {
-    // stdout
+    if (m_src == "stdin") {
+    // stdin
     m_mode = SOUNDIN_STDIN;
     m_handle = nullptr;
     m_run = true;
@@ -127,6 +126,7 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
       m_run = true;
       thread = std::thread(audio, std::ref(*this));
     } else {
+      m_handle = NULL;
       m_error = AULIB_FOPEN_ERROR;
       m_vframes = 0;
     }
@@ -140,21 +140,24 @@ AuLib::SoundIn::SoundIn(const char *src, uint32_t nchnls, uint32_t vframes,
 }
 
 AuLib::SoundIn::~SoundIn() {
+  while (!m_cbuf.is_empty()) m_cbuf.read();
 #ifdef HAVE_PORTAUDIO
   if (m_mode == SOUNDIN_RT && m_handle != NULL) {
     Pa_StopStream((PaStream *)m_handle);
     Pa_CloseStream((PaStream *)m_handle);
-    Pa_Terminate();
     return;
   }
 #endif
-  m_run = false;
-  thread.join();
+  m_run = false;  
 #ifdef HAVE_LIBSNDFILE
   if (m_mode == SOUNDIN_SNDFILE && m_handle != NULL) {
+    thread.join();
     sf_close((SNDFILE *)m_handle);
+    return;
   }
 #endif
+  if(m_mode == SOUNDIN_STDIN)
+    thread.join();
 }
 
 const double *AuLib::SoundIn::read(uint32_t frames) {

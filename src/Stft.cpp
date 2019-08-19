@@ -41,8 +41,8 @@ const double *AuLib::Stft::transform(const double *sig, uint32_t vframes) {
         if (m_pos[j] == m_N) {
           uint32_t offset = j * m_H;
           double *r = reinterpret_cast<double *>(m_cdata.data());
-          m_cdata[0].real(sig[0]), m_cdata[0].imag(sig[1]);
           if (m_repr == fft::polar) {
+	    m_cdata[0].real(sig[0]), m_cdata[0].imag(sig[1]);
             for (uint32_t n = 2, k = 1; n < m_N; n += 2, k++) {
               m_cdata[k] = std::polar(sig[n], sig[n + 1]);
             }

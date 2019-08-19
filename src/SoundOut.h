@@ -40,7 +40,7 @@ const std::string soundout_error[] = {"SoundOut: file open error",
                                       "SoundOut: RT stream start error",
                                       "SoundOut: destination not available",
                                       "SoundOut: general error"};
-  
+
 /** Audio output class
  */
 class SoundOut final : public AudioBase {

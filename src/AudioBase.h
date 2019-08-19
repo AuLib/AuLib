@@ -29,12 +29,12 @@ protected:
 
 public:
   /** AudioBase constructor  \n
-     nchnls - number of channels \n
-     vframes - number of frames in vector. This is set to next power-of-two no
+      nchnls - number of channels \n
+      vframes - number of frames in vector. This is set to next power-of-two no
       greater than the requested number of frames.
       Objects requiring arbitrary vector sizes should explicity re-size
       the vector using the resize_exact() method. \n
-     sr - sampling rate
+      sr - sampling rate
   */
   AudioBase(uint32_t nchnls = def_nchnls, uint32_t vframes = def_vframes,
             double sr = def_sr)
@@ -237,7 +237,7 @@ public:
 
   /** Get (max/allocated) vector size in samples
     */
-  uint32_t vsamps() const { return (uint32_t) m_vector.size(); }
+  uint32_t vsamps() const { return (uint32_t)m_vector.size(); }
 
   /** Get number of channels
    */

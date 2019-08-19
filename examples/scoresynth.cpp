@@ -46,6 +46,8 @@ class SineSyn : public Note {
   double m_rel;
   Adsr m_env;
   Oscili m_osc;
+  double m_cps;
+  double m_amp;
 
   // DSP override
   virtual const SineSyn &dsp() {
@@ -61,6 +63,8 @@ class SineSyn : public Note {
 
   // note on processing
   virtual void on_note() {
+    m_amp = m_vel / 128.;
+    m_cps = 440. * pow(2., (m_num - 69.) / 12.);
     m_env.reset(m_amp, m_att, m_dec, m_sus * m_amp, m_rel);
   }
 

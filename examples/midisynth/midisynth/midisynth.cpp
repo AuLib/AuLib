@@ -81,6 +81,8 @@ protected:
     
     // note on processing
     virtual void on_note() {
+        m_amp = m_vel / 128.;
+        m_cps = 440. * pow(2., (m_num - 69.) / 12.); 
         m_env.reset(m_amp * 0.2, m_ctl[m_atn] + 0.001, m_ctl[m_dcn] + 0.001,
                     m_ctl[m_ssn] * m_amp * 0.2, m_ctl[m_rln] + 0.001);
     }

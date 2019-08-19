@@ -79,7 +79,7 @@ public:
 
   /** Circular buffer size in frames
    */
-  uint32_t size() const { return (uint32_t) m_buffer.size() / m_nchnls; }
+  uint32_t size() const { return (uint32_t)m_buffer.size() / m_nchnls; }
 
   /** check if buffer is empty
    */

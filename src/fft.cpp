@@ -94,15 +94,15 @@ void AuLib::fft::transform(double *r, std::vector<std::complex<double>> &c,
   double o, zro, nyq;
   double *s = reinterpret_cast<double *>(c.data());
   if (pckd)
-    zro = c[0].real() * 2., nyq = c[0].imag() * 2.;
+    zro = c[0].real(), nyq = c[0].imag();
   else
-    zro = c[0].real() * 2., nyq = c[N].real() * 2.;
+    zro = c[0].real(), nyq = c[N].real();
   c[0].real(zro + nyq), c[0].imag(zro - nyq);
   o = pi / N;
   wp.real(cos(o)), wp.imag(sin(o));
   w *= wp;
   int j;
-  for (uint32_t i = 1; i < N / 2 + 1; i++) {
+  for (uint32_t i = 1; i < N / 2; i++) {
     j = N - i;
     even = .5 * (c[i] + conj(c[j]));
     odd = .5i * (c[i] - conj(c[j]));

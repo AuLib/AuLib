@@ -18,8 +18,6 @@ bool AuLib::Note::note_on(int32_t chn, double num, double vel,
       m_num = num;
       m_vel = vel;
       m_tstamp = tstamp;
-      m_amp = vel / 128.;
-      m_cps = 440. * pow(2., (num - 69.) / 12.);
       on_note();
     }
   }
@@ -32,7 +30,6 @@ bool AuLib::Note::note_off(int32_t chn, double num, double vel) {
       m_on = false;
       m_vel = vel;
       m_num = num;
-      m_amp = 0.;
       off_note();
     }
   }
@@ -41,7 +38,6 @@ bool AuLib::Note::note_off(int32_t chn, double num, double vel) {
 bool AuLib::Note::note_off() {
   if (m_on) {
     m_on = false;
-    m_amp = 0.;
     off_note();
   }
   return m_on;

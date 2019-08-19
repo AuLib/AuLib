@@ -21,7 +21,8 @@ AuLib::MidiIn::MidiIn()
 };
 
 AuLib::MidiIn::~MidiIn() {
-  if(m_mstream != nullptr) close();
+  if (m_mstream != nullptr)
+    close();
   Pm_Terminate();
 }
 

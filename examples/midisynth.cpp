@@ -53,15 +53,7 @@ public:
 };
 
 class SineSyn : public Note {
-protected:
-  // control list
-  uint32_t m_atn, m_dcn, m_ssn, m_rln;
-  std::map<uint32_t, double> m_ctl;
-  double m_bend;
 
-  // signal processing objects
-  Adsr m_env;
-  Oscili m_osc;
 
   // DSP override
   virtual const SineSyn &dsp() {
@@ -77,6 +69,8 @@ protected:
 
   // note on processing
   virtual void on_note() {
+    m_amp = m_vel / 128.;
+    m_cps = 440. * pow(2., (m_num - 69.) / 12.);   
     m_env.reset(m_amp * 0.2, m_ctl[m_atn] + 0.001, m_ctl[m_dcn] + 0.001,
                 m_ctl[m_ssn] * m_amp, m_ctl[m_rln] + 0.001);
   }
@@ -98,6 +92,18 @@ protected:
       m_ctl[num] = data[1] / 128.;
     }
   };
+
+protected:
+  // control list
+  uint32_t m_atn, m_dcn, m_ssn, m_rln;
+  std::map<uint32_t, double> m_ctl;
+  double m_bend;
+  double m_cps;
+  double m_amp;
+
+  // signal processing objects
+  Adsr m_env;
+  Oscili m_osc;
 
 public:
   typedef std::array<int, 4> ctl_list;
@@ -156,7 +162,7 @@ int main() {
     std::cout << devs << std::endl;
   std::cout << "choose a device: ";
   std::cin >> dev;
-  
+
   if (midi.open(dev) == AULIB_NOERROR) {
     std::cout << "running... (use ctrl-c to close)\n";
     // listen to midi on behalf of sinsynth & sawsynth

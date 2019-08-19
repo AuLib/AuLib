@@ -22,8 +22,8 @@
 
 namespace AuLib {
 int rt_audio(const float *input, float *output, unsigned long frameCount,
-                    const void *timeInfo, unsigned long statusFlags,
-                    SoundOut *userData) {
+             const void *timeInfo, unsigned long statusFlags,
+             SoundOut *userData) {
   AuLib::SoundOut &obj = *userData;
   const double *s = obj.m_cbuf.reads();
 
@@ -144,23 +144,23 @@ AuLib::SoundOut::SoundOut(const char *dest, uint32_t nchnls, uint32_t vframes,
 
 AuLib::SoundOut::~SoundOut() {
   // wait for cbuf to be consumed
-  while (!m_cbuf.is_empty())
-    ;
+  while (!m_cbuf.is_empty());
 #ifdef HAVE_PORTAUDIO
   if (m_mode == SOUNDOUT_RT && m_handle != NULL) {
     Pa_StopStream((PaStream *)m_handle);
     Pa_CloseStream((PaStream *)m_handle);
-    Pa_Terminate();
     return;
   }
 #endif
   m_run = false;
-  thread.join();
 #ifdef HAVE_LIBSNDFILE
   if (m_mode == SOUNDOUT_SNDFILE && m_handle != NULL) {
+    thread.join();
     sf_close((SNDFILE *)m_handle);
   }
 #endif
+  if(m_mode == SOUNDOUT_STDOUT)
+    thread.join();
 }
 
 uint64_t AuLib::SoundOut::write(uint32_t frames, uint32_t chn, uint32_t nchnls,

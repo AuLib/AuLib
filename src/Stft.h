@@ -115,6 +115,7 @@ public:
   /** Scale the spectral data vector
    */
   virtual const AudioBase &operator*=(double scal) {
+    if (m_dir == fft::inverse) return AudioBase::operator*=(scal);
     if (m_repr == fft::polar) {
       for (uint32_t i = 0; i < m_vector.size(); i += 2) {
         m_vector[i] *= scal;
@@ -127,6 +128,7 @@ public:
   /** Multiply the data vector by a spectral vector
    */
   virtual const AudioBase &operator*=(const double *sig) {
+    if (m_dir == fft::inverse) return AudioBase::operator*=(sig);
     if (m_repr == fft::polar) {
       for (uint32_t i = 0; i < m_vector.size(); i += 2) {
         m_vector[i] *= sig[i];
@@ -140,6 +142,7 @@ public:
   /** Multiply the data vector by the vector from obj
    */
   virtual const AudioBase &operator*=(const Stft &obj) {
+    if (m_dir == fft::inverse) return AudioBase::operator*=(obj);
     if (m_vframes == obj.m_vframes && m_repr == obj.repr()) {
       if (m_repr == fft::polar) {
         for (uint32_t i = 0; i < m_vector.size(); i += 2) {
@@ -156,6 +159,7 @@ public:
       (non-op for polar repr)
   */
   virtual const AudioBase &operator+=(double num) {
+    if (m_dir == fft::inverse) return AudioBase::operator+=(num);
     if (m_repr != fft::polar)
       for (uint32_t i = 0; i < m_vector.size(); i += 2) {
         m_vector[i] += num;
@@ -167,6 +171,7 @@ public:
       (non-op for polar repr)
    */
   virtual const AudioBase &operator+=(const double *sig) {
+    if (m_dir == fft::inverse) return AudioBase::operator+=(sig);
     if (m_repr != fft::polar)
       for (uint32_t i = 0; i < m_vector.size(); i += 2)
         m_vector[i] += sig[i];
@@ -177,6 +182,7 @@ public:
       (non-op for polar repr)
    */
   virtual const AudioBase &operator+=(const Stft &obj) {
+    if (m_dir == fft::inverse) return AudioBase::operator+=(obj);
     if (m_vframes == obj.m_vframes && obj.repr() == m_repr &&
         m_repr != fft::polar)
       for (uint32_t i = 0; i < m_vector.size(); i += 2)

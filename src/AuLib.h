@@ -104,7 +104,6 @@ const uint32_t def_decim = 4;
 
 /** the pi definition.
  */
-const double pi = 3.141592653589793;
 
 /** the two pi definition.
  */

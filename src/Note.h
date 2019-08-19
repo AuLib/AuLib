@@ -47,18 +47,17 @@ protected:
   double m_vel;
   int32_t m_chn;
   bool m_on;
-  double m_cps;
-  double m_amp;
 
   void clear() { set(0.); }
 
 public:
-  /** Constructs a note for a given channel
+    /** Constructs a note for a given control channel
       (-1 means omni, channels are ignored; this is the default)
-  */
-  Note(int32_t chn = -1)
-      : m_tstamp(0), m_num(128), m_vel(128), m_chn(chn), m_on(false), m_cps(0.),
-        m_amp(0.){};
+    */
+    Note(int32_t chn = -1, uint32_t nchnls = def_nchnls, uint32_t vframes = def_vframes,
+            double sr = def_sr)
+    : AudioBase::AudioBase(nchnls, vframes, sr), m_tstamp(0), m_num(128.),
+      m_vel(128.), m_chn(chn), m_on(false) {};
 
   /** processing method: call it to produce one vector of audio
    */
