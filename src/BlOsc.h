@@ -34,7 +34,7 @@ public:
     double nyq = sr / 2.;
     for (uint32_t i = 0; i < octs; i++) {
       double fr = base * pow(2, i);
-      m_waves[i] = FourierTable(nyq / fr, type);
+      m_waves[i] = FourierTable(nyq/(2*fr), type);
     }
   }
 
