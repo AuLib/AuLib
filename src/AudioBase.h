@@ -41,8 +41,14 @@ public:
       : m_nchnls(nchnls), m_vframes(npow2(vframes)),
         m_vector(m_vframes * nchnls, 0.0), m_sr(sr), m_error(0){};
 
+  // \cond
+  /** Destructor 
+      this is needed to silence warning about the use
+      of virtual functions without a virtual destructor.
+  */
   virtual ~AudioBase() { };
-
+  // \endcond
+  
   /** Scale the data vector
    */
   virtual const AudioBase &operator*=(double scal) {
