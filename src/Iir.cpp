@@ -30,7 +30,7 @@ const double *AuLib::Iir::dsp(const double *sig) {
 }
 
 void AuLib::LowP::update() {
-  double l = 1. / tan(pi * m_freq / m_sr);
+  double l = 1/tan(pi * m_freq / m_sr);
   double sqrt2l = sqrt(2.) * l;
   double lsq = l * l;
   m_a[0] = 1. / (1. + sqrt2l + lsq);
@@ -41,7 +41,7 @@ void AuLib::LowP::update() {
 }
 
 void AuLib::HighP::update() {
-  double l = 1. / tan(pi * m_freq / m_sr);
+  double l = tan(pi * m_freq / m_sr);
   double sqrt2l = sqrt(2.) * l;
   double lsq = l * l;
   m_a[0] = 1. / (1. + sqrt2l + lsq);
@@ -62,7 +62,7 @@ void AuLib::BandP::update() {
 }
 
 void AuLib::BandR::update() {
-  double l = 1. / tan(pi * m_bw / m_sr);
+  double l = tan(pi * m_bw / m_sr);
   double cosl = 2. * cos(2 * pi * m_freq / m_sr);
   m_a[0] = 1. / (1. + l);
   m_a[1] = -cosl * m_a[0];
