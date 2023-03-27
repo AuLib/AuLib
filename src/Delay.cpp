@@ -49,7 +49,7 @@ const double *AuLib::Delay::dsp(const double *sig, const double *dt) {
     irp = (uint32_t)rp;
     frac = rp - irp;
     a = m_delay[irp];
-    if (++irp == m_delay.vframes() - 1)
+    if (++irp == m_delay.vframes())
       irp = 0;
     b = m_delay[irp];
     m_vector[i] = a + frac * (b - a);
