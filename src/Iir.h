@@ -92,7 +92,7 @@ public:
    */
   const Iir &process(const AudioBase &obj, const double *a, const double *b) {
     std::copy(a, a + 3, m_a);
-    std::copy(b, b + 3, m_a);
+    std::copy(b, b + 2, m_b);
     return process(obj);
   }
 
