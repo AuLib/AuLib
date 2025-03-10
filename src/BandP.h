@@ -17,13 +17,13 @@ namespace AuLib {
 /**  2nd-order Butterworth band-pass filter
  */
 class BandP : public LowP {
+  
+  /** Coefficients update
+   */
+  void update() override;
 
 protected:
   double m_bw;
-
-  /** Coefficients update
-   */
-  virtual void update();
 
 public:
   /** BandP constructor \n\n
@@ -50,7 +50,7 @@ public:
       m_freq = cf;
       update();
     }
-    dsp(sig);
+    process(sig);
     return vector();
   }
 
@@ -63,7 +63,7 @@ public:
       m_freq = cf;
       update();
     }
-    dsp(obj.vector());
+    process(obj.vector());
     return *this;
   }
 };

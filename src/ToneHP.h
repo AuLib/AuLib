@@ -18,10 +18,21 @@ namespace AuLib {
  */
 class ToneHP : public ToneLP {
 
-protected:
-  /** Update filter coefficients
-   */
-  virtual void update();
+  void update() override {
+    double costh = 2. - cos(2. * pi * m_freq / m_sr);
+    m_b = costh - sqrt(costh * costh - 1.);
+    m_a = (1. + m_b);
+  }
+
+  const double *dsp(const double *sig) override {
+    for (uint32_t i = 0; i < m_vframes; i++) {
+      double w = m_a * sig[i] + m_b * m_del;
+      m_vector[i] = m_del - w;
+      m_del = w;
+    }
+    return vector();
+  }
+
 
 public:
   /** ToneHP constructor \n\n

@@ -19,15 +19,14 @@ namespace AuLib {
     with linear interpolation
 */
 class SamplePlayer : public Oscili {
-
-protected:
+  
   /** Oscillator for multichannel tables
    */
-  virtual void dsp();
+  void dsp() override;
 
   /** AM/FM processing
   */
-  virtual void am_fm(uint32_t ndx) {
+  void am_fm(uint32_t ndx) override {
     if (m_am != nullptr)
       m_amp = m_am[ndx];
     if (m_fm != nullptr) {
@@ -38,7 +37,7 @@ protected:
 
   /** set the sampling increment
    */
-  virtual void set_incr(double f) {
+  void set_incr(double f)  override {
     m_freq = f * m_sr / m_tframes;
     m_incr = f;
   }

@@ -85,7 +85,7 @@ void AuLib::ResonR::update() {
   m_a[1] = 0;
 }
 
-const double *AuLib::Reson::filter(const double *sig) {
+const double *AuLib::Reson::dsp(const double *sig) {
   double y;
   for (uint32_t i = 0; i < m_vframes; i++) {
     y = sig[i] * m_scal - m_b[0] * m_del[0] - m_b[1] * m_del[1];

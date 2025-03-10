@@ -19,10 +19,9 @@ namespace AuLib {
  */
 class Oscili : public Oscil {
 
-protected:
   /** interpolating oscillator process
    */
-  virtual void dsp();
+ void dsp() override;
 
 public:
   /** Sinusoidal Oscili constructor \n\n

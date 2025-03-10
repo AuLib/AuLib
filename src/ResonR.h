@@ -19,10 +19,9 @@ namespace AuLib {
 */
 class ResonR : public BandP {
 
-protected:
   /** Coefficients update
    */
-  virtual void update();
+  void update() override;
 
 public:
   /** ResonR constructor \n\n

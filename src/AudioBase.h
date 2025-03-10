@@ -20,6 +20,45 @@ namespace AuLib {
  */
 class AudioBase {
 
+  virtual const AudioBase &prod(double scal) {
+    for (uint32_t i = 0; i < m_vector.size(); i++)
+      m_vector[i] *= scal;
+    return *this;
+  }
+
+  virtual const AudioBase &prod(const double *sig) {
+    for (uint32_t i = 0; i < m_vector.size(); i++)
+      m_vector[i] *= sig[i];
+    return *this;
+  }
+
+  virtual const AudioBase &prod(const AudioBase &obj) {
+    if (m_vframes == obj.m_vframes && m_nchnls == obj.m_nchnls)
+      return *this *= obj.vector();
+    else
+      return *this;
+  }
+
+
+  virtual const AudioBase &sum(double offs) {
+    for (uint32_t i = 0; i < m_vector.size(); i++)
+      m_vector[i] += offs;
+    return *this;
+  }
+
+  virtual const AudioBase &sum(const double *sig) {
+    for (uint32_t i = 0; i < m_vector.size(); i++)
+      m_vector[i] += sig[i];
+    return *this;
+  }
+
+  virtual const AudioBase &sum(const AudioBase &obj) {
+    if (m_vframes == obj.m_vframes && m_nchnls == obj.m_nchnls)
+      return *this += obj.vector();
+    else
+      return *this;
+  }
+
 protected:
   uint32_t m_nchnls;
   uint32_t m_vframes;
@@ -51,52 +90,38 @@ public:
   
   /** Scale the data vector
    */
-  virtual const AudioBase &operator*=(double scal) {
-    for (uint32_t i = 0; i < m_vector.size(); i++)
-      m_vector[i] *= scal;
-    return *this;
+  const AudioBase &operator*=(double scal) {
+    return prod(scal);
   }
 
   /** Multiply the data vector by a sig vector
    */
-  virtual const AudioBase &operator*=(const double *sig) {
-    for (uint32_t i = 0; i < m_vector.size(); i++)
-      m_vector[i] *= sig[i];
-    return *this;
+  const AudioBase &operator*=(const double *sig) {
+    return prod(sig);
   }
 
   /** Multiply the data vector by the vector from obj
    */
-  virtual const AudioBase &operator*=(const AudioBase &obj) {
-    if (m_vframes == obj.m_vframes && m_nchnls == obj.m_nchnls)
-      return *this *= obj.vector();
-    else
-      return *this;
+  const AudioBase &operator*=(const AudioBase &obj) {
+    return prod(obj);
   }
 
   /** DC offset the data vector
    */
-  virtual const AudioBase &operator+=(double offs) {
-    for (uint32_t i = 0; i < m_vector.size(); i++)
-      m_vector[i] += offs;
-    return *this;
+  const AudioBase &operator+=(double offs) {
+    return sum(offs);
   }
 
   /** Add a vector sig to the data vector
    */
-  virtual const AudioBase &operator+=(const double *sig) {
-    for (uint32_t i = 0; i < m_vector.size(); i++)
-      m_vector[i] += sig[i];
-    return *this;
+  const AudioBase &operator+=(const double *sig) {
+    return sum(sig);
   }
 
   /** Add a vector sig from obj to the data vector
    */
-  virtual const AudioBase &operator+=(const AudioBase &obj) {
-    if (m_vframes == obj.m_vframes && m_nchnls == obj.m_nchnls)
-      return *this += obj.vector();
-    else
-      return *this;
+  const AudioBase &operator+=(const AudioBase &obj) {
+    return sum(obj);
   }
 
   /** Get a reference of

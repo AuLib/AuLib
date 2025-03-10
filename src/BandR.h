@@ -18,10 +18,10 @@ namespace AuLib {
  */
 class BandR : public BandP {
 
-protected:
+
   /** Coefficients update
    */
-  virtual void update();
+  void update() override;
 
 public:
   /** BandR constructor \n\n

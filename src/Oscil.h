@@ -22,6 +22,10 @@ namespace AuLib {
  */
 class Oscil : public AudioBase {
 
+  /** truncating oscillator process
+   */
+  virtual void dsp();
+  
 protected:
   const static FourierTable m_sine;
   const double *m_table;
@@ -33,10 +37,7 @@ protected:
   const double *m_fm;
   uint64_t m_tframes;
 
-  /** truncating oscillator process
-   */
-  virtual void dsp();
-
+  
   /** AM/FM processing
    */
   virtual void am_fm(uint32_t ndx) {

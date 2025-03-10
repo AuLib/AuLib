@@ -20,11 +20,11 @@ namespace AuLib {
 */
 class Fir : public Delay {
 
-  virtual const double *dsp(const double *sig, double dt) { return dsp(sig); }
-  virtual const double *dsp(const double *sig, const double *dt) {
+  const double *dsp(const double *sig, double dt) override { return dsp(sig); }
+  const double *dsp(const double *sig, const double *dt)  override {
     return dsp(sig);
   }
-  virtual const double *dsp(const double *sig);
+  virtual const double *dsp(const double *sig) override;
 
 protected:
   const double *m_ir;

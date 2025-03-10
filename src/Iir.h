@@ -17,13 +17,7 @@ namespace AuLib {
 /** General-purpose 2nd-order IIR filter section
  */
 class Iir : public AudioBase {
-
-protected:
-  double m_del[2];
-  double m_a[3];
-  double m_b[2];
-  double m_scal;
-
+  
   /** Filter kernel
    */
   virtual const double *dsp(const double *sig);
@@ -31,6 +25,12 @@ protected:
   /** Coefficients update
    */
   virtual void update(){};
+
+protected:
+  double m_del[2];
+  double m_a[3];
+  double m_b[2];
+  double m_scal;
 
 public:
   /** Iir constructor \n\n

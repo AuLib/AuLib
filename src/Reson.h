@@ -18,10 +18,7 @@ namespace AuLib {
  */
 class Reson : public ResonR {
 
-protected:
-  /** Filter kernel
-   */
-  virtual const double *filter(const double *sig);
+ const double *dsp(const double *sig) override;
 
 public:
   /** Reson constructor \n\n

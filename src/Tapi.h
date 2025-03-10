@@ -19,8 +19,8 @@ namespace AuLib {
 */
 class Tapi : public Tap {
 
-  virtual const Tap &dsp(const Delay &obj, double time);
-  virtual const double *dsp(const Delay &obj, const double *time);
+  const Tap &dsp(const Delay &obj, double time) override;
+  const double *dsp(const Delay &obj, const double *time) override;
 
 public:
   /** Tapi constructor \n\n

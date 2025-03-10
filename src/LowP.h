@@ -18,12 +18,12 @@ namespace AuLib {
  */
 class LowP : public Iir {
 
-protected:
-  double m_freq;
-
   /** Coefficients update
    */
-  virtual void update();
+  void update() override;
+
+protected:
+  double m_freq;
 
 public:
   /** LowP constructor \n\n
@@ -47,7 +47,7 @@ public:
       m_freq = cf;
       update();
     }
-    dsp(sig);
+    process(sig);
     return vector();
   }
 
@@ -58,7 +58,7 @@ public:
       m_freq = cf;
       update();
     }
-    dsp(obj.vector());
+    process(obj.vector());
     return *this;
   }
 

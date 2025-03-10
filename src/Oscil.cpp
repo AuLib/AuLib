@@ -101,5 +101,5 @@ void AuLib::SamplePlayer::dsp() {
       mod();
     }
   } else
-    Oscili::dsp();
+    Oscili::process();
 }

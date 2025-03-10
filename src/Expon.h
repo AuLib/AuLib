@@ -19,8 +19,7 @@ namespace AuLib {
 */
 class Expon : public Line {
 
-protected:
-  virtual void dsp() {
+  void dsp() override {
     for (uint32_t i = 0; i < m_vframes; i++) {
       m_vector[i] = m_y;
       if (m_cnt < m_x1) {
@@ -30,7 +29,7 @@ protected:
     }
   }
 
-  virtual void restart() {
+ void restart() override {
     m_cnt = 0;
     if (m_y <= 0.)
       m_y = db_min;

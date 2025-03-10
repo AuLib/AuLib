@@ -18,18 +18,19 @@ namespace AuLib {
  */
 class Rms : public ToneLP {
 
-protected:
-  /** rectification
-   */
-  double rect(double x) { return x < 0.0 ? -x : x; }
-
   /** RMS processing
   */
-  virtual const double *dsp(const double *sig) {
+  const double *dsp(const double *sig) override {
     for (uint32_t i = 0; i < m_vframes; i++)
       m_vector[i] = m_del = m_a * rect(sig[i]) - m_b * m_del;
     return vector();
   }
+  
+
+protected:
+  /** rectification
+   */
+  double rect(double x) { return x < 0.0 ? -x : x; }
 
 public:
   /** Rms constructor \n\n

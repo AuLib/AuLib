@@ -17,11 +17,10 @@ namespace AuLib {
 /**  2nd-order Butterworth high-pass filter
  */
 class HighP : public LowP {
-
-protected:
+  
   /** Coefficients update
    */
-  virtual void update();
+  void update() override;
 
 public:
   /** Highp constructor \n\n

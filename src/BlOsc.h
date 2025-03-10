@@ -49,12 +49,9 @@ public:
  */
 class BlOsc : public Oscili {
 
-protected:
-  const TableSet &m_waves;
-
   /** AM/FM processing
- */
-  virtual void am_fm(uint32_t ndx) {
+   */
+  void am_fm(uint32_t ndx) override {
     if (m_am != nullptr)
       m_amp = m_am[ndx];
     if (m_fm != nullptr) {
@@ -64,19 +61,22 @@ protected:
     }
   }
 
+  /** set the sampling increment
+   */
+  void set_incr(double f) override {
+    Oscil::set_incr(f);
+    tselect();
+  }
+  
+protected:
+  const TableSet &m_waves;
+
   /** table selection
    */
   void tselect() {
     int32_t num = (int32_t)log2(m_freq / base);
     num = num < 0 ? 0 : (num > octs - 1 ? octs - 1 : num);
     m_table = m_waves[num].vector();
-  }
-
-  /** set the sampling increment
-   */
-  virtual void set_incr(double f) {
-    Oscil::set_incr(f);
-    tselect();
   }
 
 public:

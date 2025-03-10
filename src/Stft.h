@@ -26,6 +26,95 @@ namespace AuLib {
 */
 class Stft : public AudioBase {
 
+  /** STFT transform
+   */
+  virtual const double *transform(const double *sig, uint32_t vframes);
+
+
+    /** Scale the spectral data vector
+   */
+  const AudioBase &prod(double scal) override {
+    if (m_dir == fft::inverse) return AudioBase::operator*=(scal);
+    if (m_repr == fft::polar) {
+      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+        m_vector[i] *= scal;
+      }
+    } else
+      return AudioBase::operator*=(scal);
+    return *this;
+  }
+
+  /** Multiply the data vector by a spectral vector
+   */
+  const AudioBase &prod(const double *sig) override {
+    if (m_dir == fft::inverse) return AudioBase::operator*=(sig);
+    if (m_repr == fft::polar) {
+      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+        m_vector[i] *= sig[i];
+        m_vector[i + 1] *= sig[i + 1];
+      }
+    } else
+      return AudioBase::operator*=(sig);
+    return *this;
+  }
+
+  /** Multiply the data vector by the vector from obj
+   */
+  const AudioBase &prod(const AudioBase &obj) override {
+    if (m_dir == fft::inverse) return AudioBase::operator*=(obj);
+    if (m_vframes == obj.vframes() &&
+        m_repr == static_cast<const Stft &>(obj).repr()) {
+      if (m_repr == fft::polar) {
+        for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+          m_vector[i] *= obj[i];
+          m_vector[i + 1] *= obj[i + 1];
+        }
+      } else
+        AudioBase::operator*=(obj);
+    }
+    return *this;
+  }
+
+  /** Add a double to the spectral data
+      (non-op for polar repr)
+  */
+  const AudioBase &sum(double num) override {
+    if (m_dir == fft::inverse) return AudioBase::operator+=(num);
+    if (m_repr != fft::polar)
+      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
+        m_vector[i] += num;
+      }
+    return *this;
+  }
+
+  /** Add a vector sig to the data vector
+      (non-op for polar repr)
+   */
+  const AudioBase &sum(const double *sig) override {
+    if (m_dir == fft::inverse) return AudioBase::operator+=(sig);
+    if (m_repr != fft::polar)
+      for (uint32_t i = 0; i < m_vector.size(); i += 2)
+        m_vector[i] += sig[i];
+    return *this;
+  }
+
+  /** Add a vector sig from obj to the data vector
+      (non-op for polar repr)
+   */
+  const AudioBase &sum(const AudioBase &obj) override {
+    if (m_dir == fft::inverse) return AudioBase::operator+=(obj);
+    if (m_vframes == obj.vframes() &&
+        static_cast<const Stft &>(obj).repr() == m_repr &&
+        m_repr != fft::polar)
+      for (uint32_t i = 0; i < m_vector.size(); i += 2)
+        m_vector[i] += obj[i];
+    return *this;
+  }
+
+  virtual const std::vector<std::complex<double>> &spec() {
+    return m_cdata;
+  }
+
 protected:
   const std::complex<double> m_z;
   uint32_t m_N;
@@ -38,10 +127,6 @@ protected:
   std::vector<std::vector<double>> m_framebufs;
   std::vector<uint32_t> m_pos;
   std::vector<std::complex<double>> m_cdata;
-
-  /** STFT transform
-   */
-  virtual const double *transform(const double *sig, uint32_t vframes);
 
 public:
   /** Stft constructor \n\n
@@ -101,8 +186,8 @@ public:
   /** spectrum as a complex<double> vector ref
       (only meaningful in forward transforms)
    */
-  virtual const std::vector<std::complex<double>> &spectrum() {
-    return m_cdata;
+  const std::vector<std::complex<double>> &spectrum() {
+    return spec();
   }
 
   /** return bin data as a complex<double> ref
@@ -112,83 +197,7 @@ public:
     return spectrum()[n < m_N / 2 ? n : m_N / 2 - 1];
   }
 
-  /** Scale the spectral data vector
-   */
-  virtual const AudioBase &operator*=(double scal) {
-    if (m_dir == fft::inverse) return AudioBase::operator*=(scal);
-    if (m_repr == fft::polar) {
-      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
-        m_vector[i] *= scal;
-      }
-    } else
-      return AudioBase::operator*=(scal);
-    return *this;
-  }
 
-  /** Multiply the data vector by a spectral vector
-   */
-  virtual const AudioBase &operator*=(const double *sig) {
-    if (m_dir == fft::inverse) return AudioBase::operator*=(sig);
-    if (m_repr == fft::polar) {
-      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
-        m_vector[i] *= sig[i];
-        m_vector[i + 1] *= sig[i + 1];
-      }
-    } else
-      return AudioBase::operator*=(sig);
-    return *this;
-  }
-
-  /** Multiply the data vector by the vector from obj
-   */
-  virtual const AudioBase &operator*=(const Stft &obj) {
-    if (m_dir == fft::inverse) return AudioBase::operator*=(obj);
-    if (m_vframes == obj.m_vframes && m_repr == obj.repr()) {
-      if (m_repr == fft::polar) {
-        for (uint32_t i = 0; i < m_vector.size(); i += 2) {
-          m_vector[i] *= obj[i];
-          m_vector[i + 1] *= obj[i + 1];
-        }
-      } else
-        AudioBase::operator*=(obj);
-    }
-    return *this;
-  }
-
-  /** Add a double to the spectral data
-      (non-op for polar repr)
-  */
-  virtual const AudioBase &operator+=(double num) {
-    if (m_dir == fft::inverse) return AudioBase::operator+=(num);
-    if (m_repr != fft::polar)
-      for (uint32_t i = 0; i < m_vector.size(); i += 2) {
-        m_vector[i] += num;
-      }
-    return *this;
-  }
-
-  /** Add a vector sig to the data vector
-      (non-op for polar repr)
-   */
-  virtual const AudioBase &operator+=(const double *sig) {
-    if (m_dir == fft::inverse) return AudioBase::operator+=(sig);
-    if (m_repr != fft::polar)
-      for (uint32_t i = 0; i < m_vector.size(); i += 2)
-        m_vector[i] += sig[i];
-    return *this;
-  }
-
-  /** Add a vector sig from obj to the data vector
-      (non-op for polar repr)
-   */
-  virtual const AudioBase &operator+=(const Stft &obj) {
-    if (m_dir == fft::inverse) return AudioBase::operator+=(obj);
-    if (m_vframes == obj.m_vframes && obj.repr() == m_repr &&
-        m_repr != fft::polar)
-      for (uint32_t i = 0; i < m_vector.size(); i += 2)
-        m_vector[i] += obj[i];
-    return *this;
-  }
 };
 
 /*! \class Stft Stft.h AuLib/Stft.h

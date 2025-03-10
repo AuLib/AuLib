@@ -19,10 +19,9 @@ namespace AuLib {
  */
 class Oscilic : public Oscil {
 
-protected:
   /** cubic oscillator process
    */
-  virtual void dsp();
+  void dsp() override;
 
 public:
   /** Sinusoidal Oscilic constructor \n\n

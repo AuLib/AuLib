@@ -19,14 +19,6 @@ namespace AuLib {
 */
 class Line : public AudioBase {
 
-protected:
-  double m_y;
-  double m_y0;
-  double m_y1;
-  uint32_t m_x1;
-  double m_incr;
-  uint64_t m_cnt;
-
   /** process the output vector
    */
   virtual void dsp() {
@@ -40,11 +32,20 @@ protected:
     }
   }
 
+  
   virtual void restart() {
     m_cnt = 0;
     m_y = m_y0;
     m_incr = (m_y1 - m_y0) / m_x1;
   }
+
+protected:
+  double m_y;
+  double m_y0;
+  double m_y1;
+  uint32_t m_x1;
+  double m_incr;
+  uint64_t m_cnt;
 
 public:
   /** Line constructor \n\n

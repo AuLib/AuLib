@@ -65,7 +65,7 @@ const double *AuLib::Pvoc::transform(const double *sig, uint32_t vframes) {
   double delta, c = m_sr / m_N, d = m_sr / (twopi * m_H);
   uint32_t fmcnt = m_framecount;
   if (m_dir == fft::forward) {
-    Stft::transform(sig, vframes);
+    Stft::process(sig, vframes);
     if (m_framecount > fmcnt)
       m_done = false;
     if (!m_done) {
@@ -89,7 +89,7 @@ const double *AuLib::Pvoc::transform(const double *sig, uint32_t vframes) {
       }
       m_done = true;
     }
-    Stft::transform(m_sbuf.data(), vframes);
+    Stft::process(m_sbuf.data(), vframes);
     if (m_framecount > fmcnt)
       m_done = false;
   }

@@ -9,7 +9,6 @@ Pan.cpp
 Envel.cpp
 EnvelTable.cpp
 Iir.cpp
-Tone.cpp
 Balance.cpp
 Delay.cpp
 SoundIn.cpp

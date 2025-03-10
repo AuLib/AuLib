@@ -18,25 +18,31 @@ namespace AuLib {
  */
 class ToneLP : public AudioBase {
 
+  /** Update filter coefficients
+   */
+  virtual void update() {
+    double costh = 2. - cos(2. * pi * m_freq / m_sr);
+    m_b = sqrt(costh * costh - 1.) - costh;
+    m_a = (1. + m_b);
+  }
+
+  /** filter kernel
+   */
+  virtual const double *dsp(const double *sig) {
+    for (uint32_t i = 0; i < m_vframes; i++) {
+      m_del = m_a * sig[i] + m_b * m_del;
+      m_vector[i] = m_del;
+    }
+    return vector();
+  }
+
 protected:
   double m_freq;
   double m_del;
   double m_a;
   double m_b;
 
-  /** Update filter coefficients
-   */
-  virtual void update();
 
-  /** filter kernel
-   */
-  virtual const double *dsp(const double *sig) {
-    for (uint32_t i = 0; i < m_vframes; i++) {
-      m_del = m_a * sig[i] - m_b * m_del;
-      m_vector[i] = m_del;
-    }
-    return vector();
-  }
 
 public:
   /** ToneLP constructor \n\n

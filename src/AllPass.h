@@ -18,11 +18,11 @@ namespace AuLib {
  */
 class AllPass : public Delay {
 
-  virtual const double *dsp(const double *sig, double dt) { return dsp(sig); }
-  virtual const double *dsp(const double *sig, const double *dt) {
+  const double *dsp(const double *sig, double dt) override { return dsp(sig); }
+  const double *dsp(const double *sig, const double *dt) override {
     return dsp(sig);
   }
-  virtual const double *dsp(const double *sig);
+  const double *dsp(const double *sig) override;
 
 public:
   /** AllPass constructor \n\n
