@@ -1,11 +1,11 @@
-set(LIBS AuLib ${LIBSNDFILE} ${PORTAUDIO} ${CMAKE_THREAD_LIBS_INIT})
-
 function(build_example NAME SRC)
   add_executable(${NAME} ${SRC})
   target_link_libraries(${NAME} ${LIBS})
   install(TARGETS ${NAME} RUNTIME DESTINATION bin)
 endfunction(build_example)
 
+if(PORTAUDIO AND LIBSNDFILE) 
+ set(LIBS AuLib ${LIBSNDFILE} ${PORTAUDIO} ${CMAKE_THREAD_LIBS_INIT})
 # example programs
 message(STATUS "building examples")
 build_example(sine sine.cpp)
@@ -28,7 +28,14 @@ build_example(ssynth scoresynth.cpp)
 build_example(reverb reverb.cpp)
 
 if(PORTMIDI)
+message(STATUS "building MIDI example")
 build_example(msynth midisynth.cpp)
 target_link_libraries(msynth ${PORTMIDI} ${PORTIME})
+else()
+message(STATUS "portmidi not found: not building MIDI example")
+endif()
+
+else() 
+message(STATUS "dependencies not found: not building examples")
 endif()
 
