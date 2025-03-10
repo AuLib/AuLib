@@ -46,7 +46,7 @@ public:
       this is needed to silence warning about the use
       of virtual functions without a virtual destructor.
   */
-  virtual ~AudioBase() { };
+  virtual ~AudioBase() = default;
   // \endcond
   
   /** Scale the data vector

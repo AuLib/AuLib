@@ -1,6 +1,6 @@
 # CMake build script
 # for the AuLib project
-cmake_minimum_required(VERSION 3.0.1)
+cmake_minimum_required(VERSION 3.13)
 
 # set CMAKE_BUILD_TYPE (DEBUG or RELEASE)
 set(CMAKE_BUILD_TYPE "DEBUG")
